@@ -1,0 +1,47 @@
+app/Config/App.php
+
+# CodeIgniter 4 .gitignore
+
+# Environment files
+.env
+.env.backup
+
+# Writable directories (logs, cache, session, etc.)
+writable/*
+!writable/.gitignore
+
+# User uploads (adjust if your uploads folder is different)
+public/uploads/
+public/uploads/*
+
+# Composer dependencies
+/vendor/
+
+# Node dependencies
+/node_modules/
+
+# IDE/editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Build or distribution folders (if you have any)
+dist/
+build/
+
+# Coverage reports from tests
+coverage/
+
+# NPM/Yarn logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
