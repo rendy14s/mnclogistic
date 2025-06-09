@@ -6,22 +6,19 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
- // Routes Pages
-    $routes->get('/', 'Home::index');
+ // Get Page
 
-    $routes->get('admin', 'Admin::index');
+    $routes->get('/', 'Home::index');
 
     $routes->get('login', 'Auth::login');
 
     $routes->get('logout', 'Auth::logout');
 
-    $routes->get('dashboard', 'Dashboard::index', ['filter' => 'auth']);
+    $routes->get('dashboard', 'Dashboard::index', ['filter' => 'tokenAuth']);
 
-    $routes->get('register', 'Register::index', ['filter' => 'auth']);
+    $routes->get('register', 'Register::index', ['filter' => 'tokenAuth']);
 
-    $routes->get('users', 'Users::index', ['filter' => 'auth']);
+    $routes->get('users', 'Users::index', ['filter' => 'tokenAuth']);
 
- // Routes API
-
-
-    $routes->post('api/loginPost', 'Auth::loginPost');
+ // API
+    $routes->post('auth/loginPost', 'Auth::loginPost');

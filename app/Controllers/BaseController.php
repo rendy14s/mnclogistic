@@ -46,8 +46,6 @@ abstract class BaseController extends Controller
     /**
      * @return void
      */
-
-    protected $data = [];
     
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
@@ -57,8 +55,5 @@ abstract class BaseController extends Controller
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = service('session');
-
-          // Set your global data here
-        $this->data['apiBaseUrl'] = env('API_BASE_URL');
     }
 }

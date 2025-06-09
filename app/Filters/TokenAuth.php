@@ -21,7 +21,8 @@ class TokenAuth implements FilterInterface
         }
 
         if (!$accessToken) {
-            return response()->setStatusCode(401)->setJSON(['error' => 'Access token missing']);
+            // return response()->setStatusCode(401)->setJSON(['error' => 'Access token missing']);
+            return redirect()->to('/login');
         }
 
         $tokenModel = new MNCUserToken();
@@ -31,7 +32,7 @@ class TokenAuth implements FilterInterface
             return response()->setStatusCode(401)->setJSON(['error' => 'Invalid token']);
         }
 
-        if (Time::now()->isAfter(Time::parse($token['access_expires']))) {
+        if (Time::now()->isAfter(Time::parse($token['expires_at']))) {
             return response()->setStatusCode(401)->setJSON(['error' => 'Token expired']);
         }
 

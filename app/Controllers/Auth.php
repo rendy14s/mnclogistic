@@ -16,7 +16,7 @@ class Auth extends BaseController
 
     public function login()
     {
-        return view('admin/pages/login/index', $this->data); 
+        return view('admin/pages/login/index'); 
     }
 
     public function loginPost()
