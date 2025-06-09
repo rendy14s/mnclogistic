@@ -1,0 +1,30 @@
+# Composer vendor directory
+/vendor/
+
+# Environment config
+.env
+
+# Logs and cache
+/writable/cache/*
+/writable/debugbar/*
+/writable/logs/*
+/writable/session/*
+/writable/uploads/*
+!writable/index.html
+
+# IDE/editor specific files
+*.sublime-project
+*.sublime-workspace
+*.idea/
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# PHPUnit
+phpunit.xml
+phpunit.xml.dist
+
+# Composer lock file (optional if you're committing lock)
+/composer.lock
