@@ -21,19 +21,22 @@ class RefreshToken extends BaseController
         $refreshToken = $this->request->getCookie('access_token');
 
         if (!$refreshToken) {
-            return $this->response->setStatusCode(401)->setJSON(['error' => 'Token missing']);
+            // return $this->response->setStatusCode(401)->setJSON(['error' => 'Token missing']);
+            return redirect()->to('/login');
         }
 
         $tokenModel = new MNCUserToken();
         $tokenData = $tokenModel->GetAccessToken($refreshToken);
 
         if (!$tokenData) {
-            return $this->response->setStatusCode(401)->setJSON(['error' => 'Invalid token']);
+            // return $this->response->setStatusCode(401)->setJSON(['error' => 'Invalid token']);
+            return redirect()->to('/login');
         }
 
         // Check if refresh token expired
         if (time() > strtotime($tokenData['expires_at'])) {
-            return $this->response->setStatusCode(401)->setJSON(['error' => 'Token expired']);
+            // return $this->response->setStatusCode(401)->setJSON(['error' => 'Token expired']);
+            return redirect()->to('/login');
         }
 
         $newAccessToken = bin2hex(random_bytes(32));
