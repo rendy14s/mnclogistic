@@ -1,0 +1,70 @@
+CRITICAL - 2025-06-03 05:09:34 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "admin/index.php"
+[Method: GET, Route: admin]
+in SYSTEMPATH/Exceptions/FrameworkException.php on line 39.
+ 1 SYSTEMPATH/View/View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile()
+ 2 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render()
+ 3 APPPATH/Controllers/Admin.php(12): view()
+ 4 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\Admin->index()
+ 5 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+ 6 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+ 7 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+ 9 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2025-06-03 10:07:51 --> ParseError: syntax error, unexpected identifier "assets", expecting ")"
+[Method: GET, Route: admin]
+in APPPATH/Views/admin/index.php on line 86.
+ 1 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render()
+ 3 APPPATH/Controllers/Admin.php(12): view()
+ 4 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\Admin->index()
+ 5 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+ 6 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+ 7 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+ 9 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2025-06-03 10:08:07 --> ParseError: syntax error, unexpected identifier "assets", expecting ")"
+[Method: GET, Route: admin]
+in APPPATH/Views/admin/index.php on line 86.
+ 1 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render()
+ 3 APPPATH/Controllers/Admin.php(12): view()
+ 4 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\Admin->index()
+ 5 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+ 6 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+ 7 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+ 9 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2025-06-03 10:12:55 --> ParseError: syntax error, unexpected identifier "assets", expecting ")"
+[Method: GET, Route: admin]
+in APPPATH/Views/admin/index.php on line 86.
+ 1 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render()
+ 3 APPPATH/Controllers/Admin.php(12): view()
+ 4 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\Admin->index()
+ 5 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+ 6 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+ 7 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+ 9 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2025-06-03 10:13:37 --> ParseError: syntax error, unexpected identifier "assets", expecting ")"
+[Method: GET, Route: admin]
+in APPPATH/Views/admin/index.php on line 118.
+ 1 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render()
+ 3 APPPATH/Controllers/Admin.php(12): view()
+ 4 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\Admin->index()
+ 5 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+ 6 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+ 7 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+ 9 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2025-06-03 10:14:09 --> CodeIgniter\HTTP\Exceptions\BadRequestException: The URI you submitted has disallowed characters: "user3-128x128.jpg')"
+[Method: GET, Route: assets/admin/dist/img/user3-128x128.jpg%27%29]
+in SYSTEMPATH/Router/Router.php on line 741.
+ 1 SYSTEMPATH/Router/Router.php(207): CodeIgniter\Router\Router->checkDisallowedChars()
+ 2 SYSTEMPATH/CodeIgniter.php(832): CodeIgniter\Router\Router->handle()
+ 3 SYSTEMPATH/CodeIgniter.php(455): CodeIgniter\CodeIgniter->tryToRouteIt()
+ 4 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+ 5 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+ 7 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
