@@ -72,7 +72,7 @@
             <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav m-auto py-0">
                 </div>
-                <a href="<?= base_url('admin') ?>" class="btn btn-primary py-2 px-4 d-none d-lg-block">Login</a>
+                <a href="<?= base_url('dashboard') ?>" class="btn btn-primary py-2 px-4 d-none d-lg-block">Login</a>
             </div>
         </nav>
     </div>
