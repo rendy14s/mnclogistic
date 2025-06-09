@@ -38,7 +38,8 @@
                                 <table id="example2" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>No</th>
+                                            <th>Employee ID</th>
                                             <th>Full Name</th>
                                             <th>Username</th>
                                             <th>Administrator</th>
@@ -456,7 +457,8 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>No</th>
+                                            <th>Employee ID</th>
                                             <th>Full Name</th>
                                             <th>Username</th>
                                             <th>Administrator</th>
