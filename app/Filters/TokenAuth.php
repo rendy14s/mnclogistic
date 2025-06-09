@@ -29,11 +29,13 @@ class TokenAuth implements FilterInterface
         $token = $tokenModel->GetAccessToken($accessToken);
 
         if (!$token) {
-            return response()->setStatusCode(401)->setJSON(['error' => 'Invalid token']);
+            // return response()->setStatusCode(401)->setJSON(['error' => 'Invalid token']);
+            return redirect()->to('/login');
         }
 
         if (Time::now()->isAfter(Time::parse($token['expires_at']))) {
-            return response()->setStatusCode(401)->setJSON(['error' => 'Token expired']);
+            // return response()->setStatusCode(401)->setJSON(['error' => 'Token expired']);
+            return redirect()->to('/login');
         }
 
         // Optionally set user data into the request or session
