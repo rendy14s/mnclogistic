@@ -9,6 +9,10 @@ $routes->get('/', 'Home::index');
 
 $routes->get('admin', 'Admin::index');
 
-$routes->get('dashboard', 'Dashboard::index');
+$routes->get('login', 'Auth::login');
 
-$routes->get('login', 'Login::index');
+$routes->post('auth/loginPost', 'Auth::loginPost');
+
+$routes->get('logout', 'Auth::logout');
+
+$routes->get('dashboard', 'Dashboard::index', ['filter' => 'auth']);
