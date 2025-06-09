@@ -28,3 +28,5 @@ phpunit.xml.dist
 
 # Composer lock file (optional if you're committing lock)
 /composer.lock
+
+app/Config/Database.php
