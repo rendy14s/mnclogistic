@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class MNCUser extends Model
+class MNCUserToken extends Model
 {
-    protected $table            = 'mnc_users';
+    protected $table            = 'mnc_users_token';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id', 'full_name', 'username', 'password'];
+    protected $allowedFields    = ['id', 'user_id', 'access_token', 'user_agent', 'ip_address', 'expires_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -43,4 +43,9 @@ class MNCUser extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function GetAccessToken($token)
+    {
+        return $this->where('access_token', $token)->first();
+    }
 }

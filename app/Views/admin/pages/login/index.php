@@ -22,13 +22,13 @@
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Sign in to your System</p>
+      <p class="login-box-msg">Sign in to your System <?= esc($apiBaseUrl) ?></p>
 
       <?php if (session()->getFlashdata('error')): ?>
           <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
       <?php endif; ?>
 
-      <form action="<?= base_url('auth/loginPost') ?>" method="post" required>
+      <form action="<?= base_url('api/loginPost') ?>" method="post" required>
         <div class="input-group mb-3">
           <input type="text" name="username" class="form-control" placeholder="Username" required>
           <div class="input-group-append">
