@@ -29,7 +29,7 @@
                   <!-- general form elements -->
                   <div class="card card-primary">
                     <!-- form start -->
-                     <form class="form-horizontal" action="api/user/register" method="post" required>
+                     <form class="form-horizontal" action="api/register" method="post" required>
                       <div class="card-body">
                         <div class="form-group row">
                           <label for="inputFirstName" class="col-sm-2 col-form-label">First Name</label>

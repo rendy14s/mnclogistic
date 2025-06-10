@@ -16,4 +16,46 @@ class Users extends BaseController
         
         return view('admin/pages/users/index', $data);
     }
+
+    public function form_add()
+    {
+        //
+        return view('admin/pages/users/create/index');
+    }
+
+    public function create()
+    {
+        $userModel = new MNCUser();
+
+        // Get the last employee ID
+        $lastUser = $userModel->orderBy('id', 'DESC')->first();
+        $lastEmployeeID = $lastUser ? $lastUser['employee_id'] : null;
+
+        // Extract numeric part and increment
+        if ($lastEmployeeID && preg_match('/^MNC(\d+)$/', $lastEmployeeID, $matches)) {
+            $number = (int) $matches[1] + 1;
+        } else {
+            $number = 1;
+        }
+
+        // Generate new ID with padding
+        $newEmployeeID = 'MNC' . str_pad($number, 8, '0', STR_PAD_LEFT);
+
+        $firstname = $this->request->getPost('firstName');
+        $lastname  = $this->request->getPost('lastName');
+
+        $data = [
+            'employee_id' => $newEmployeeID,
+            'first_name'  => $this->request->getPost('firstName'),
+            'last_name'   => $this->request->getPost('lastName'),
+            'full_name'   => $firstname . ' ' . $lastname,
+            'username'    => $this->request->getPost('username'),
+            'password'    => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
+            'is_admin'    => $this->request->getPost('isAdmin') ? 1 : 0,
+        ];
+
+        $userModel->save($data);
+
+        return redirect()->to('/users')->with('message', 'User created successfully!');
+    }
 }

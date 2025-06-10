@@ -6,7 +6,7 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
- // Get Page
+   // Get Page
 
     $routes->get('/', 'Home::index');
 
@@ -16,13 +16,19 @@ use CodeIgniter\Router\RouteCollection;
 
     $routes->get('dashboard', 'Dashboard::index', ['filter' => 'tokenAuth']);
 
-    $routes->get('register', 'Register::index', ['filter' => 'tokenAuth']);
-
-    $routes->get('users', 'Users::index', ['filter' => 'tokenAuth']);
-
-    $routes->get('customers', 'Customers::index', ['filter' => 'tokenAuth']);
-
- // API
+   // API
     $routes->post('auth/loginPost', 'Auth::loginPost');
 
-    $routes->post('api/user/register', 'Register::create', ['filter' => 'tokenAuth']);
+
+   // Users
+      // Index Page
+      $routes->get('users', 'Users::index', ['filter' => 'tokenAuth']);
+
+      // Form Add Register User
+      $routes->get('users/register', 'Users::form_add', ['filter' => 'tokenAuth']);
+
+      // API For Add User Register
+      $routes->post('users/api/register', 'Users::create', ['filter' => 'tokenAuth']);
+
+   // Customer
+      $routes->get('customers', 'Customers::index', ['filter' => 'tokenAuth']);

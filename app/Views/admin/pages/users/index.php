@@ -28,7 +28,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="col-2">
-                                    <button type="button" class="btn btn-block btn-success btn-sm" onclick="location.href='<?= base_url('register') ?>'">
+                                    <button type="button" class="btn btn-block btn-success btn-sm" onclick="location.href='<?= base_url('users/register') ?>'">
                                         <i class="fas fa-plus"></i> Add Users
                                     </button>
                                 </div>
