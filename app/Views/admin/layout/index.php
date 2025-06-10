@@ -123,5 +123,27 @@
     });
   });
 </script>
+<!-- Marking Code -->
+<script>
+    // Replace with the next number from controller
+    const NextMarkingCode = <?= json_encode($nextNumber ?? 1) ?>;
+    const paddedNumber = String(NextMarkingCode).padStart(5, '0');
+
+    function generateMarkingCode() {
+        const customerName = document.getElementById('inputCustomerName').value.trim();
+
+        if (customerName.length >= 1) {
+            const initials = customerName.substring(0, 3).toUpperCase();
+            const markingCode = `MNC ${paddedNumber} ${initials}`;
+            document.getElementById('inputMarkingCode').value = markingCode;
+            const hiddenInput = document.getElementById('inputMarkingCodeHidden');
+            if (hiddenInput) hiddenInput.value = markingCode;
+        } else {
+            document.getElementById('inputMarkingCode').value = '';
+            const hiddenInput = document.getElementById('inputMarkingCodeHidden');
+            if (hiddenInput) hiddenInput.value = '';
+        }
+    }
+</script>
 </body>
 </html>

@@ -28,7 +28,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="col-2">
-                                    <button type="button" class="btn btn-block btn-success btn-sm" onclick="location.href='<?= base_url('register') ?>'">
+                                    <button type="button" class="btn btn-block btn-success btn-sm" onclick="location.href='<?= base_url('customers/register') ?>'">
                                         <i class="fas fa-plus"></i> Add Customer
                                     </button>
                                 </div>
@@ -51,12 +51,12 @@
                                         <?php foreach ($customers as $customer): ?>
                                             <tr>
                                                 <td><?= $id++ ?></td>
-                                                <td><?= esc($user['marking_code']) ?></td>
-                                                <td><?= esc($user['customer_name']) ?></td>
-                                                <td><?= esc($user['phone_number']) ?></td>
-                                                <td><?= esc($user['address']) ?></td>
+                                                <td><?= esc($customer['marking_code']) ?></td>
+                                                <td><?= esc($customer['customer_name']) ?></td>
+                                                <td><?= esc($customer['phone_number']) ?></td>
+                                                <td><?= esc($customer['address']) ?></td>
                                                 <td>
-                                                    <?= !empty($user['created_at']) ? date('H:i:s A d/m/Y', strtotime($user['created_at'])) :'-' ?>
+                                                    <?= !empty($customer['created_at']) ? date('H:i:s A d/m/Y', strtotime($customer['created_at'])) :'-' ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

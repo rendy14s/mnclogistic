@@ -31,4 +31,11 @@ use CodeIgniter\Router\RouteCollection;
       $routes->post('users/api/register', 'Users::create', ['filter' => 'tokenAuth']);
 
    // Customer
+      // Index Page
       $routes->get('customers', 'Customers::index', ['filter' => 'tokenAuth']);
+
+      // Form Add Register Customer
+      $routes->get('customers/register', 'Customers::form_add', ['filter' => 'tokenAuth']);
+
+      // API For Add Customer Register
+      $routes->post('customers/api/register', 'Customers::create', ['filter' => 'tokenAuth']);
