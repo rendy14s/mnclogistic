@@ -22,3 +22,5 @@ use CodeIgniter\Router\RouteCollection;
 
  // API
     $routes->post('auth/loginPost', 'Auth::loginPost');
+
+    $routes->post('api/user/register', 'Register::create', ['filter' => 'tokenAuth']);

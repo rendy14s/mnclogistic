@@ -12,7 +12,7 @@ class MNCUser extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id', 'full_name', 'username', 'password'];
+    protected $allowedFields    = ['id', 'employee_id', 'first_name', 'last_name', 'full_name', 'username', 'password', 'is_admin'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

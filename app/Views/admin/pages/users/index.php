@@ -47,7 +47,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php $id = 0; ?>
+                                        <?php $id = 1; ?>
                                         <?php foreach ($users as $user): ?>
                                             <tr>
                                                 <td><?= $id++ ?></td>
@@ -61,16 +61,6 @@
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Employee ID</th>
-                                            <th>Full Name</th>
-                                            <th>Username</th>
-                                            <th>Administrator</th>
-                                            <th>Created At</th>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                             <!-- /.card-body -->
