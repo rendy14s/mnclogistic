@@ -20,6 +20,8 @@ use CodeIgniter\Router\RouteCollection;
 
     $routes->get('users', 'Users::index', ['filter' => 'tokenAuth']);
 
+    $routes->get('customers', 'Customers::index', ['filter' => 'tokenAuth']);
+
  // API
     $routes->post('auth/loginPost', 'Auth::loginPost');
 
