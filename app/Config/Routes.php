@@ -39,3 +39,13 @@ use CodeIgniter\Router\RouteCollection;
 
       // API For Add Customer Register
       $routes->post('customers/api/register', 'Customers::create', ['filter' => 'tokenAuth']);
+
+   // 3rd Courier
+      // Index Page
+      $routes->get('3rdcourier', 'Courier::index', ['filter' => 'tokenAuth']);
+
+      // Form Add 3rd Courier
+      $routes->get('3rdcourier/register', 'Courier::form_add', ['filter' => 'tokenAuth']);
+
+      // API For Add 3rd Courier
+      $routes->post('3rdcourier/api/register', 'Courier::create', ['filter' => 'tokenAuth']);

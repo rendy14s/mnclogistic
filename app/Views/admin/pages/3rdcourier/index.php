@@ -8,12 +8,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Data User</h1>
+                        <h1>Data Courier</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="<?= base_url('dashboard') ?>">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Data User</li>
+                            <li class="breadcrumb-item active">Data Courier</li>
                         </ol>
                     </div>
                 </div>
@@ -28,8 +28,8 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="col-2">
-                                    <button type="button" class="btn btn-block btn-success btn-sm" onclick="location.href='<?= base_url('users/register') ?>'">
-                                        <i class="fas fa-plus"></i> Add Users
+                                    <button type="button" class="btn btn-block btn-success btn-sm" onclick="location.href='<?= base_url('3rdcourier/register') ?>'">
+                                        <i class="fas fa-plus"></i> Add 3rd Couriers
                                     </button>
                                 </div>
                             </div>
@@ -39,24 +39,18 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Employee ID</th>
-                                            <th>Full Name</th>
-                                            <th>Username</th>
-                                            <th>Administrator</th>
+                                            <th>Courier Name</th>
                                             <th>Created At</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php $id = 1; ?>
-                                        <?php foreach ($users as $user): ?>
+                                        <?php foreach ($couriers as $courier): ?>
                                             <tr>
                                                 <td><?= $id++ ?></td>
-                                                <td><?= esc($user['employee_id']) ?></td>
-                                                <td><?= esc($user['full_name']) ?></td>
-                                                <td><?= esc($user['username']) ?></td>
-                                                <td><?= esc($user['is_admin']) == 1 ? 'Yes' : 'No' ?></td>
+                                                <td><?= esc($courier['courier_name']) ?></td>
                                                 <td>
-                                                    <?= !empty($user['created_at']) ? date('H:i:s A d/m/Y', strtotime($user['created_at'])) :'-' ?>
+                                                    <?= !empty($courier['created_at']) ? date('H:i:s A d/m/Y', strtotime($courier['created_at'])) :'-' ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
