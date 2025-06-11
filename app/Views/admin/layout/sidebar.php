@@ -52,6 +52,12 @@
               <p>User</p>
             </a>
           </li>
+          <li class="nav-item <?= ($segment_first === 'users') ? 'menu-open' : '' ?>">
+            <a href="<?= base_url('prices') ?>" class="nav-link">
+              <i class="nav-icon fas fa-user"></i>
+              <p>Price</p>
+            </a>
+          </li>
           <li class="nav-item <?= ($segment_first === '3rdcourier') ? 'menu-open' : '' ?>">
             <a href="<?= base_url('3rdcourier') ?>" class="nav-link">
               <i class="nav-icon fas fa-user"></i>

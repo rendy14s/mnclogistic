@@ -40,6 +40,16 @@ use CodeIgniter\Router\RouteCollection;
       // API For Add Customer Register
       $routes->post('customers/api/register', 'Customers::create', ['filter' => 'tokenAuth']);
 
+   // Price
+      // Index Page
+      $routes->get('prices', 'Price::index', ['filter' => 'tokenAuth']);
+
+      // Form Add Register Customer
+      $routes->get('prices/register', 'Price::form_add', ['filter' => 'tokenAuth']);
+
+      // API For Add Customer Register
+      $routes->post('prices/api/register', 'Price::create', ['filter' => 'tokenAuth']);
+
    // 3rd Courier
       // Index Page
       $routes->get('3rdcourier', 'Courier::index', ['filter' => 'tokenAuth']);
