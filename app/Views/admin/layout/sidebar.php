@@ -54,13 +54,13 @@
           </li>
           <li class="nav-item <?= ($segment_first === 'users') ? 'menu-open' : '' ?>">
             <a href="<?= base_url('prices') ?>" class="nav-link">
-              <i class="nav-icon fas fa-user"></i>
+              <i class="nav-icon fas ion-social-usd"></i>
               <p>Price</p>
             </a>
           </li>
           <li class="nav-item <?= ($segment_first === '3rdcourier') ? 'menu-open' : '' ?>">
             <a href="<?= base_url('3rdcourier') ?>" class="nav-link">
-              <i class="nav-icon fas fa-user"></i>
+              <i class="nav-icon fas ion-android-car"></i>
               <p>3rd Courier</p>
             </a>
           </li>
