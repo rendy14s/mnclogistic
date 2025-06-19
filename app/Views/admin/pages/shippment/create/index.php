@@ -29,7 +29,7 @@
                   <!-- general form elements -->
                   <div class="card card-primary">
                     <!-- form start -->
-                    <form class="form-horizontal" action="api/add" method="post" required>
+                    <form id="shippingForm" class="form-horizontal" action="api/add" method="post" required>
                       <div class="card-body">
                         <div class="form-group row">
                           <label for="inputMarkingCode" class="col-sm-2 col-form-label">Marking Code</label>

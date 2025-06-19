@@ -40,6 +40,9 @@
     <div class="content-wrapper">
         <section class="content pt-3">
             <div class="container-fluid">
+                <!-- GLOBAL ALERT SECTION -->
+                <div id="alertBox" class="alert d-none" role="alert"></div>
+
                 <?= $this->renderSection('content') ?>
             </div>
         </section>
@@ -146,8 +149,24 @@
     }
 </script>
 
+<script>
+function showAlert(message, type = 'success') {
+    const alertBox = document.getElementById('alertBox');
+    alertBox.className = `alert alert-${type}`;
+    alertBox.textContent = message;
+    alertBox.classList.remove('d-none');
+
+    // Auto-dismiss after 5 seconds (optional)
+    setTimeout(() => {
+        alertBox.classList.add('d-none');
+        alertBox.textContent = '';
+    }, 3000);
+}
+</script>
+
 <!-- Core JS Shippment -->
-<script src="<?= base_url('assets/admin/corejs/shippment.js?v=<?= time() ') ?>"></script>
+<script src="<?= base_url('assets/admin/corejs/shippment.js') ?>"></script>
+
 
 
 </body>

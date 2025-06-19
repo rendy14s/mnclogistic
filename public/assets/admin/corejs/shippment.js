@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const shippingPriceSelect = document.getElementById('shippingPrice');
     const editTotalBtn = document.getElementById('editTotalBtn');
     const consolidationCheckbox = document.getElementById('consolidationCheckbox');
+    const form = document.getElementById('shippingForm');
+
 
 
     let packages = [];
@@ -21,6 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
     ['dimension_p', 'dimension_l', 'dimension_t'].forEach(id =>
         document.getElementById(id).addEventListener('input', updateVolumeAuto)
     );
+
+
+    form.addEventListener('submit', function(e) {
+        const packagesJson = document.getElementById('packages_json').value;
+        if (!packagesJson || packagesJson.trim() === '[]') {
+            e.preventDefault(); // cancel form submission
+            showAlert('Please add at least one package before submitting.', 'danger');
+            return;
+        }
+
+        // allow form submission if validation passes
+    });
 
     totalInput.addEventListener('blur', handleTotalInputBlur);
 

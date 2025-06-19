@@ -6,7 +6,9 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\MNCShippment;
 use App\Models\MNCShippmentPackage;
+use App\Models\MNCShippmentLog;
 use App\Models\MNCCustomer;
+use App\Models\MNCUser;
 use App\Models\MNCPrice;
 
 class Shippment extends BaseController
@@ -35,7 +37,8 @@ class Shippment extends BaseController
     {
         // dd($this->request->getPost());die;
         $shippmentModel         = new MNCShippment();
-        $shippmentModelPackage  = new MNCShippmentPackage();
+        $shippmentPackageModel  = new MNCShippmentPackage();
+        $shippmentLogModel      = new MNCShippmentLog();
 
         $db = \Config\Database::connect();
         $db->transStart();
@@ -50,8 +53,10 @@ class Shippment extends BaseController
                 'total_price'       => $this->request->getPost('total_price'),
                 'consolidation'     => $this->request->getPost('consolidation') ? 1 : 0,
                 'package_json'      => $this->request->getPost('packages_json'),
-                'status'            => 1
+                'status'            => 1,
+                'created_by'        => session('user')['id'],
             ];
+
 
             // Insert main shipping row
             $shippmentModel->insert($dataShippment);
@@ -61,12 +66,12 @@ class Shippment extends BaseController
                 throw new \Exception("Shipping insert failed");
             }
 
-            // dd($shippingId);die;
+            // dd(session('user')['id']);die;
 
             // Insert each package
             $packages = json_decode($this->request->getPost('packages_json'), true);
             foreach ($packages as $pkg) {
-                $shippmentModelPackage->insert([
+                $shippmentPackageModel->insert([
                     'shippment_id'  => $shippingId,
                     'description'   => $pkg['description'],
                     'dimension_p'   => $pkg['p'],
@@ -78,9 +83,25 @@ class Shippment extends BaseController
                 ]);
             }
 
+            // dd($shippmentPackageModel);die;
+
+
+            // // Prepare shipping log data
+            $dataShippmentlog = [
+                'shippment_id'      => $shippingId,
+                'user_id'           => session('user')['id'],
+                'description'       => 'NEW DATA INSERTED [ON PROGRESS]',
+            ];
+
+            // Insert shipping log
+            $shippmentLogModel->insert($dataShippmentlog);
+
+
             $db->transComplete(); // COMMIT TRANSACTION
 
             if ($db->transStatus() === false) {
+                log_message('error', print_r($dataShippment, true));
+                log_message('error', print_r($shippmentModel->errors(), true));
                 throw new \Exception("Transaction failed");
             }
 
@@ -94,18 +115,22 @@ class Shippment extends BaseController
     public function process($id)
     {
         $shippmentModel         = new MNCShippment();
-        $shippmentModelPackage  = new MNCShippmentPackage();
+        $shippmentPackageModel  = new MNCShippmentPackage();
+        $userModel              = new MNCUser();
 
         $shippment = $shippmentModel->find($id);
         if (!$shippment) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException("Shippment ID $id tidak ditemukan");
         }
 
-        $packages = $shippmentModelPackage->where('shippment_id', $id)->findAll();
+        $packages   = $shippmentPackageModel->where('shippment_id', $id)->findAll();
+        $users      = $userModel->where('id', $shippment['created_by'])->first();
 
+        // dd($users); die;
         return view('admin/pages/shippment/process/index', [
             'shippment' => $shippment,
-            'packages' => $packages
+            'packages' => $packages,
+            'users' => $users
         ]);
     }
 }

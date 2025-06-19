@@ -31,6 +31,8 @@ class Auth implements FilterInterface
         if (!$user || !isset($user['logged_in']) || !$user['logged_in']) {
             return redirect()->to('/login');
         }
+
+        return redirect()->to('/dashboard');
     }
 
     /**

@@ -27,46 +27,47 @@ class Auth extends BaseController
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
 
+        if (empty($username) || empty($password)) {
+            return redirect()->back()->with('error', 'Username dan password wajib diisi');
+        }
+
         $user = $userModel->where('username', $username)->first();
 
         if ($user && password_verify($password, $user['password'])) {
             $session->set('user', [
-                'id'       => $user['id'],
-                'fullname' => $user['full_name'],
-                'username' => $user['username'],
+                'id'        => $user['id'],
+                'fullname'  => $user['full_name'],
+                'username'  => $user['username'],
                 'logged_in' => true,
             ]);
 
-            //Token Created
-            $accessToken = bin2hex(random_bytes(32));
-            $expiresToken = date('Y-m-d H:i:s', time() + 900); // 15 Minutes
-            $ipAddress = $this->request->getIPAddress();
-            $userAgent = $this->request->getUserAgent()->getAgentString();
+            // Token
+            $accessToken   = bin2hex(random_bytes(32));
+            $expiresToken  = date('Y-m-d H:i:s', time() + 900); // 15 minutes
+            $ipAddress     = $this->request->getIPAddress();
+            $userAgent     = $this->request->getUserAgent()->getAgentString();
 
-
-            // Save tokens to DB and cookies
+            // Save token to DB
             $tokenModel = new MNCUserToken();
-
-            $tokenModel->where('user_id', $user['id'])->delete();
-
-              $tokenModel->insert([
-                'user_id' => $user['id'],
+            $tokenModel->where('user_id', $user['id'])->delete(); // optional: clear old token
+            $tokenModel->insert([
+                'user_id'      => $user['id'],
                 'access_token' => $accessToken,
-                'user_agent' => $userAgent,
-                'ip_address' => $ipAddress,
-                'expires_at' => $expiresToken,
+                'user_agent'   => $userAgent,
+                'ip_address'   => $ipAddress,
+                'expires_at'   => $expiresToken,
             ]);
 
-            // Set cookies (secure flags recommended in production)
+            // Set access_token cookie (adjust secure flag on production)
             setcookie('access_token', $accessToken, time() + 900, '/', '', false, true);
 
-            // Use HTTPS and secure cookie flags (secure and httponly) for cookies in production.
-
+            // ✅ Redirect ke halaman yang akan inject JS (lihat view selanjutnya)
             return redirect()->to('/dashboard');
-        } else {
-            return redirect()->back()->with('error', 'Invalid username or password');
         }
+
+        return redirect()->back()->with('error', 'Invalid username or password');
     }
+
 
     public function logout()
     {

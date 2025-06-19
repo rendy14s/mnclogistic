@@ -33,6 +33,7 @@
                         <p><strong>Price Code:</strong> <?= esc($shippment['price_code']) ?></p>
                         <p><strong>Total Price:</strong> Rp <?= number_format($shippment['total_price'], 0, ',', '.') ?></p>
                         <p><strong>Status:</strong> <?= $shippment['status'] == 1 ? 'On Progress' : 'Completed' ?></p>
+                        <p><strong>Created By:</strong> <?= $users['full_name']?></p>
                         <hr>
 
                         <h5>Packages:</h5>
