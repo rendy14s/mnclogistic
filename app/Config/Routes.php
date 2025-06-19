@@ -59,3 +59,13 @@ use CodeIgniter\Router\RouteCollection;
 
       // API For Add 3rd Courier
       $routes->post('3rdcourier/api/register', 'Courier::create', ['filter' => 'tokenAuth']);
+
+   // Core Shippment
+      //Index Page
+      $routes->get('shippment', 'Shippment::index', ['filter' => 'tokenAuth']);
+
+      // Form Add New Shippment
+      $routes->get('shippment/add', 'Shippment::form_add', ['filter' => 'tokenAuth']);
+
+      // API For Add New Shippment
+      $routes->post('shippment/api/add', 'Shippment::add', ['filter' => 'tokenAuth']);

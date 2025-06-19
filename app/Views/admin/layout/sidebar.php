@@ -45,6 +45,14 @@
               </p>
             </a>
           </li>
+          <li class="nav-item <?= ($segment_first === 'shippment') ? 'menu-open' : '' ?>">
+            <a href="<?= base_url('shippment') ?>" class="nav-link">
+              <i class="nav-icon fa fa-fw fa-list-alt"></i>
+              <p>
+                Shippment
+              </p>
+            </a>
+          </li>
           <li class="nav-header">System</li>
           <li class="nav-item <?= ($segment_first === 'users') ? 'menu-open' : '' ?>">
             <a href="<?= base_url('users') ?>" class="nav-link">
@@ -52,7 +60,7 @@
               <p>User</p>
             </a>
           </li>
-          <li class="nav-item <?= ($segment_first === 'users') ? 'menu-open' : '' ?>">
+          <li class="nav-item <?= ($segment_first === 'prices') ? 'menu-open' : '' ?>">
             <a href="<?= base_url('prices') ?>" class="nav-link">
               <i class="nav-icon fas ion-social-usd"></i>
               <p>Price</p>

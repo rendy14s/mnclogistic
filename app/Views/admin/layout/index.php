@@ -145,5 +145,10 @@
         }
     }
 </script>
+
+<!-- Core JS Shippment -->
+<script src="<?= base_url('assets/admin/corejs/shippment.js?v=<?= time() ') ?>"></script>
+
+
 </body>
 </html>
