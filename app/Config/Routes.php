@@ -67,5 +67,8 @@ use CodeIgniter\Router\RouteCollection;
       // Form Add New Shippment
       $routes->get('shippment/add', 'Shippment::form_add', ['filter' => 'tokenAuth']);
 
+      // Form Process Shippment
+      $routes->get('shippment/process/(:num)', 'Shippment::process/$1', ['filter' => 'tokenAuth']);
+
       // API For Add New Shippment
       $routes->post('shippment/api/add', 'Shippment::add', ['filter' => 'tokenAuth']);

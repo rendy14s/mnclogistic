@@ -51,7 +51,11 @@
                                         <?php foreach ($shippments as $shippment): ?>
                                             <tr>
                                                 <td><?= $id++ ?></td>
-                                                <td><?= esc($shippment['marking_code']) ?></td>
+                                                <td>
+                                                    <a href="<?= base_url('shippment/process/' . $shippment['id']) ?>">
+                                                        <?= esc($shippment['marking_code']) ?>
+                                                    </a>
+                                                </td>
                                                 <td><?= esc($shippment['price_code']) ?></td>
                                                 <td>
                                                     <?= $shippment['consolidation'] == 1 ? 'Yes' : 'No' ?>

@@ -90,4 +90,22 @@ class Shippment extends BaseController
                 return redirect()->back()->with('error', 'Save failed: ' . $e->getMessage());
         }
     }
+
+    public function process($id)
+    {
+        $shippmentModel         = new MNCShippment();
+        $shippmentModelPackage  = new MNCShippmentPackage();
+
+        $shippment = $shippmentModel->find($id);
+        if (!$shippment) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Shippment ID $id tidak ditemukan");
+        }
+
+        $packages = $shippmentModelPackage->where('shippment_id', $id)->findAll();
+
+        return view('admin/pages/shippment/process/index', [
+            'shippment' => $shippment,
+            'packages' => $packages
+        ]);
+    }
 }
