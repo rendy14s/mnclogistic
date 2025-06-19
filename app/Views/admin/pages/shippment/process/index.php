@@ -59,6 +59,30 @@
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
+
+                        <hr>
+
+                        <h5>Log Activites:</h5>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>User</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($logs as $log): ?>
+                                    <tr>
+                                        <td><?= esc($log['description']) ?></td>
+                                        <td><?= esc($log['full_name']) ?></td>
+                                        <td>
+                                            <?= !empty($log['created_at']) ? date('H:i:s A d/m/Y', strtotime($log['created_at'])) :'-' ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
                     </div>
                   </div>
                   <!-- /.card -->

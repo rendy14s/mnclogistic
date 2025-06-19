@@ -116,6 +116,7 @@ class Shippment extends BaseController
     {
         $shippmentModel         = new MNCShippment();
         $shippmentPackageModel  = new MNCShippmentPackage();
+        $shippmentLogModel      = new MNCShippmentLog();
         $userModel              = new MNCUser();
 
         $shippment = $shippmentModel->find($id);
@@ -125,12 +126,18 @@ class Shippment extends BaseController
 
         $packages   = $shippmentPackageModel->where('shippment_id', $id)->findAll();
         $users      = $userModel->where('id', $shippment['created_by'])->first();
+        
+        $logs = $shippmentLogModel
+                ->select('mnc_shippment_logs.*, mnc_users.full_name')
+                ->join('mnc_users', 'mnc_users.id = mnc_shippment_logs.user_id', 'left')
+                ->where('shippment_id', $id)
+                ->findAll();
 
-        // dd($users); die;
         return view('admin/pages/shippment/process/index', [
             'shippment' => $shippment,
             'packages' => $packages,
-            'users' => $users
+            'users' => $users,
+            'logs' => $logs
         ]);
     }
 }
