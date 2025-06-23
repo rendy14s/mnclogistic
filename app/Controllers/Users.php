@@ -51,7 +51,7 @@ class Users extends BaseController
             'full_name'   => $firstname . ' ' . $lastname,
             'username'    => $this->request->getPost('username'),
             'password'    => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
-            'is_admin'    => $this->request->getPost('isAdmin') ? 1 : 0,
+            'role'        => $this->request->getPost('role'),
         ];
 
         $userModel->save($data);

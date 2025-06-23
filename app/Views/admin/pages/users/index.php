@@ -54,7 +54,22 @@
                                                 <td><?= esc($user['employee_id']) ?></td>
                                                 <td><?= esc($user['full_name']) ?></td>
                                                 <td><?= esc($user['username']) ?></td>
-                                                <td><?= esc($user['is_admin']) == 1 ? 'Yes' : 'No' ?></td>
+                                                <td>
+                                                    <?php
+                                                        switch ($user['role']) {
+                                                            case 1:
+                                                                echo 'Admin';
+                                                                break;
+                                                            case 2:
+                                                                echo 'Finance';
+                                                                break;
+                                                            case 0:
+                                                            default:
+                                                                echo 'Staff';
+                                                                break;
+                                                        }
+                                                    ?>
+                                                </td>
                                                 <td>
                                                     <?= !empty($user['created_at']) ? date('H:i:s A d/m/Y', strtotime($user['created_at'])) :'-' ?>
                                                 </td>

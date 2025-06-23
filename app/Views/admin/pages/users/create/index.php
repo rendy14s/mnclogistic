@@ -56,11 +56,14 @@
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label for="inputPassword" class="col-sm-2 col-form-label">Is Admin ?</label>
+                          <label for="inputRole" class="col-sm-2 col-form-label">Role</label>
                           <div class="col-sm-4">
-                            <div class="form-check">
-                              <input type="checkbox" name="isAdmin" class="form-check-input" id="inputIsAdmin" required>
-                            </div>
+                            <select name="role" class="form-control select2" style="width: 100%;" required>
+                                <option value="" selected disabled>---SELECT ROLE---</option>
+                                <option value="1">Admin</option>
+                                <option value="2">Finance</option>
+                                <option value="3">Staff</option>
+                            </select>
                           </div>
                         </div>
                       </div>
