@@ -103,13 +103,32 @@
         img.qr {
             width: 80px;
         }
+
+        .invoice-paid-stamp {
+            position: fixed;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 140px;
+            font-weight: bold;
+            color: #28a745; /* Bootstrap success green */
+            opacity: 0.08;
+            z-index: 0;
+            white-space: nowrap;
+            pointer-events: none;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="invoice-box">
 
         <!-- Watermark (optional) -->
-        <div class="watermark">INVOICE</div>
+        <?php if ($shipment['status'] == '2'): ?>
+            <div class="invoice-paid-stamp">PAID</div>
+        <?php else: ?>
+            <div class="watermark">INVOICE</div>
+        <?php endif; ?>
 
         <table class="mb-20">
             <tr>
