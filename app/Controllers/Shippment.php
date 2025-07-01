@@ -174,4 +174,35 @@ class Shippment extends BaseController
         // Success
         return redirect()->back()->with('success', 'Invoice marked as paid.');
     }
+
+    public function setArrived($id)
+    {
+        $db = \Config\Database::connect();
+        $shipmentModel = new MNCShippment();
+        $shipmentLogModel = new MNCShippmentLog();
+
+        // Begin transaction
+        $db->transStart();
+
+        // Update shipment status to "Paid" (status = 2)
+        $shipmentModel->update($id, ['status_tracking' => '2']);
+
+        // Insert shipment log
+        $shipmentLogModel->insert([
+            'shippment_id' => $id,
+            'user_id'       => session('user')['id'],
+            'description'  => 'SHIPMENT ARRIVED STATUS UPDATE BY ' . session('user')['fullname'],
+            'created_at'   => date('Y-m-d H:i:s'),
+        ]);
+
+        // Complete the transaction
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            throw new \Exception("Transaction failed");
+        }
+
+        // Success
+        return redirect()->back()->with('success', 'Updated shipment status to Arrived.');
+    }
 }

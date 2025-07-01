@@ -107,11 +107,12 @@
                         <?php endif; ?>
 
                         <?php if ($session->get('user')['role'] === '3'): ?>
-                            <div class="d-flex justify-content-end mb-3">
-                                <a href="<?= base_url('shippment/edit/' . $shippment['id']) ?>" class="btn btn-sm btn-warning">
-                                    <i class="fas fa-edit"></i> Arrivement Process
-                                </a>
-                            </div>
+                            <form action="<?= base_url('shippment/arrived/' . $shippment['id']) ?>" method="get" onsubmit="return confirm('Mark this arrived?')" class="ml-2">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="btn btn-sm btn-success">
+                                  Arrived Shipment
+                                </button>
+                            </form>
                         <?php endif; ?>
                     </div>
                   </div>

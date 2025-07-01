@@ -28,9 +28,12 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="col-2">
-                                    <button type="button" class="btn btn-block btn-success btn-sm" onclick="location.href='<?= base_url('shippment/add') ?>'">
-                                        <i class="fas fa-plus"></i> Add Shippment
-                                    </button>
+                                    <?php $session = session(); ?>
+                                    <?php if ($session->get('user')['role'] === '3'): ?>
+                                        <button type="button" class="btn btn-block btn-success btn-sm" onclick="location.href='<?= base_url('shippment/add') ?>'">
+                                            <i class="fas fa-plus"></i> Add Shippment
+                                        </button>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             <!-- /.card-header -->
@@ -42,7 +45,8 @@
                                             <th>Marking Code</th>
                                             <th>Destination</th>
                                             <th>Consolidation</th>
-                                            <th>Status</th>
+                                            <th>Status Tracking</th>
+                                            <th>Status Finance</th>
                                             <th>Created Time</th>
                                         </tr>
                                     </thead>
@@ -70,6 +74,21 @@
                                                                 echo '<span class="badge badge-success">Completed</span>';
                                                                 break;
                                                             case 0:
+                                                            default:
+                                                                echo '<span class="badge badge-secondary">Pending</span>';
+                                                                break;
+                                                        }
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                        switch ($shippment['status_finance']) {
+                                                            case 0:
+                                                                echo '<span class="badge badge-warning">Un paid</span>';
+                                                                break;
+                                                            case 1:
+                                                                echo '<span class="badge badge-success">Paid</span>';
+                                                                break;
                                                             default:
                                                                 echo '<span class="badge badge-secondary">Pending</span>';
                                                                 break;
