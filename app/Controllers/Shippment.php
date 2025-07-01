@@ -205,4 +205,35 @@ class Shippment extends BaseController
         // Success
         return redirect()->back()->with('success', 'Updated shipment status to Arrived.');
     }
+
+    public function setDelivery($id)
+    {
+        $db = \Config\Database::connect();
+        $shipmentModel = new MNCShippment();
+        $shipmentLogModel = new MNCShippmentLog();
+
+        // Begin transaction
+        $db->transStart();
+
+        // Update shipment status to "Paid" (status = 2)
+        $shipmentModel->update($id, ['status_tracking' => '3']);
+
+        // Insert shipment log
+        $shipmentLogModel->insert([
+            'shippment_id' => $id,
+            'user_id'       => session('user')['id'],
+            'description'  => 'SHIPMENT DELIVERY TO CUSTOMER BY ' . session('user')['fullname'],
+            'created_at'   => date('Y-m-d H:i:s'),
+        ]);
+
+        // Complete the transaction
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            throw new \Exception("Transaction failed");
+        }
+
+        // Success
+        return redirect()->back()->with('success', 'Updated shipment status to Arrived.');
+    }
 }

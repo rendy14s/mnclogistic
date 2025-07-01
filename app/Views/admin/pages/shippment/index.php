@@ -71,7 +71,10 @@
                                                                 echo '<span class="badge badge-warning">On Progress</span>';
                                                                 break;
                                                             case 2:
-                                                                echo '<span class="badge badge-success">Completed</span>';
+                                                                echo '<span class="badge badge-secondary">Arrived Destination</span>';
+                                                                break;
+                                                            case 3:
+                                                                echo '<span class="badge badge-success">Delivered to Customer</span>';
                                                                 break;
                                                             case 0:
                                                             default:
