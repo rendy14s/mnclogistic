@@ -83,6 +83,12 @@
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
+                        <?php $session = session(); ?>
+
+                        <!-- Only show this button if the user is an finance -->
+                        <?php if ($session->get('user')['role'] === '2'): ?>
+                            <button class="btn btn-primary">Finance Only Button</button>
+                        <?php endif; ?>
                     </div>
                   </div>
                   <!-- /.card -->
