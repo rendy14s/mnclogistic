@@ -53,7 +53,8 @@ class Shippment extends BaseController
                 'total_price'       => $this->request->getPost('total_price'),
                 'consolidation'     => $this->request->getPost('consolidation') ? 1 : 0,
                 'package_json'      => $this->request->getPost('packages_json'),
-                'status'            => 1,
+                'status_tracking'   => 1,
+                'status_finance'    => 0,
                 'created_by'        => session('user')['id'],
             ];
 
@@ -151,7 +152,7 @@ class Shippment extends BaseController
         $db->transStart();
 
         // Update shipment status to "Paid" (status = 2)
-        $shipmentModel->update($id, ['status' => '2']);
+        $shipmentModel->update($id, ['status_finance' => '1']);
 
         // Insert shipment log
         $shipmentLogModel->insert([

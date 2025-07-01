@@ -62,7 +62,7 @@
                                                 </td>
                                                 <td>
                                                     <?php
-                                                        switch ($shippment['status']) {
+                                                        switch ($shippment['status_tracking']) {
                                                             case 1:
                                                                 echo '<span class="badge badge-warning">On Progress</span>';
                                                                 break;

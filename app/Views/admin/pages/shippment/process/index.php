@@ -32,7 +32,8 @@
                         <p><strong>Marking Code:</strong> <?= esc($shippment['marking_code']) ?></p>
                         <p><strong>Price Code:</strong> <?= esc($shippment['price_code']) ?></p>
                         <p><strong>Total Price:</strong> Rp <?= number_format($shippment['total_price'], 0, ',', '.') ?></p>
-                        <p><strong>Status:</strong> <?= $shippment['status'] == 1 ? 'On Progress, Un Paid' : 'Completed' ?></p>
+                        <p><strong>Status Shipment:</strong> <?= $shippment['status_tracking'] == 1 ? 'On Progress' : 'Completed' ?></p>
+                        <p><strong>Status Finance:</strong> <?= $shippment['status_finance'] == 0 ? 'UN PAID' : 'PAID' ?></p>
                         <p><strong>Created By:</strong> <?= $users['full_name']?></p>
                         <hr>
 
@@ -94,7 +95,7 @@
                                 </a>
 
                                 <!-- Mark as Paid Button -->
-                                <?php if ($shippment['status'] != '2'): ?>
+                                <?php if ($shippment['status_finance'] != '1'): ?>
                                   <form action="<?= base_url('shippment/paid/' . $shippment['id']) ?>" method="get" onsubmit="return confirm('Mark this invoice as paid?')" class="ml-2">
                                       <?= csrf_field() ?>
                                       <button type="submit" class="btn btn-sm btn-success">
@@ -102,6 +103,14 @@
                                       </button>
                                   </form>
                                 <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($session->get('user')['role'] === '3'): ?>
+                            <div class="d-flex justify-content-end mb-3">
+                                <a href="<?= base_url('shippment/edit/' . $shippment['id']) ?>" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i> Arrivement Process
+                                </a>
                             </div>
                         <?php endif; ?>
                     </div>

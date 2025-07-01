@@ -124,7 +124,7 @@
     <div class="invoice-box">
 
         <!-- Watermark (optional) -->
-        <?php if ($shipment['status'] == '2'): ?>
+        <?php if ($shipment['status_finance'] == '1'): ?>
             <div class="invoice-paid-stamp">PAID</div>
         <?php else: ?>
             <div class="watermark">INVOICE</div>
