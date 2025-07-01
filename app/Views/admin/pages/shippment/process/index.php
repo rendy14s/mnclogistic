@@ -32,7 +32,7 @@
                         <p><strong>Marking Code:</strong> <?= esc($shippment['marking_code']) ?></p>
                         <p><strong>Price Code:</strong> <?= esc($shippment['price_code']) ?></p>
                         <p><strong>Total Price:</strong> Rp <?= number_format($shippment['total_price'], 0, ',', '.') ?></p>
-                        <p><strong>Status:</strong> <?= $shippment['status'] == 1 ? 'On Progress' : 'Completed' ?></p>
+                        <p><strong>Status:</strong> <?= $shippment['status'] == 1 ? 'On Progress, Un Paid' : 'Completed' ?></p>
                         <p><strong>Created By:</strong> <?= $users['full_name']?></p>
                         <hr>
 
@@ -86,8 +86,23 @@
                         <?php $session = session(); ?>
 
                         <!-- Only show this button if the user is an finance -->
+                        <br />
                         <?php if ($session->get('user')['role'] === '2'): ?>
-                            <button class="btn btn-primary">Finance Only Button</button>
+                            <div class="d-flex justify-content-end mb-3">
+                                <a href="<?= base_url('invoice/pdf/' . $shippment['id']) ?>" target="_blank" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-file-pdf"></i> Export PDF
+                                </a>
+
+                                <!-- Mark as Paid Button -->
+                                <?php if ($shippment['status'] != '2'): ?>
+                                  <form action="<?= base_url('shippment/paid/' . $shippment['id']) ?>" method="get" onsubmit="return confirm('Mark this invoice as paid?')" class="ml-2">
+                                      <?= csrf_field() ?>
+                                      <button type="submit" class="btn btn-sm btn-success">
+                                        Mark as Paid
+                                      </button>
+                                  </form>
+                                <?php endif; ?>
+                            </div>
                         <?php endif; ?>
                     </div>
                   </div>

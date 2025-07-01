@@ -140,4 +140,37 @@ class Shippment extends BaseController
             'logs' => $logs
         ]);
     }
+
+    public function setPaid($id)
+    {
+        $db = \Config\Database::connect();
+        $shipmentModel = new MNCShippment();
+        $shipmentLogModel = new MNCShippmentLog();
+
+        // Begin transaction
+        $db->transStart();
+
+        // Update shipment status to "Paid" (status = 2)
+        $shipmentModel->update($id, ['status' => '2']);
+
+        // Insert shipment log
+        $shipmentLogModel->insert([
+            'shippment_id' => $id,
+            'user_id'       => session('user')['id'],
+            'description'  => 'INVOICE MARKED AS PAID BY ' . session('user')['fullname'],
+            'created_at'   => date('Y-m-d H:i:s'),
+        ]);
+
+        // Complete the transaction
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            // Rollback occurred
+            // dd($db->transStatus());die;
+            return redirect()->back()->with('error', 'Failed to mark invoice as paid.');
+        }
+
+        // Success
+        return redirect()->back()->with('success', 'Invoice marked as paid.');
+    }
 }

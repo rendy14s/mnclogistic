@@ -72,3 +72,9 @@ use CodeIgniter\Router\RouteCollection;
 
       // API For Add New Shippment
       $routes->post('shippment/api/add', 'Shippment::add', ['filter' => 'tokenAuth']);
+
+      // Make Set Paid
+      $routes->get('shippment/paid/(:num)', 'Shippment::setPaid/$1');
+
+      // Core Invoice
+      $routes->get('invoice/pdf/(:num)', 'Invoice::exportPdf/$1');
