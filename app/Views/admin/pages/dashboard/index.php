@@ -17,6 +17,7 @@
 
             <!-- Main content -->
             <section class="content">
+            <?php $session = session(); ?>
             <div class="container-fluid">
                 <!-- Small boxes (Stat box) -->
                 <div class="row">
@@ -24,14 +25,16 @@
                     <!-- small box -->
                     <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>150</h3>
+                        <h3><?= esc($totalRowsShipment) ?></h3>
 
-                        <p>New Orders</p>
+                        <p>Shipment</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-bag"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <?php if ($session->get('user')['role'] === '1'): ?>
+                    <a href="<?= base_url('shippment') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <?php endif ?>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -39,14 +42,16 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                     <div class="inner">
-                        <h3>53<sup style="font-size: 20px">%</sup></h3>
+                        <h3><?= esc($totalRowsShipmentSuccess) ?></h3>
 
-                        <p>Bounce Rate</p>
+                        <p>Shipment Completed</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <?php if ($session->get('user')['role'] === '1'): ?>
+                        <a href="<?= base_url('shippment') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <?php endif ?>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -54,14 +59,16 @@
                     <!-- small box -->
                     <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3>44</h3>
+                        <h3><?= esc($totalRowsUsers) ?></h3>
 
-                        <p>User Registrations</p>
+                        <p>User Access System</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-person-add"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <?php if ($session->get('user')['role'] === '1'): ?>
+                        <a href="<?= base_url('users') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <?php endif ?>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -69,14 +76,16 @@
                     <!-- small box -->
                     <div class="small-box bg-danger">
                     <div class="inner">
-                        <h3>65</h3>
+                        <h3><?= esc($totalRowsCustomers) ?></h3>
 
-                        <p>Unique Visitors</p>
+                        <p>Unique Customer</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-pie-graph"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <?php if ($session->get('user')['role'] === '1'): ?>
+                        <a href="<?= base_url('customers') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <?php endif ?>
                     </div>
                 </div>
                 <!-- ./col -->
