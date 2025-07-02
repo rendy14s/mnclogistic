@@ -167,6 +167,41 @@ function showAlert(message, type = 'success') {
 <!-- Core JS Shippment -->
 <script src="<?= base_url('assets/admin/corejs/shippment.js') ?>"></script>
 
+<script>
+    const imageInput = document.getElementById('inputImages');
+    const imagePreview = document.getElementById('imagePreview');
+    const fileLabel = document.querySelector('label[for="inputImages"]');
+
+    imageInput.addEventListener('change', function () {
+        imagePreview.innerHTML = '';
+        const files = Array.from(this.files);
+
+        if (files.length > 4) {
+            alert('You can upload a maximum of 4 images.');
+            this.value = '';
+            fileLabel.textContent = 'Choose up to 4 images';
+            return;
+        }
+
+        fileLabel.textContent = files.length + ' image(s) selected';
+
+        files.forEach(file => {
+            if (!file.type.startsWith('image/')) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('m-1', 'img-thumbnail');
+                img.style.height = '100px';
+                img.style.width = '100px';
+                imagePreview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+</script>
+
 
 
 </body>

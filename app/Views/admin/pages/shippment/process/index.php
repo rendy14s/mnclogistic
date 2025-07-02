@@ -32,7 +32,25 @@
                         <p><strong>Marking Code:</strong> <?= esc($shippment['marking_code']) ?></p>
                         <p><strong>Price Code:</strong> <?= esc($shippment['price_code']) ?></p>
                         <p><strong>Total Price:</strong> Rp <?= number_format($shippment['total_price'], 0, ',', '.') ?></p>
-                        <p><strong>Status Shipment:</strong> <?= $shippment['status_tracking'] == 1 ? 'On Progress' : 'Completed' ?></p>
+                        <p><strong>Status Shipment:</strong> 
+                            <?=
+                                $statusText = '';
+                                switch ($shippment['status_tracking']) {
+                                    case 1:
+                                        $statusText = 'On Progress';
+                                        break;
+                                    case 2:
+                                        $statusText = 'Arrived';
+                                        break;
+                                    case 3:
+                                        $statusText = 'Delivery to Customer, Completed';
+                                        break;
+                                    default:
+                                        $statusText = 'Unknown';
+                                } 
+                            ?>
+                            <?= esc($statusText) ?>
+                        </p>
                         <p><strong>Status Finance:</strong> <?= $shippment['status_finance'] == 0 ? 'UN PAID' : 'PAID' ?></p>
                         <p><strong>Created By:</strong> <?= $users['full_name']?></p>
                         <hr>
@@ -128,60 +146,59 @@
                     <div class="modal fade" id="deliveryModal" tabindex="-1" role="dialog" aria-labelledby="deliveryModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
+
                                 <div class="modal-header">
                                     <h4 class="modal-title">Form Delivery Customer</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <form id="packageForm">
+
+                                <!-- Add enctype for file uploads -->
+                                <form id="deliveryForm" method="post" enctype="multipart/form-data" action="<?= site_url('shippment/deliverycustomer/' . $shippment['id']) ?>" >
+                                    <?= csrf_field() ?>
                                     <div class="card-body">
+
                                         <div class="form-group row">
-                                            <label for="inputDescription" class="col-sm-3 col-form-label">Description</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" name="description" class="form-control" id="inputDescription" placeholder="Description" onblur="formatTextInput(this)" required>
+                                            <label for="inputTrackingNumber" class="col-sm-4 col-form-label">Tracking Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="trackingNumber" class="form-control" id="inputTrackingNumber" placeholder="Tracking Number" required>
                                             </div>
                                         </div>
+
                                         <div class="form-group row">
-                                            <label for="inputDimensionP" class="col-sm-3 col-form-label">Dimension P</label>
-                                            <div class="col-sm-9">
-                                                <input type="number" name="dimension_p" class="form-control" id="dimension_p" placeholder="Dimension P" step="any" required>
+                                            <label for="inputCourier" class="col-sm-4 col-form-label">Courier</label>
+                                            <div class="col-sm-8">
+                                                <select name="courier" class="form-control" id="inputCourier" required>
+                                                    <option value="">Select Courier</option>
+                                                    <?php foreach ($couriers as $courier): ?>
+                                                        <option value="<?= esc($courier['id']) ?>"><?= esc($courier['courier_name']) ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
                                             </div>
                                         </div>
+
+                                        <!-- Modified image input -->
                                         <div class="form-group row">
-                                            <label for="inputDimensionL" class="col-sm-3 col-form-label">Dimension L</label>
-                                            <div class="col-sm-9">
-                                                <input type="number" name="dimension_l" class="form-control" id="dimension_l" placeholder="Dimension L" step="any" required>
+                                            <label for="inputImages" class="col-sm-4 col-form-label">Upload Images</label>
+                                            <div class="col-sm-8">
+                                                <div class="custom-file">
+                                                    <input type="file" name="images[]" class="custom-file-input" id="inputImages" accept="image/*" multiple required>
+                                                    <label class="custom-file-label" for="inputImages">Choose up to 4 images</label>
+                                                </div>
+                                                <small class="form-text text-muted">Max 4 images, JPG/PNG only.</small>
+                                                <div id="imagePreview" class="mt-3 d-flex flex-wrap"></div>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label for="inputDimensionT" class="col-sm-3 col-form-label">Dimension T</label>
-                                            <div class="col-sm-9">
-                                                <input type="number" name="dimension_t" class="form-control" id="dimension_t" placeholder="Dimension T" step="any" required>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputDimensionV" class="col-sm-3 col-form-label">Volume</label>
-                                            <div class="col-sm-9">
-                                                <input type="number" name="dimension_v" class="form-control" id="dimension_v" step="any" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputRealWeight" class="col-sm-3 col-form-label">Real Weight</label>
-                                            <div class="col-sm-9">
-                                                <input type="number" name="realWeight" class="form-control" id="realWeight" placeholder="Real Weight" step="any" required>
-                                            </div>
-                                        </div>
+
                                     </div>
+
                                     <div class="modal-footer justify-content-between">
-                                        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
-                                        <button type="submit" class="btn btn-primary">Add</button>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
                                     </div>
                                 </form>
                             </div>
-                            <!-- /.modal-content -->
                         </div>
-                        <!-- /.modal-dialog -->
                     </div>
                     <!-- /.modal -->
                   <!-- /.card -->
@@ -195,3 +212,7 @@
         <?= $this->endSection() ?>
       </div>
       <!-- /.content-wrapper -->
+
+
+
+

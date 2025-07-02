@@ -10,6 +10,9 @@ use App\Models\MNCShippmentLog;
 use App\Models\MNCCustomer;
 use App\Models\MNCUser;
 use App\Models\MNCPrice;
+use App\Models\MNCCourier;
+use App\Models\MNCDelivery;
+use App\Models\MNCDeliveryImage;
 
 class Shippment extends BaseController
 {
@@ -119,6 +122,8 @@ class Shippment extends BaseController
         $shippmentPackageModel  = new MNCShippmentPackage();
         $shippmentLogModel      = new MNCShippmentLog();
         $userModel              = new MNCUser();
+        $courierData            = new MNCCourier();
+        $couriers               = $courierData->findAll();
 
         $shippment = $shippmentModel->find($id);
         if (!$shippment) {
@@ -138,7 +143,8 @@ class Shippment extends BaseController
             'shippment' => $shippment,
             'packages' => $packages,
             'users' => $users,
-            'logs' => $logs
+            'logs' => $logs,
+            'couriers' => $couriers
         ]);
     }
 
@@ -236,4 +242,84 @@ class Shippment extends BaseController
         // Success
         return redirect()->back()->with('success', 'Updated shipment status to Arrived.');
     }
+
+    public function saveDeliveryCustomer($id)
+    {
+        helper(['text', 'filesystem']);
+        $db = \Config\Database::connect();
+        $db->transBegin();
+
+        $trackingNumber = $this->request->getPost('trackingNumber');
+        $courierId      = $this->request->getPost('courier');
+        $images         = $this->request->getFiles()['images'] ?? [];
+
+        if (count($images) > 4) {
+            return redirect()->back()->with('error', 'You can only upload up to 4 images.');
+        }
+
+        // Insert delivery record
+        $deliveryModel = new MNCDelivery();
+        $deliveryId = $deliveryModel->insert([
+            'shippment_id'    => $id,
+            'tracking_number' => $trackingNumber,
+            'courier_id'      => $courierId
+        ]);
+
+        $uploadPath = FCPATH . 'delivery';
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0775, true);
+        }
+
+        $allowedTypes = ['jpg', 'jpeg', 'png'];
+        $maxSizeBytes = 2 * 1024 * 1024; // 2MB
+        $imageModel = new MNCDeliveryImage();
+
+        foreach ($images as $image) {
+            if (!$image->isValid()) {
+                $db->transRollback();
+                return redirect()->back()->with('error', 'Invalid image upload.');
+            }
+
+            $ext = strtolower($image->getExtension());
+            if (!in_array($ext, $allowedTypes)) {
+                $db->transRollback();
+                return redirect()->back()->with('error', 'Only JPG, JPEG, PNG are allowed.');
+            }
+
+            if ($image->getSize() > $maxSizeBytes) {
+                $db->transRollback();
+                return redirect()->back()->with('error', 'Each image must be under 2MB.');
+            }
+
+            // Save the image as-is with a unique name
+            $uid = uniqid();
+            $finalName = $uid . '.' . $ext;
+
+            if (!$image->move($uploadPath, $finalName)) {
+                $db->transRollback();
+                return redirect()->back()->with('error', 'Image upload failed.');
+            }
+
+            $imageModel->insert([
+                'shippment_delivery_id' => $deliveryId,
+                'path' => $uploadPath . '/' . $finalName,
+                'image' => $finalName
+            ]);
+        }
+
+        $shippmentLogModel = new MNCShippmentLog();
+        $shippmentLogModel->insert([
+            'shippment_id' => $id,
+            'user_id'      => session('user')['id'],
+            'description'  => 'DELIVERY TO CUSTOMER WITH TRACKING NUMBER ' . $trackingNumber . ' BY ' . session('user')['fullname']
+        ]);
+
+        $shipmentModel = new MNCShippment();
+        $shipmentModel->update($id, ['status_tracking' => '3']); // Update status to Delivered
+
+        $db->transCommit();
+        return redirect()->back()->with('success', 'Delivery and images saved successfully.');
+    }
+
+
 }

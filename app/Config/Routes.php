@@ -81,6 +81,8 @@ use CodeIgniter\Router\RouteCollection;
 
        // Make Set Delivered
       $routes->get('shippment/deliver/(:num)', 'Shippment::setDelivery/$1');
+      $routes->post('shippment/deliverycustomer/(:num)', 'Shippment::saveDeliveryCustomer/$1');
+
 
       // Core Invoice
       $routes->get('invoice/pdf/(:num)', 'Invoice::exportPdf/$1');
