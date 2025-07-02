@@ -32,3 +32,4 @@ phpunit.xml.dist
 app/Config/Database.php
 app/Controllers/Auth.php
 app/Views/admin/pages/shippment/process/index.php
+public/delivery/
