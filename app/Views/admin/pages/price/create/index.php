@@ -49,9 +49,9 @@
                           <div class="col-sm-4">
                             <select name="to" class="form-control select2" style="width: 100%;" required>
                               <option value="" selected disabled>---SELECT COUNTRY---</option>
-                              <?php foreach ($countries as $country): ?>
-                                  <option value="<?= esc($country['iso_code']) ?>">
-                                    <?= esc($country['country']) . ' - ' . esc($country['iso_code']) ?>
+                              <?php foreach ($citys as $city): ?>
+                                  <option value="<?= esc($city['iso_code']) ?>">
+                                    <?= esc($city['city_name']) . ' - ' . esc($city['iso_code']) ?>
                                   </option>
                               <?php endforeach; ?>
                             </select>

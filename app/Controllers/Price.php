@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\MNCPrice;
 use App\Models\MNCConstantCountry;
+use App\Models\MNCConstantCity;
 
 
 class Price extends BaseController
@@ -23,7 +24,9 @@ class Price extends BaseController
     {
         //
         $countryModel   = new MNCConstantCountry();
+        $cityModel      = new MNCConstantCity();
         $data['countries']  = $countryModel->findAll();
+        $data['citys']       = $cityModel->findAll();
 
         return view('admin/pages/price/create/index', $data);
     }
