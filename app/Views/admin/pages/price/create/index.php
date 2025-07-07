@@ -35,7 +35,7 @@
                           <label for="inputFrom" class="col-sm-2 col-form-label">From</label>
                           <div class="col-sm-4">
                             <select name="from" class="form-control select2" style="width: 100%;" required>
-                              <option selected disabled>---SELECT COUNTRY---</option>
+                              <option value="" selected disabled>---SELECT COUNTRY---</option>
                               <?php foreach ($countries as $country): ?>
                                   <option value="<?= esc($country['iso_code']) ?>">
                                     <?= esc($country['country']) . ' - ' . esc($country['iso_code']) ?>
@@ -48,7 +48,7 @@
                           <label for="inputTo" class="col-sm-2 col-form-label">To</label>
                           <div class="col-sm-4">
                             <select name="to" class="form-control select2" style="width: 100%;" required>
-                              <option selected disabled>---SELECT COUNTRY---</option>
+                              <option value="" selected disabled>---SELECT COUNTRY---</option>
                               <?php foreach ($countries as $country): ?>
                                   <option value="<?= esc($country['iso_code']) ?>">
                                     <?= esc($country['country']) . ' - ' . esc($country['iso_code']) ?>
