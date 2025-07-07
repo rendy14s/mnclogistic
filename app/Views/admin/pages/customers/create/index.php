@@ -34,8 +34,7 @@
                         <div class="form-group row">
                           <label for="inputMarkingCode" class="col-sm-2 col-form-label">Marking Code</label>
                           <div class="col-sm-4">
-                            <input type="text" name="markingCode" class="form-control" id="inputMarkingCode" placeholder="Marking Code" required disabled>
-                            <input type="hidden" name="markingCodeHidden" id="inputMarkingCodeHidden">
+                            <input type="text" name="markingCode" class="form-control" id="inputMarkingCode" placeholder="Marking Code" required>
                           </div>
                         </div>
                         <div class="form-group row">

@@ -20,17 +20,8 @@ class Customers extends BaseController
     public function form_add()
     {
         //
-        $customerModel = new MNCCustomer();
-        $lastUser = $customerModel->orderBy('id', 'DESC')->first();
-        $lastNumber = 0;
 
-        if ($lastUser && preg_match('/MNC\s(\d+)\s[A-Z]{2}/', $lastUser['marking_code'] ?? '', $matches)) {
-            $lastNumber = (int) $matches[1];
-        }
-
-        $nextNumber = $lastNumber + 1;
-
-        return view('admin/pages/customers/create/index', ['nextNumber' => $nextNumber]);
+        return view('admin/pages/customers/create/index');
     }
 
     public function create()
@@ -38,7 +29,7 @@ class Customers extends BaseController
         $customerModel = new MNCCustomer();
 
         $data = [
-            'marking_code'      => $this->request->getPost('markingCodeHidden'),
+            'marking_code'      => $this->request->getPost('markingCode'),
             'customer_name'     => $this->request->getPost('customerName'),
             'phone_number'      => $this->request->getPost('phoneNumber'),
             'address'           => $this->request->getPost('address')
