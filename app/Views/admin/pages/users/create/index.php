@@ -63,7 +63,7 @@
                                 <option value="1">Admin</option>
                                 <option value="2">Finance</option>
                                 <option value="3">Staff / Operation Batam</option>
-                                <option value="3">Staff / Operation Jakarta</option>
+                                <option value="4">Staff / Operation Jakarta</option>
                             </select>
                           </div>
                         </div>

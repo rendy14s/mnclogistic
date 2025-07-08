@@ -63,9 +63,15 @@
                                                             case 2:
                                                                 echo 'Finance';
                                                                 break;
+                                                            case 3:
+                                                                echo 'Staff / Operation Batam';
+                                                                break;
+                                                            case 4:
+                                                                echo 'Staff / Operation Jakarta';
+                                                                break;
                                                             case 0:
                                                             default:
-                                                                echo 'Staff';
+                                                                echo 'Not Yet Assigned';
                                                                 break;
                                                         }
                                                     ?>
