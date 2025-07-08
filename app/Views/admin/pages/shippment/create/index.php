@@ -93,6 +93,13 @@
                                   </th>
                                 </tr>
                                 <tr>
+                                  <th colspan="5" class="text-right">Total Used Weight (Kg)</th>
+                                  <td colspan="2">
+                                    <span id="totalUsedWeight">0</span>
+                                    <input type="number" id="totalUsedWeightInput" class="form-control d-none mt-1" min="0">
+                                  </td>
+                                </tr>
+                                <tr>
                                   <td colspan="5" class="text-right"><strong>Total:</strong></td>
                                   <td colspan="2">
                                     <span id="totalPrice">Rp 0</span>
