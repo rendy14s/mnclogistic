@@ -44,6 +44,7 @@
                                             <th>Username</th>
                                             <th>Administrator</th>
                                             <th>Created At</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -64,10 +65,16 @@
                                                                 echo 'Finance';
                                                                 break;
                                                             case 3:
-                                                                echo 'Staff / Operation Batam';
+                                                                echo 'Staff Operational Batam';
                                                                 break;
                                                             case 4:
-                                                                echo 'Staff / Operation Jakarta';
+                                                                echo 'Staff Operational Jakarta';
+                                                                break;
+                                                            case 5:
+                                                                echo 'Direktur';
+                                                                break;
+                                                            case 6:
+                                                                echo 'Marketing';
                                                                 break;
                                                             case 0:
                                                             default:
@@ -78,6 +85,11 @@
                                                 </td>
                                                 <td>
                                                     <?= !empty($user['created_at']) ? date('H:i:s A d/m/Y', strtotime($user['created_at'])) :'-' ?>
+                                                </td>
+                                                <td> <!-- Action Buttons -->
+                                                    <a href="<?= base_url('users/edit/' . $user['id']) ?>" class="btn btn-primary btn-sm">Edit</a>
+                                                    <!-- <a href="change_password.php?id=<?= esc($user['id']) ?>" class="btn btn-warning btn-sm">Change Password</a>
+                                                    <a href="delete_user.php?id=<?= esc($user['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a> -->
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

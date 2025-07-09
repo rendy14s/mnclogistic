@@ -33,7 +33,7 @@
                         <i class="ion ion-bag"></i>
                     </div>
                     <?php if ($session->get('user')['role'] === '1'): ?>
-                    <a href="<?= base_url('shippment') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= base_url('shipment') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     <?php endif ?>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                         <i class="ion ion-stats-bars"></i>
                     </div>
                         <?php if ($session->get('user')['role'] === '1'): ?>
-                        <a href="<?= base_url('shippment') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="<?= base_url('shipment') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         <?php endif ?>
                     </div>
                 </div>

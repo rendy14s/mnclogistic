@@ -8,12 +8,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Data Shippment</h1>
+                        <h1>Data Shipment</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="<?= base_url('dashboard') ?>">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Data Shippment</li>
+                            <li class="breadcrumb-item active">Data Shipment</li>
                         </ol>
                     </div>
                 </div>
@@ -30,8 +30,8 @@
                                 <div class="col-2">
                                     <?php $session = session(); ?>
                                     <?php if ($session->get('user')['role'] === '3'): ?>
-                                        <button type="button" class="btn btn-block btn-success btn-sm" onclick="location.href='<?= base_url('shippment/add') ?>'">
-                                            <i class="fas fa-plus"></i> Add Shippment
+                                        <button type="button" class="btn btn-block btn-success btn-sm" onclick="location.href='<?= base_url('shipment/add') ?>'">
+                                            <i class="fas fa-plus"></i> Add Shipment
                                         </button>
                                     <?php endif; ?>
                                 </div>
@@ -52,21 +52,21 @@
                                     </thead>
                                     <tbody>
                                         <?php $id = 1; ?>
-                                        <?php foreach ($shippments as $shippment): ?>
+                                        <?php foreach ($shipments as $shipment): ?>
                                             <tr>
                                                 <td><?= $id++ ?></td>
                                                 <td>
-                                                    <a href="<?= base_url('shippment/process/' . $shippment['id']) ?>">
-                                                        <?= esc($shippment['marking_code']) ?>
+                                                    <a href="<?= base_url('shipment/process/' . $shipment['id']) ?>">
+                                                        <?= esc($shipment['marking_code']) ?>
                                                     </a>
                                                 </td>
-                                                <td><?= esc($shippment['price_code']) ?></td>
+                                                <td><?= esc($shipment['price_code']) ?></td>
                                                 <td>
-                                                    <?= $shippment['consolidation'] == 1 ? 'Yes' : 'No' ?>
+                                                    <?= $shipment['consolidation'] == 1 ? 'Yes' : 'No' ?>
                                                 </td>
                                                 <td>
                                                     <?php
-                                                        switch ($shippment['status_tracking']) {
+                                                        switch ($shipment['status_tracking']) {
                                                             case 1:
                                                                 echo '<span class="badge badge-warning">On Progress</span>';
                                                                 break;
@@ -85,7 +85,7 @@
                                                 </td>
                                                 <td>
                                                     <?php
-                                                        switch ($shippment['status_finance']) {
+                                                        switch ($shipment['status_finance']) {
                                                             case 0:
                                                                 echo '<span class="badge badge-warning">Un paid</span>';
                                                                 break;
@@ -99,7 +99,7 @@
                                                     ?>
                                                 </td>
                                                 <td>
-                                                    <?= !empty($shippment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shippment['created_at'])) :'-' ?>
+                                                    <?= !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) :'-' ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

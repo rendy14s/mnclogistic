@@ -4,8 +4,8 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-use App\Models\MNCShippment;
-use App\Models\MNCShippmentPackage;
+use App\Models\MNCShipment;
+use App\Models\MNCShipmentPackage;
 use App\Models\MNCCustomer;
 
 class Invoice extends BaseController
@@ -20,11 +20,11 @@ class Invoice extends BaseController
         helper('pdf');
 
         $customer = new MNCCustomer();
-        $shipmentModel = new MNCShippment();
-        $detailModel = new MNCShippmentPackage();
+        $shipmentModel = new MNCShipment();
+        $detailModel = new MNCShipmentPackage();
 
         $shipment = $shipmentModel->find($id);
-        $details = $detailModel->where('shippment_id', $id)->findAll();
+        $details = $detailModel->where('shipment_id', $id)->findAll();
         $customerData = $customer->where('marking_code', $shipment['marking_code'])->first();
 
         if (!$shipment) {

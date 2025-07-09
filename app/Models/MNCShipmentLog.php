@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class MNCShipmentLog extends Model
 {
-    protected $table            = 'mnc_shippment_logs';
+    protected $table            = 'mnc_shipment_logs';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';

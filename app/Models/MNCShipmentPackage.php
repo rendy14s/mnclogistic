@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class MNCShipmentPackage extends Model
 {
-    protected $table            = 'mnc_shippment_package';
+    protected $table            = 'mnc_shipment_package';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';

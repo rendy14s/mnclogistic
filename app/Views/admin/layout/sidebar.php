@@ -51,11 +51,11 @@
             </li>
           <?php endif; ?>
 
-          <li class="nav-item <?= ($segment_first === 'shippment') ? 'menu-open' : '' ?>">
-            <a href="<?= base_url('shippment') ?>" class="nav-link">
+          <li class="nav-item <?= ($segment_first === 'shipment') ? 'menu-open' : '' ?>">
+            <a href="<?= base_url('shipment') ?>" class="nav-link">
               <i class="nav-icon fa fa-fw fa-list-alt"></i>
               <p>
-                Shippment
+                Shipment
               </p>
             </a>
           </li>

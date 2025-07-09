@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-use App\Models\MNCShippment;
+use App\Models\MNCShipment;
 use App\Models\MNCUser;
 use App\Models\MNCCustomer;
 
@@ -13,7 +13,7 @@ class Dashboard extends BaseController
     public function index()
     {
         //
-        $countShipmentData = new MNCShippment();
+        $countShipmentData = new MNCShipment();
 
         // $countShipmentDataSuccess = new MNCDeliveryImage();
 

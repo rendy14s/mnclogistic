@@ -142,8 +142,8 @@ function showAlert(message, type = 'success') {
 }
 </script>
 
-<!-- Core JS Shippment -->
-<script src="<?= base_url('assets/admin/corejs/shippment.js') ?>"></script>
+<!-- Core JS Shipment -->
+<script src="<?= base_url('assets/admin/corejs/shipment.js') ?>"></script>
 
 <script>
     const imageInput = document.getElementById('inputImages');

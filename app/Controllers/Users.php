@@ -58,4 +58,43 @@ class Users extends BaseController
 
         return redirect()->to('/users')->with('message', 'User created successfully!');
     }
+
+    public function edit($id) {
+        $userModel = new MNCUser();
+        $user = $userModel->find($id); // Fetch user by ID
+
+        if (!$user) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("User not found.");
+        }
+
+        if ($this->request->getMethod() === 'POST') {
+            // Handle form submission
+
+            $firstname = $this->request->getPost('first_name');
+            $lastname  = $this->request->getPost('last_name');
+
+            $data = [
+                'first_name'    => $this->request->getPost('first_name'),
+                'last_name'     => $this->request->getPost('last_name'),
+                'full_name'     => $firstname . ' ' . $lastname,
+                'username'      => $this->request->getPost('username'),
+                'role'          => $this->request->getPost('role'),
+            ];
+
+            // Debug: Check data before update
+            log_message('debug', 'Form Data: ' . json_encode($data));
+
+            // Update the user data
+            if ($userModel->update($id, $data)) {
+                log_message('debug', 'User updated successfully.');
+                return redirect()->to('/users'); // Redirect to the users list page
+            } else {
+                // If the update fails, log the error
+                log_message('error', 'Failed to update user with ID: ' . $id);
+            }
+        }
+
+        // Pass user data to the view
+        return view('admin/pages/users/edit/index', ['user' => $user]);
+    }
 }

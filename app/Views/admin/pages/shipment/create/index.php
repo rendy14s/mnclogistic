@@ -8,12 +8,12 @@
             <div class="container-fluid">
               <div class="row mb-2">
                 <div class="col-sm-6">
-                  <h1>Add Shippment</h1>
+                  <h1>Add Shipment</h1>
                 </div>
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="<?= base_url('shippment') ?>">Data Shippment</a></li>
-                    <li class="breadcrumb-item active">Add New Shippment</li>
+                    <li class="breadcrumb-item"><a href="<?= base_url('shipment') ?>">Data Shipment</a></li>
+                    <li class="breadcrumb-item active">Add New Shipment</li>
                   </ol>
                 </div>
               </div>
@@ -45,10 +45,10 @@
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label for="inputTo" class="col-sm-2 col-form-label">Original Shippment</label>
+                          <label for="inputTo" class="col-sm-2 col-form-label">Original Shipment</label>
                           <div class="col-sm-4">
                             <select id="shippingPrice" name="price_code" class="form-control select2" style="width: 100%;" required>
-                              <option value=""  selected disabled>---SELECT SHIPPMENT---</option>
+                              <option value=""  selected disabled>---SELECT SHIPMENT---</option>
                               <?php foreach ($prices as $price): ?>
                                   <option value="<?= esc($price['price_code']) ?>" data-price="<?= esc($price['price']) ?>">
                                     <?= esc($price['price_code']) ?>
