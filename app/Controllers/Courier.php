@@ -28,7 +28,8 @@ class Courier extends BaseController
         $courierModel = new MNCCourier();
 
         $data = [
-            'courier_name'      => $this->request->getPost('courierName')
+            'courier_name'      => $this->request->getPost('courierName'),
+            'status'            => '1'
         ];
 
         $courierModel->save($data);
