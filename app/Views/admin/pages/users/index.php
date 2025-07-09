@@ -88,8 +88,8 @@
                                                 </td>
                                                 <td> <!-- Action Buttons -->
                                                     <a href="<?= base_url('users/edit/' . $user['id']) ?>" class="btn btn-primary btn-sm">Edit</a>
-                                                    <!-- <a href="change_password.php?id=<?= esc($user['id']) ?>" class="btn btn-warning btn-sm">Change Password</a>
-                                                    <a href="delete_user.php?id=<?= esc($user['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a> -->
+                                                    <a href="<?= base_url('users/change_password/' . $user['id']) ?>" class="btn btn-warning btn-sm">Change Password</a>
+                                                    <a href="<?= base_url('users/softDelete/' . $user['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

@@ -30,11 +30,21 @@ use CodeIgniter\Router\RouteCollection;
       // Form Edit User
       $routes->get('users/edit/(:num)', 'Users::edit/$1', ['filter' => 'tokenAuth']);
 
+      // Form Change Password
+      $routes->get('users/change_password/(:num)', 'Users::changePassword/$1', ['filter' => 'tokenAuth']);
+      
+
       // API For Add User Register
       $routes->post('users/api/register', 'Users::create', ['filter' => 'tokenAuth']);
 
       // API For Edit User
       $routes->post('users/api/edit/(:num)', 'Users::edit/$1', ['filter' => 'tokenAuth']);
+
+      // API For Change Password
+      $routes->post('users/api/changePassword/(:num)', 'Users::changePassword/$1', ['filter' => 'tokenAuth']);
+
+      // API For Soft Delete User
+      $routes->get('users/softDelete/(:num)', 'Users::softDelete/$1', ['filter' => 'tokenAuth']);
 
    // Customer
       // Index Page

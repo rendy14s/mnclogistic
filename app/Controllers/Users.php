@@ -11,8 +11,9 @@ class Users extends BaseController
     public function index()
     {
         //
-        $model = new MNCUser();
-        $data['users'] = $model->findAll();
+        $userModel = new MNCUser();
+        // Only select active users (status = 1)
+        $data['users'] = $userModel->where('status', 1)->findAll();
         
         return view('admin/pages/users/index', $data);
     }
@@ -52,6 +53,7 @@ class Users extends BaseController
             'username'    => $this->request->getPost('username'),
             'password'    => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
             'role'        => $this->request->getPost('role'),
+            'status'        => '1', // Default status set to '1' (active)
         ];
 
         $userModel->save($data);
@@ -97,4 +99,68 @@ class Users extends BaseController
         // Pass user data to the view
         return view('admin/pages/users/edit/index', ['user' => $user]);
     }
+
+    public function changePassword($id)
+    {
+        $userModel = new MNCUser();
+        $user = $userModel->find($id); // Get user data
+
+        if (!$user) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("User not found.");
+        }
+
+        // Check if form is submitted (POST)
+        if ($this->request->getMethod() === 'POST') {
+
+            // Get the new password
+            $newPassword = $this->request->getPost('password');
+
+            // Hash the password before saving it to the database
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+            // Update the password in the database
+            $data = [
+                'password' => $hashedPassword,
+            ];
+
+            if ($userModel->update($id, $data)) {
+                // Redirect with success message
+                return redirect()->to('/users')->with('message', 'Password changed successfully.');
+            } else {
+                // If update failed
+                return redirect()->back()->with('error', 'Failed to change password.');
+            }
+        }
+
+        // If the request is GET, show the change password form
+        return view('admin/pages/users/change_password/index', ['user' => $user]);
+    }
+
+    public function softDelete($id)
+    {
+        // Get the user model
+        $userModel = new MNCUser();
+
+        // Find the user
+        $user = $userModel->find($id);
+
+        // Check if the user exists
+        if (!$user) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('User not found');
+        }
+
+        // Update the user's status to 0 (soft delete)
+        $data = [
+            'status' => 0
+        ];
+
+        if ($userModel->update($id, $data)) {
+            // Redirect to users list with a success message
+            return redirect()->to('/users')->with('message', 'User soft-deleted successfully.');
+        } else {
+            // If update fails
+            return redirect()->back()->with('error', 'Failed to soft delete the user.');
+        }
+    }
+
 }
