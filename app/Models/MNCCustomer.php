@@ -12,7 +12,7 @@ class MNCCustomer extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id', 'marking_code', 'customer_name', 'address', 'phone_number', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['id', 'marking_code', 'customer_name', 'address', 'phone_number', 'status', 'created_at', 'updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

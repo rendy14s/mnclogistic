@@ -44,6 +44,7 @@
                                             <th>Phone Number</th>
                                             <th>Address</th>
                                             <th>Created At</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -57,6 +58,10 @@
                                                 <td><?= esc($customer['address']) ?></td>
                                                 <td>
                                                     <?= !empty($customer['created_at']) ? date('H:i:s A d/m/Y', strtotime($customer['created_at'])) :'-' ?>
+                                                </td>
+                                                <td> <!-- Action Buttons -->
+                                                    <a href="<?= base_url('customers/edit/' . $customer['id']) ?>" class="btn btn-primary btn-sm">Edit</a>
+                                                    <a href="<?= base_url('customers/softDelete/' . $customer['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this customer?')">Delete</a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
