@@ -74,13 +74,13 @@
                                     <th>P x L x T</th>
                                     <th>Volume</th>
                                     <th>Real Weight</th>
-                                    <th>Used Weight (Kg)</th>
+                                    <!-- <th>Used Weight (Kg)</th> -->
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr class="no-data">
-                                    <td colspan="7" class="text-center text-muted">No data available in table</td>
+                                    <td colspan="6" class="text-center text-muted">No data available in table</td>
                                 </tr>
                             </tbody>
                             <tfoot>

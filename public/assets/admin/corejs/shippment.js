@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editTotalBtn = document.getElementById('editTotalBtn');
     const consolidationCheckbox = document.getElementById('consolidationCheckbox');
     const form = document.getElementById('shippingForm');
+    const totalUsedWeightDisplay = document.getElementById('totalUsedWeight');
 
 
 
@@ -58,38 +59,111 @@ document.addEventListener('DOMContentLoaded', () => {
         return parseInt(selectedOption.dataset.price || '0', 10);
     }
 
-    function calculateUsedWeight(volume, realWeight, consolidationEnabled = false) {
-        return consolidationEnabled
-            ? Math.ceil(Math.max(volume, realWeight))
-            : Math.ceil(volume + realWeight);
-    }
+    // function calculateUsedWeight(volume, realWeight, consolidationEnabled = false) {
+    //     return consolidationEnabled
+    //         ? Math.ceil(Math.max(volume, realWeight))
+    //         : Math.ceil(volume + realWeight);
+    // }
 
     function calculateVolume(p, l, t) {
         return (p * l * t) / 6000;
     }
 
+    // function renderPackagesTable() {
+
+    //     packagesTableBody.innerHTML = '';
+
+    //     if (packages.length === 0) {
+    //         packagesTableBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No data available in table</td></tr>`;
+    //         totalDisplay.textContent = 'Rp 0';
+    //         totalHiddenInput.value = 0;
+    //         totalUsedWeightDisplay.textContent = '0'; // Set total used weight to 0 when there's no data
+    //         return;
+    //     }
+
+    //     const pricePerKg = getPricePerKg();
+    //     const updatedPackages = [];
+    //     let total = 0;
+    //     let totalUsedWeight = 0; // Ensure this is a number
+
+
+    //     packages.forEach((pkg, i) => {
+    //         const volume = calculateVolume(pkg.p, pkg.l, pkg.t);
+    //         const usedWeight = calculateUsedWeight(volume, pkg.real_weight);
+    //         const rowTotal = usedWeight * pricePerKg;
+    //         total += rowTotal;
+    //         totalUsedWeight += usedWeight; // Accumulate total used weight
+
+    //         updatedPackages.push({ ...pkg, volume, used_weight: usedWeight });
+
+    //         packagesTableBody.insertAdjacentHTML('beforeend', `
+    //             <tr>
+    //                 <td>${i + 1}</td>
+    //                 <td>${pkg.description}</td>
+    //                 <td>${pkg.p} x ${pkg.l} x ${pkg.t}</td>
+    //                 <td>${volume.toFixed(2)}</td>
+    //                 <td>${pkg.real_weight}</td>
+    //                 <td>
+    //                     <button type="button" class="btn btn-sm btn-warning" data-action="edit" data-index="${i}">Edit</button>
+    //                     <button type="button" class="btn btn-sm btn-danger" data-action="delete" data-index="${i}">Delete</button>
+    //                 </td>
+    //             </tr>
+    //         `);
+    //     });
+
+    //     // Check manual override
+    //     const override = !totalInput.classList.contains('d-none') && !isNaN(parseInt(totalInput.value, 10))
+    //         ? parseInt(totalInput.value, 10)
+    //         : total;
+
+    //     console.log('kiw', parseInt(totalInput.value, 10), total);
+
+    //     totalDisplay.textContent = `Rp ${override.toLocaleString()}`;
+    //     totalHiddenInput.value = override;
+    //     packagesJsonInput.value = JSON.stringify(updatedPackages);
+
+    //     // Update total used weight in the footer
+    //     totalUsedWeightDisplay.textContent = totalUsedWeight.toFixed(2); // Set the calculated total used weight
+
+    //     document.getElementById('override_total').value = "0";
+    // }
+
     function renderPackagesTable() {
-        packagesTableBody.innerHTML = '';
+        packagesTableBody.innerHTML = '';  // Clear the table
 
         if (packages.length === 0) {
             packagesTableBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No data available in table</td></tr>`;
             totalDisplay.textContent = 'Rp 0';
             totalHiddenInput.value = 0;
+            totalUsedWeightDisplay.textContent = '0'; // Set total used weight to 0 when there's no data
             return;
         }
 
-        const pricePerKg = getPricePerKg();
+        const pricePerKg = getPricePerKg();  // Fetch price per kg from your pricing logic
+        const consolidationCheckbox = document.getElementById('consolidationCheckbox');
+        const consolidationEnabled = consolidationCheckbox?.checked;
+
+        let total = 0;  // This will accumulate the total price
+        let totalUsedWeight = 0;  // This will accumulate the total used weight (kg)
+        let totalPackagesWeight = 0;  // For consolidation, we'll accumulate weight for all packages
+
         const updatedPackages = [];
-        let total = 0;
 
         packages.forEach((pkg, i) => {
             const volume = calculateVolume(pkg.p, pkg.l, pkg.t);
-            const usedWeight = calculateUsedWeight(volume, pkg.real_weight);
+            const usedWeight = calculateUsedWeight(volume, pkg.real_weight, consolidationEnabled);  // Use consolidation logic here
             const rowTotal = usedWeight * pricePerKg;
-            total += rowTotal;
+
+            // For consolidation, accumulate total weight to sum later
+            if (consolidationEnabled) {
+                totalPackagesWeight += usedWeight;
+            } else {
+                totalUsedWeight += usedWeight;  // Regular behavior without consolidation
+            }
 
             updatedPackages.push({ ...pkg, volume, used_weight: usedWeight });
 
+            // Insert the row for the table
             packagesTableBody.insertAdjacentHTML('beforeend', `
                 <tr>
                     <td>${i + 1}</td>
@@ -97,7 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${pkg.p} x ${pkg.l} x ${pkg.t}</td>
                     <td>${volume.toFixed(2)}</td>
                     <td>${pkg.real_weight}</td>
-                    <td>${usedWeight}</td>
                     <td>
                         <button type="button" class="btn btn-sm btn-warning" data-action="edit" data-index="${i}">Edit</button>
                         <button type="button" class="btn btn-sm btn-danger" data-action="delete" data-index="${i}">Delete</button>
@@ -106,17 +179,29 @@ document.addEventListener('DOMContentLoaded', () => {
             `);
         });
 
-        // Check manual override
+        // If consolidation is enabled, sum up the total weight and round it
+        if (consolidationEnabled) {
+            totalUsedWeight = Math.ceil(totalPackagesWeight);  // Round the consolidated total weight
+        }
+
+        // Calculate the total price based on the final used weight
         const override = !totalInput.classList.contains('d-none') && !isNaN(parseInt(totalInput.value, 10))
             ? parseInt(totalInput.value, 10)
-            : total;
+            : totalUsedWeight;
 
-        totalDisplay.textContent = `Rp ${override.toLocaleString()}`;
-        totalHiddenInput.value = override;
+        total = override * pricePerKg;  // Calculate the total cost
+
+        // Display the results
+        totalDisplay.textContent = `Rp ${total.toLocaleString()}`;
+        totalHiddenInput.value = override;  // Hidden input for the form submission
         packagesJsonInput.value = JSON.stringify(updatedPackages);
+
+        // Update total used weight in the footer
+        totalUsedWeightDisplay.textContent = totalUsedWeight.toFixed(2);  // Update the total used weight in kg
 
         document.getElementById('override_total').value = "0";
     }
+
 
     function resetForm() {
         packageForm.reset();
@@ -227,13 +312,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function calculateUsedWeight(volume, realWeight) {
-        const consolidationCheckbox = document.getElementById('consolidationCheckbox');
-        const consolidationEnabled = consolidationCheckbox?.checked;
 
-        return consolidationEnabled
-            ? Math.ceil(Math.max(volume, realWeight))
-            : Math.ceil(volume + realWeight);
+    function calculateUsedWeight(volume, realWeight, consolidationEnabled) {
+        console.log("Calculating used weight with volume:", volume, "and real weight:", realWeight);
+
+        // If consolidation is checked, sum the maximum of each individual package's used weight
+        if (consolidationEnabled) {
+            // For each package, we use the max of volume-based weight or real weight
+            const usedWeight = Math.max(volume, realWeight);
+            return usedWeight;  // Do not round yet, we'll sum and round the total later
+        }
+
+        // If consolidation is unchecked, we calculate the max for each package and round it up
+        return Math.ceil(Math.max(volume, realWeight));  // Round individual weights
     }
 
     window.formatTextInput = function (el) {
