@@ -41,6 +41,7 @@
                                             <th>No</th>
                                             <th>Courier Name</th>
                                             <th>Created At</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -51,6 +52,10 @@
                                                 <td><?= esc($courier['courier_name']) ?></td>
                                                 <td>
                                                     <?= !empty($courier['created_at']) ? date('H:i:s A d/m/Y', strtotime($courier['created_at'])) :'-' ?>
+                                                </td>
+                                                <td> <!-- Action Buttons -->
+                                                    <a href="<?= base_url('3rdcourier/edit/' . $courier['id']) ?>" class="btn btn-primary btn-sm">Edit</a>
+                                                    <a href="<?= base_url('3rdcourier/softDelete/' . $courier['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
