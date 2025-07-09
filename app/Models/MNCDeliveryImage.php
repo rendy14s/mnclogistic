@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class MNCDeliveryImage extends Model
 {
-    protected $table            = 'mnc_shippment_delivery_image';
+    protected $table            = 'mnc_shipment_delivery_image';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['shippment_delivery_id', 'path', 'image', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['shipment_delivery_id', 'path', 'image', 'created_at', 'updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

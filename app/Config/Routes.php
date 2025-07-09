@@ -60,28 +60,28 @@ use CodeIgniter\Router\RouteCollection;
       // API For Add 3rd Courier
       $routes->post('3rdcourier/api/register', 'Courier::create', ['filter' => 'tokenAuth']);
 
-   // Core Shippment
+   // Core Shipment
       //Index Page
-      $routes->get('shippment', 'Shippment::index', ['filter' => 'tokenAuth']);
+      $routes->get('shipment', 'Shipment::index', ['filter' => 'tokenAuth']);
 
-      // Form Add New Shippment
-      $routes->get('shippment/add', 'Shippment::form_add', ['filter' => 'tokenAuth']);
+      // Form Add New Shipment
+      $routes->get('shipment/add', 'Shipment::form_add', ['filter' => 'tokenAuth']);
 
-      // Form Process Shippment
-      $routes->get('shippment/process/(:num)', 'Shippment::process/$1', ['filter' => 'tokenAuth']);
+      // Form Process Shipment
+      $routes->get('shipment/process/(:num)', 'Shipment::process/$1', ['filter' => 'tokenAuth']);
 
-      // API For Add New Shippment
-      $routes->post('shippment/api/add', 'Shippment::add', ['filter' => 'tokenAuth']);
+      // API For Add New Shipment
+      $routes->post('shipment/api/add', 'Shipment::add', ['filter' => 'tokenAuth']);
 
       // Make Set Paid
-      $routes->get('shippment/paid/(:num)', 'Shippment::setPaid/$1');
+      $routes->get('shipment/paid/(:num)', 'Shipment::setPaid/$1');
 
       // Make Set Arrived
-      $routes->get('shippment/arrived/(:num)', 'Shippment::setArrived/$1');
+      $routes->get('shipment/arrived/(:num)', 'Shipment::setArrived/$1');
 
        // Make Set Delivered
-      $routes->get('shippment/deliver/(:num)', 'Shippment::setDelivery/$1');
-      $routes->post('shippment/deliverycustomer/(:num)', 'Shippment::saveDeliveryCustomer/$1');
+      $routes->get('shipment/deliver/(:num)', 'Shipment::setDelivery/$1');
+      $routes->post('shipment/deliverycustomer/(:num)', 'Shipment::saveDeliveryCustomer/$1');
 
 
       // Core Invoice

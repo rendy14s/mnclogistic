@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class ShippmentLog extends BaseController
+class ShipmentLog extends BaseController
 {
     public function index()
     {

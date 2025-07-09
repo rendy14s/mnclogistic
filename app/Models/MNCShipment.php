@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class MNCShippmentLog extends Model
+class MNCShipment extends Model
 {
-    protected $table            = 'mnc_shippment_logs';
+    protected $table            = 'mnc_shipment';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['shippment_id', 'user_id', 'description', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['marking_code', 'price_code', 'special_case', 'total_price','total_weight', 'consolidation', 'package_json', 'status_tracking', 'status_finance', 'created_by', 'created_at', 'updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

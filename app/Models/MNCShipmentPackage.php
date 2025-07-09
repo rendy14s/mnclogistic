@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class MNCShippmentPackage extends Model
+class MNCShipmentPackage extends Model
 {
     protected $table            = 'mnc_shippment_package';
     protected $primaryKey       = 'id';
@@ -12,7 +12,7 @@ class MNCShippmentPackage extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['shippment_id', 'description', 'dimension_p', 'dimension_l', 'dimension_t', 'dimension_v', 'real_weight', 'used_weight', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['shipment_id', 'description', 'dimension_p', 'dimension_l', 'dimension_t', 'dimension_v', 'real_weight', 'used_weight', 'created_at', 'updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

@@ -4,9 +4,9 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-use App\Models\MNCShippment;
-use App\Models\MNCShippmentPackage;
-use App\Models\MNCShippmentLog;
+use App\Models\MNCShipment;
+use App\Models\MNCShipmentPackage;
+use App\Models\MNCShipmentLog;
 use App\Models\MNCCustomer;
 use App\Models\MNCUser;
 use App\Models\MNCPrice;
@@ -14,15 +14,15 @@ use App\Models\MNCCourier;
 use App\Models\MNCDelivery;
 use App\Models\MNCDeliveryImage;
 
-class Shippment extends BaseController
+class Shipment extends BaseController
 {
     public function index()
     {
         //
-        $shippmentModel         = new MNCShippment();
-        $data['shippments']     = $shippmentModel->findAll();
+        $shipmentModel         = new MNCShipment();
+        $data['shipments']     = $shipmentModel->findAll();
         
-        return view('admin/pages/shippment/index', $data);
+        return view('admin/pages/shipment/index', $data);
     }
 
     public function form_add()
@@ -33,15 +33,15 @@ class Shippment extends BaseController
         $data['customers']  = $customerModel->findAll();
         $data['prices']     = $priceModel->findAll();
 
-        return view('admin/pages/shippment/create/index', $data);
+        return view('admin/pages/shipment/create/index', $data);
     }
 
     public function add()
     {
         // dd($this->request->getPost());die;
-        $shippmentModel         = new MNCShippment();
-        $shippmentPackageModel  = new MNCShippmentPackage();
-        $shippmentLogModel      = new MNCShippmentLog();
+        $shipmentModel         = new MNCShipment();
+        $shipmentPackageModel  = new MNCShipmentPackage();
+        $shipmentLogModel      = new MNCShipmentLog();
 
         $db = \Config\Database::connect();
         $db->transStart();
@@ -49,7 +49,7 @@ class Shippment extends BaseController
 
         try {
             // Prepare shipping data
-            $dataShippment = [
+            $dataShipment = [
                 'marking_code'      => $this->request->getPost('marking_code'),
                 'price_code'        => $this->request->getPost('price_code'),
                 'special_case'      => $this->request->getPost('override_total') ? 1 : 0,
@@ -63,8 +63,8 @@ class Shippment extends BaseController
 
 
             // Insert main shipping row
-            $shippmentModel->insert($dataShippment);
-            $shippingId = $shippmentModel->getInsertID();
+            $shipmentModel->insert($dataShipment);
+            $shippingId = $shipmentModel->getInsertID();
 
             if (!$shippingId) {
                 throw new \Exception("Shipping insert failed");
@@ -75,8 +75,8 @@ class Shippment extends BaseController
             // Insert each package
             $packages = json_decode($this->request->getPost('packages_json'), true);
             foreach ($packages as $pkg) {
-                $shippmentPackageModel->insert([
-                    'shippment_id'  => $shippingId,
+                $shipmentPackageModel->insert([
+                    'shipment_id'  => $shippingId,
                     'description'   => $pkg['description'],
                     'dimension_p'   => $pkg['p'],
                     'dimension_l'   => $pkg['l'],
@@ -87,29 +87,29 @@ class Shippment extends BaseController
                 ]);
             }
 
-            // dd($shippmentPackageModel);die;
+            // dd($shipmentPackageModel);die;
 
 
             // // Prepare shipping log data
-            $dataShippmentlog = [
-                'shippment_id'      => $shippingId,
+            $dataShipmentlog = [
+                'shipment_id'      => $shippingId,
                 'user_id'           => session('user')['id'],
                 'description'       => 'NEW DATA INSERTED [ON PROGRESS]',
             ];
 
             // Insert shipping log
-            $shippmentLogModel->insert($dataShippmentlog);
+            $shipmentLogModel->insert($dataShipmentlog);
 
 
             $db->transComplete(); // COMMIT TRANSACTION
 
             if ($db->transStatus() === false) {
-                log_message('error', print_r($dataShippment, true));
-                log_message('error', print_r($shippmentModel->errors(), true));
+                log_message('error', print_r($dataShipment, true));
+                log_message('error', print_r($shipmentModel->errors(), true));
                 throw new \Exception("Transaction failed");
             }
 
-            return redirect()->to('/shippment')->with('success', 'Shipping created successfully.');
+            return redirect()->to('/shipment')->with('success', 'Shipping created successfully.');
         } catch (\Exception $e) {
                 $db->transRollback(); // ROLLBACK if anything fails
                 return redirect()->back()->with('error', 'Save failed: ' . $e->getMessage());
@@ -118,29 +118,29 @@ class Shippment extends BaseController
 
     public function process($id)
     {
-        $shippmentModel         = new MNCShippment();
-        $shippmentPackageModel  = new MNCShippmentPackage();
-        $shippmentLogModel      = new MNCShippmentLog();
+        $shipmentModel         = new MNCShipment();
+        $shipmentPackageModel  = new MNCShipmentPackage();
+        $shipmentLogModel      = new MNCShipmentLog();
         $userModel              = new MNCUser();
         $courierData            = new MNCCourier();
         $couriers               = $courierData->findAll();
 
-        $shippment = $shippmentModel->find($id);
-        if (!$shippment) {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException("Shippment ID $id tidak ditemukan");
+        $shipment = $shipmentModel->find($id);
+        if (!$shipment) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Shipment ID $id tidak ditemukan");
         }
 
-        $packages   = $shippmentPackageModel->where('shippment_id', $id)->findAll();
-        $users      = $userModel->where('id', $shippment['created_by'])->first();
+        $packages   = $shipmentPackageModel->where('shipment_id', $id)->findAll();
+        $users      = $userModel->where('id', $shipment['created_by'])->first();
         
-        $logs = $shippmentLogModel
-                ->select('mnc_shippment_logs.*, mnc_users.full_name')
-                ->join('mnc_users', 'mnc_users.id = mnc_shippment_logs.user_id', 'left')
-                ->where('shippment_id', $id)
+        $logs = $shipmentLogModel
+                ->select('mnc_shipment_logs.*, mnc_users.full_name')
+                ->join('mnc_users', 'mnc_users.id = mnc_shipment_logs.user_id', 'left')
+                ->where('shipment_id', $id)
                 ->findAll();
 
-        return view('admin/pages/shippment/process/index', [
-            'shippment' => $shippment,
+        return view('admin/pages/shipment/process/index', [
+            'shipment' => $shipment,
             'packages' => $packages,
             'users' => $users,
             'logs' => $logs,
@@ -151,8 +151,8 @@ class Shippment extends BaseController
     public function setPaid($id)
     {
         $db = \Config\Database::connect();
-        $shipmentModel = new MNCShippment();
-        $shipmentLogModel = new MNCShippmentLog();
+        $shipmentModel = new MNCShipment();
+        $shipmentLogModel = new MNCShipmentLog();
 
         // Begin transaction
         $db->transStart();
@@ -162,7 +162,7 @@ class Shippment extends BaseController
 
         // Insert shipment log
         $shipmentLogModel->insert([
-            'shippment_id' => $id,
+            'shipment_id' => $id,
             'user_id'       => session('user')['id'],
             'description'  => 'INVOICE MARKED AS PAID BY ' . session('user')['fullname'],
             'created_at'   => date('Y-m-d H:i:s'),
@@ -184,8 +184,8 @@ class Shippment extends BaseController
     public function setArrived($id)
     {
         $db = \Config\Database::connect();
-        $shipmentModel = new MNCShippment();
-        $shipmentLogModel = new MNCShippmentLog();
+        $shipmentModel = new MNCShipment();
+        $shipmentLogModel = new MNCShipmentLog();
 
         // Begin transaction
         $db->transStart();
@@ -195,7 +195,7 @@ class Shippment extends BaseController
 
         // Insert shipment log
         $shipmentLogModel->insert([
-            'shippment_id' => $id,
+            'shipment_id' => $id,
             'user_id'       => session('user')['id'],
             'description'  => 'SHIPMENT ARRIVED STATUS UPDATE BY ' . session('user')['fullname'],
             'created_at'   => date('Y-m-d H:i:s'),
@@ -215,8 +215,8 @@ class Shippment extends BaseController
     public function setDelivery($id)
     {
         $db = \Config\Database::connect();
-        $shipmentModel = new MNCShippment();
-        $shipmentLogModel = new MNCShippmentLog();
+        $shipmentModel = new MNCShipment();
+        $shipmentLogModel = new MNCShipmentLog();
 
         // Begin transaction
         $db->transStart();
@@ -226,7 +226,7 @@ class Shippment extends BaseController
 
         // Insert shipment log
         $shipmentLogModel->insert([
-            'shippment_id' => $id,
+            'shipment_id' => $id,
             'user_id'       => session('user')['id'],
             'description'  => 'SHIPMENT DELIVERY TO CUSTOMER BY ' . session('user')['fullname'],
             'created_at'   => date('Y-m-d H:i:s'),
@@ -260,7 +260,7 @@ class Shippment extends BaseController
         // Insert delivery record
         $deliveryModel = new MNCDelivery();
         $deliveryId = $deliveryModel->insert([
-            'shippment_id'    => $id,
+            'shipment_id'    => $id,
             'tracking_number' => $trackingNumber,
             'courier_id'      => $courierId
         ]);
@@ -301,20 +301,20 @@ class Shippment extends BaseController
             }
 
             $imageModel->insert([
-                'shippment_delivery_id' => $deliveryId,
+                'shipment_delivery_id' => $deliveryId,
                 'path' => $uploadPath . '/' . $finalName,
                 'image' => $finalName
             ]);
         }
 
-        $shippmentLogModel = new MNCShippmentLog();
-        $shippmentLogModel->insert([
-            'shippment_id' => $id,
+        $shipmentLogModel = new MNCShipmentLog();
+        $shipmentLogModel->insert([
+            'shipment_id' => $id,
             'user_id'      => session('user')['id'],
             'description'  => 'DELIVERY TO CUSTOMER WITH TRACKING NUMBER ' . $trackingNumber . ' BY ' . session('user')['fullname']
         ]);
 
-        $shipmentModel = new MNCShippment();
+        $shipmentModel = new MNCShipment();
         $shipmentModel->update($id, ['status_tracking' => '3']); // Update status to Delivered
 
         $db->transCommit();
