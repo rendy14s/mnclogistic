@@ -8,8 +8,8 @@ use App\Models\MNCShipment;
 use App\Models\MNCShipmentPackage;
 use App\Models\MNCShipmentLog;
 use App\Models\MNCCustomer;
+use App\Models\MNCCustomerPrice;
 use App\Models\MNCUser;
-use App\Models\MNCPrice;
 use App\Models\MNCCourier;
 use App\Models\MNCDelivery;
 use App\Models\MNCDeliveryImage;
@@ -29,9 +29,7 @@ class Shipment extends BaseController
     {
         //
         $customerModel      = new MNCCustomer();
-        $priceModel         = new MNCPrice();
         $data['customers']  = $customerModel->findAll();
-        $data['prices']     = $priceModel->findAll();
 
         return view('admin/pages/shipment/create/index', $data);
     }
@@ -319,6 +317,19 @@ class Shipment extends BaseController
 
         $db->transCommit();
         return redirect()->back()->with('success', 'Delivery and images saved successfully.');
+    }
+
+    // This method handles the route '/shipment/api/getCustomerPrice/{customer_id}'
+    public function getCustomerPrice($customer_id)
+    {
+        // Load the model (assuming you have a model called MNCCustomerPrice)
+        $customerPriceModel = new MNCCustomerPrice();
+
+        // Fetch prices based on the customer_id (you can adjust this to your database structure)
+        $prices = $customerPriceModel->where('customer_id', $customer_id)->findAll();
+
+        // Return the data as a JSON response
+        return $this->response->setJSON($prices);
     }
 
 

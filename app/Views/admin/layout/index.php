@@ -154,6 +154,9 @@ function showAlert(message, type = 'success') {
 <!-- Core JS Edit Pricing Customer -->
 <script src="<?= base_url('assets/admin/corejs/edit_pricing_customer.js') ?>"></script>
 
+<!-- Core JS Price Add Shipment -->
+<script src="<?= base_url('assets/admin/corejs/price_add_shipment.js') ?>"></script>
+
 <!-- Image Preview Script -->
 <script>
     const imageInput = document.getElementById('inputImages');

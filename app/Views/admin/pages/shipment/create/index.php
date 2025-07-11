@@ -34,10 +34,10 @@
                         <div class="form-group row">
                           <label for="inputMarkingCode" class="col-sm-2 col-form-label">Marking Code</label>
                           <div class="col-sm-4">
-                            <select name="marking_code" class="form-control select2" style="width: 100%;" required>
+                            <select name="marking_code" class="form-control select2" style="width: 100%;" id="markingCodeSelect" required>
                               <option value="" selected disabled>---SELECT MARKING CODE---</option>
                               <?php foreach ($customers as $customer): ?>
-                                  <option value="<?= esc($customer['marking_code']) ?>">
+                                  <option value="<?= esc($customer['id']) ?>">
                                     <?= esc($customer['marking_code']) ?>
                                   </option>
                               <?php endforeach; ?>
@@ -49,11 +49,6 @@
                           <div class="col-sm-4">
                             <select id="shippingPrice" name="price_code" class="form-control select2" style="width: 100%;" required>
                               <option value=""  selected disabled>---SELECT SHIPMENT---</option>
-                              <?php foreach ($prices as $price): ?>
-                                  <option value="<?= esc($price['price_code']) ?>" data-price="<?= esc($price['price']) ?>">
-                                    <?= esc($price['price_code']) ?>
-                                  </option>
-                              <?php endforeach; ?>
                             </select>
                           </div>
                         </div>

@@ -106,6 +106,9 @@ use CodeIgniter\Router\RouteCollection;
       // API For Add New Shipment
       $routes->post('shipment/api/add', 'Shipment::add', ['filter' => 'tokenAuth']);
 
+      // Api For Render / Get Customer Price
+      $routes->get('shipment/api/getCustomerPrice/(:num)', 'Shipment::getCustomerPrice/$1', ['filter' => 'tokenAuth']);
+
       // Make Set Paid
       $routes->get('shipment/paid/(:num)', 'Shipment::setPaid/$1');
 
