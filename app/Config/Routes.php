@@ -53,11 +53,20 @@ use CodeIgniter\Router\RouteCollection;
       // Form Add Register Customer
       $routes->get('customers/register', 'Customers::form_add', ['filter' => 'tokenAuth']);
 
-       // Form Edit Customer
+      // From Add Pricing Customer
+      $routes->get('customers/register/pricing', 'Customers::form_add_pricing', ['filter' => 'tokenAuth']);
+
+      // // Form Edit Customer
       $routes->get('customers/edit/(:num)', 'Customers::edit/$1', ['filter' => 'tokenAuth']);
 
+      // Form Edit Pricing Customer
+      $routes->get('customers/edit/pricing/(:num)', 'Customers::pricing/$1', ['filter' => 'tokenAuth']);
+
       // API For Add Customer Register
-      $routes->post('customers/api/register', 'Customers::create', ['filter' => 'tokenAuth']);
+      $routes->post('customers/register/api/add', 'Customers::create', ['filter' => 'tokenAuth']);
+
+      // API For Add Pricing Customer
+      $routes->post('customers/api/edit/pricing', 'Customers::editPricing', ['filter' => 'tokenAuth']);
 
       // API For Edit Customer
       $routes->post('customers/api/edit/(:num)', 'Customers::edit/$1', ['filter' => 'tokenAuth']); 

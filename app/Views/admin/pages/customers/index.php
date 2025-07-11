@@ -60,7 +60,8 @@
                                                     <?= !empty($customer['created_at']) ? date('H:i:s A d/m/Y', strtotime($customer['created_at'])) :'-' ?>
                                                 </td>
                                                 <td> <!-- Action Buttons -->
-                                                    <a href="<?= base_url('customers/edit/' . $customer['id']) ?>" class="btn btn-primary btn-sm">Edit</a>
+                                                    <a href="<?= base_url('customers/edit/' . $customer['id']) ?>" class="btn btn-primary btn-sm">Edit Info</a>
+                                                    <a href="<?= base_url('customers/edit/pricing/' . $customer['id']) ?>" class="btn btn-warning btn-sm">Edit Price</a>
                                                     <a href="<?= base_url('customers/softDelete/' . $customer['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this customer?')">Delete</a>
                                                 </td>
                                             </tr>

@@ -29,7 +29,7 @@
                   <!-- general form elements -->
                   <div class="card card-primary">
                     <!-- form start -->
-                     <form class="form-horizontal" action="api/register" method="post" required>
+                     <!-- <form class="form-horizontal" id="customerForm" method="post" required> -->
                       <div class="card-body">
                         <div class="form-group row">
                           <label for="inputMarkingCode" class="col-sm-2 col-form-label">Marking Code</label>
@@ -40,7 +40,7 @@
                         <div class="form-group row">
                           <label for="inputCustomerName" class="col-sm-2 col-form-label">Customer Name</label>
                           <div class="col-sm-4">
-                            <input type="text" name="customerName" class="form-control" id="inputCustomerName" placeholder="Customer Name" onkeyup="generateMarkingCode()" required>
+                            <input type="text" name="customerName" class="form-control" id="inputCustomerName" placeholder="Customer Name"  required>
                           </div>
                         </div>
                         <div class="form-group row">
@@ -58,11 +58,10 @@
                       </div>
                       <!-- /.card-body -->
                       <div class="card-footer">
-                        <button type="submit" class="btn btn-info float-right">Create</button>
-                        <!-- <button type="submit" class="btn btn-default float-right">Cancel</button> -->
+                        <button type="button" class="btn btn-primary float-right" data-url="<?= base_url('customers/register/pricing') ?>" id="createCustomerBtn">Next</button>
                       </div>
                       <!-- /.card-footer -->
-                    </form>
+                    <!-- </form> -->
                   </div>
                   <!-- /.card -->
                 </div>

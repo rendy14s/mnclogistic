@@ -145,6 +145,16 @@ function showAlert(message, type = 'success') {
 <!-- Core JS Shipment -->
 <script src="<?= base_url('assets/admin/corejs/shipment.js') ?>"></script>
 
+<!-- Core JS Customer Pricing -->
+ <script src="<?= base_url('assets/admin/corejs/pricing_customer.js') ?>"></script>
+
+<!-- Core JS Customer Add -->
+<script src="<?= base_url('assets/admin/corejs/customer_add.js') ?>"></script>
+
+<!-- Core JS Edit Pricing Customer -->
+<script src="<?= base_url('assets/admin/corejs/edit_pricing_customer.js') ?>"></script>
+
+<!-- Image Preview Script -->
 <script>
     const imageInput = document.getElementById('inputImages');
     const imagePreview = document.getElementById('imagePreview');

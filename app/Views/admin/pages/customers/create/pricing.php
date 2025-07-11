@@ -8,17 +8,26 @@
             <div class="container-fluid">
               <div class="row mb-2">
                 <div class="col-sm-6">
-                  <h1>Add Price</h1>
+                  <h1>Price Customer</h1>
                 </div>
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="<?= base_url('price') ?>">Data Price</a></li>
-                    <li class="breadcrumb-item active">Add New Price</li>
+                    <li class="breadcrumb-item"><a href="<?= base_url('customers') ?>">Data Customer</a></li>
+                    <li class="breadcrumb-item active">Price Customer</li>
                   </ol>
                 </div>
               </div>
             </div><!-- /.container-fluid -->
           </section>
+
+           <!-- Customer Info Display Section -->
+          <div id="customerDetails" class="alert alert-info">
+              <h4>Customer Information</h4>
+              <p><strong>Marking Code:</strong> <span id="markingCode"></span></p>
+              <p><strong>Customer Name:</strong> <span id="customerName"></span></p>
+              <p><strong>Phone Number:</strong> <span id="phoneNumber"></span></p>
+              <p><strong>Address:</strong> <span id="address"></span></p>
+          </div>
 
           <!-- Main content -->
           <section class="content">
@@ -29,7 +38,7 @@
                   <!-- general form elements -->
                   <div class="card card-primary">
                     <!-- form start -->
-                     <form class="form-horizontal" action="api/add" method="post" required>
+                     <form class="form-horizontal" action="api/add" method="post" onsubmit="return false;" required>
                       <div class="card-body">
                         <div class="form-group row">
                           <label for="inputFrom" class="col-sm-2 col-form-label">From</label>
@@ -59,25 +68,13 @@
                         </div>
                         <div class="form-group row">
                           <label for="inputService" class="col-sm-2 col-form-label">Service</label>
-                          <div class="row">
-                            <div class="col-sm-6">
-                              <div class="form-group clearfix">
-                                <div class="icheck-primary d-inline">
-                                  <input type="radio" id="radioPrimary1" name="service" value="AIR" required>
-                                  <label for="radioPrimary1">
-                                    AIR
-                                  </label>
-                                </div>
-
-                                <div class="icheck-primary d-inline">
-                                  <input type="radio" id="radioPrimary2" name="service" value="SEA" required>
-                                  <label for="radioPrimary2">
-                                    SEA
-                                  </label>
-                                </div>
-                              </div>
+                            <div class="col-sm-4">
+                                <select name="service" class="form-control select2" style="width: 100%;" required>
+                                    <option value="" selected disabled>---SELECT SERVICE---</option>
+                                    <option value="1">Air</option>
+                                    <option value="2">Sea</option>
+                                </select>
                             </div>
-                          </div>
                         </div>
                         <div class="form-group row">
                           <label for="inputPrice" class="col-sm-2 col-form-label">Price</label>
@@ -85,10 +82,34 @@
                             <input type="text" name="price" class="form-control" id="inputPrice" placeholder="Price" required>
                           </div>
                         </div>
+                        
+                        <div class="form-group row">
+                          <div class="col-sm-6">
+                            <button type="button" id="addPricing" class="btn btn-info float-right">Add</button>
+                          </div>
+                        </div>
+
+                        <table id="tablepriceCustomer" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Service</th>
+                                    <th>Price</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                         <!-- Hidden Input to store table data as JSON -->
+                        <input type="hidden" name="pricingData" id="pricingData">
                       </div>
                       <!-- /.card-body -->
                       <div class="card-footer">
-                        <button type="submit" class="btn btn-info float-right">Create</button>
+                        <button type="button" id="createButton" class="btn btn-primary float-right">Create</button>
                         <!-- <button type="submit" class="btn btn-default float-right">Cancel</button> -->
                       </div>
                       <!-- /.card-footer -->
