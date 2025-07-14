@@ -68,17 +68,20 @@
                                                     <?php
                                                         switch ($shipment['status_tracking']) {
                                                             case 1:
-                                                                echo '<span class="badge badge-warning">On Progress</span>';
+                                                                echo '<span class="badge badge-warning">NEW DATA SHIPMENT</span>';
                                                                 break;
                                                             case 2:
-                                                                echo '<span class="badge badge-secondary">Arrived Destination</span>';
+                                                                echo '<span class="badge badge-secondary">ON PROGRESS</span>';
                                                                 break;
                                                             case 3:
-                                                                echo '<span class="badge badge-success">Delivered to Customer, Completed</span>';
+                                                                echo '<span class="badge badge-success">ARRIVED AT WAREHOUSE</span>';
+                                                                break;
+                                                            case 4:
+                                                                echo '<span class="badge badge-success">DELIVERED TO CUSTOMER</span>';
                                                                 break;
                                                             case 0:
                                                             default:
-                                                                echo '<span class="badge badge-secondary">Pending</span>';
+                                                                echo '<span class="badge badge-secondary">PENDING</span>';
                                                                 break;
                                                         }
                                                     ?>
@@ -87,10 +90,10 @@
                                                     <?php
                                                         switch ($shipment['status_finance']) {
                                                             case 0:
-                                                                echo '<span class="badge badge-warning">Un paid</span>';
+                                                                echo '<span class="badge badge-warning">UN PAID</span>';
                                                                 break;
                                                             case 1:
-                                                                echo '<span class="badge badge-success">Paid</span>';
+                                                                echo '<span class="badge badge-success">PAID</span>';
                                                                 break;
                                                             default:
                                                                 echo '<span class="badge badge-secondary">Pending</span>';

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Controllers;
+require_once APPPATH . 'Config/Constants.php';
+
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -37,6 +39,7 @@ class Shipment extends BaseController
     public function add()
     {
         // dd($this->request->getPost());die;
+        $customerModel         = new MNCCustomer();
         $shipmentModel         = new MNCShipment();
         $shipmentPackageModel  = new MNCShipmentPackage();
         $shipmentLogModel      = new MNCShipmentLog();
@@ -46,16 +49,20 @@ class Shipment extends BaseController
 
 
         try {
+            $markingCode = $customerModel->where('id', $this->request->getPost('customer_id'))
+                             ->get()
+                             ->getRow()->marking_code;
             // Prepare shipping data
             $dataShipment = [
-                'marking_code'      => $this->request->getPost('marking_code'),
+                'marking_code'      => $markingCode,
                 'price_code'        => $this->request->getPost('price_code'),
                 'special_case'      => $this->request->getPost('override_total') ? 1 : 0,
                 'total_price'       => $this->request->getPost('total_price'),
-                'consolidation'     => $this->request->getPost('consolidation') ? 1 : 0,
+                'total_weight'      => $this->request->getPost('total_weight'),
+                'consolidation'     => $this->request->getPost('consolidation') ? 0 : 1,
                 'package_json'      => $this->request->getPost('packages_json'),
-                'status_tracking'   => 1,
-                'status_finance'    => 0,
+                'status_tracking'   => NEW_DATA_SHIPMENT,
+                'status_finance'    => WAITING_FOR_PAYMENT,
                 'created_by'        => session('user')['id'],
             ];
 
@@ -92,7 +99,7 @@ class Shipment extends BaseController
             $dataShipmentlog = [
                 'shipment_id'      => $shippingId,
                 'user_id'           => session('user')['id'],
-                'description'       => 'NEW DATA INSERTED [ON PROGRESS]',
+                'description'       => 'NEW DATA SHIPMENT [NEW DATA]',
             ];
 
             // Insert shipping log

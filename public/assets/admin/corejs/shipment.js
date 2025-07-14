@@ -4,8 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const packageModal = $('#packageModal');
     const packagesTableBody = document.querySelector('#packagesTable tbody');
     const totalDisplay = document.getElementById('totalPrice');
+    const totalPriceHidden = document.getElementById('total_price');
     const totalInput = document.getElementById('totalInput');
-    const totalHiddenInput = document.getElementById('total_price');
+    const totalWeightHiddenInput = document.getElementById('total_weight');
     const packagesJsonInput = document.getElementById('packages_json');
     const shippingPriceSelect = document.getElementById('shippingPrice');
     const editTotalBtn = document.getElementById('editTotalBtn');
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     packageForm.addEventListener('submit', handleAddOrUpdatePackage);
     packagesTableBody.addEventListener('click', handleDynamicButtons);
     editTotalBtn.addEventListener('click', handleEditTotalClick);
+
     ['dimension_p', 'dimension_l', 'dimension_t'].forEach(id =>
         document.getElementById(id).addEventListener('input', updateVolumeAuto)
     );
@@ -76,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //     if (packages.length === 0) {
     //         packagesTableBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No data available in table</td></tr>`;
     //         totalDisplay.textContent = 'Rp 0';
-    //         totalHiddenInput.value = 0;
+    //         totalWeightHiddenInput.value = 0;
     //         totalUsedWeightDisplay.textContent = '0'; // Set total used weight to 0 when there's no data
     //         return;
     //     }
@@ -119,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //     console.log('kiw', parseInt(totalInput.value, 10), total);
 
     //     totalDisplay.textContent = `Rp ${override.toLocaleString()}`;
-    //     totalHiddenInput.value = override;
+    //     totalWeightHiddenInput.value = override;
     //     packagesJsonInput.value = JSON.stringify(updatedPackages);
 
     //     // Update total used weight in the footer
@@ -134,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (packages.length === 0) {
             packagesTableBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No data available in table</td></tr>`;
             totalDisplay.textContent = 'Rp 0';
-            totalHiddenInput.value = 0;
+            totalWeightHiddenInput.value = 0;
             totalUsedWeightDisplay.textContent = '0'; // Set total used weight to 0 when there's no data
             return;
         }
@@ -144,21 +146,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const consolidationEnabled = consolidationCheckbox?.checked;
 
         let total = 0;  // This will accumulate the total price
-        let totalUsedWeight = 0;  // This will accumulate the total used weight (kg)
-        let totalPackagesWeight = 0;  // For consolidation, we'll accumulate weight for all packages
+        let totalUsedWeight = 0;    // For consolidation, we'll accumulate weight for all packages
+        let totalPackagesWeight = 0;   // This will accumulate the total used weight (kg)
 
         const updatedPackages = [];
 
         packages.forEach((pkg, i) => {
             const volume = calculateVolume(pkg.p, pkg.l, pkg.t);
-            const usedWeight = calculateUsedWeight(volume, pkg.real_weight, consolidationEnabled);  // Use consolidation logic here
-            const rowTotal = usedWeight * pricePerKg;
+            const usedWeight = calculateUsedWeight(volume, pkg.real_weight, consolidationEnabled !== false);  // Use consolidation logic here
+            // const rowTotal = usedWeight * pricePerKg;
 
             // For consolidation, accumulate total weight to sum later
-            if (consolidationEnabled) {
+            if (consolidationEnabled !== false) {
                 totalPackagesWeight += usedWeight;
+                console.log(totalPackagesWeight, 'totalPackagesWeight', consolidationEnabled);
             } else {
-                totalUsedWeight += usedWeight;  // Regular behavior without consolidation
+                 totalUsedWeight += usedWeight;  // Regular behavior without consolidation
+                console.log(totalUsedWeight, 'totalUsedWeight', consolidationEnabled);
+
             }
 
             updatedPackages.push({ ...pkg, volume, used_weight: usedWeight });
@@ -180,24 +185,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // If consolidation is enabled, sum up the total weight and round it
-        if (consolidationEnabled) {
+        if (consolidationEnabled !== false) {
             totalUsedWeight = Math.ceil(totalPackagesWeight);  // Round the consolidated total weight
         }
 
         // Calculate the total price based on the final used weight
         const override = !totalInput.classList.contains('d-none') && !isNaN(parseInt(totalInput.value, 10))
             ? parseInt(totalInput.value, 10)
-            : totalUsedWeight;
+            : Math.ceil(totalUsedWeight);
 
         total = override * pricePerKg;  // Calculate the total cost
 
         // Display the results
         totalDisplay.textContent = `Rp ${total.toLocaleString()}`;
-        totalHiddenInput.value = override;  // Hidden input for the form submission
+        totalPriceHidden.value = total;  // Hidden input for the form submission
+        totalWeightHiddenInput.value = override;  // Hidden input for the form submission
         packagesJsonInput.value = JSON.stringify(updatedPackages);
 
         // Update total used weight in the footer
-        totalUsedWeightDisplay.textContent = totalUsedWeight.toFixed(2);  // Update the total used weight in kg
+        totalUsedWeightDisplay.textContent = Math.ceil(totalUsedWeight.toFixed(2));  // Update the total used weight in kg
 
         document.getElementById('override_total').value = "0";
     }
@@ -276,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function handleEditTotalClick() {
-        totalInput.value = totalHiddenInput.value;
+        totalInput.value = totalWeightHiddenInput.value;
         totalInput.classList.remove('d-none');
         totalDisplay.classList.add('d-none');
         totalInput.focus();
@@ -285,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleTotalInputBlur() {
         const value = parseFloat(totalInput.value) || 0;
         totalDisplay.textContent = `Rp ${value.toLocaleString('id-ID')}`;
-        totalHiddenInput.value = value;
+        totalWeightHiddenInput.value = value;
 
         document.getElementById('override_total').value = "1";
         totalInput.classList.add('d-none');
@@ -294,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function updateVolumeAuto() {
+        console.log('Updating volume automatically');
         const p = parseFloat(document.getElementById('dimension_p').value) || 0;
         const l = parseFloat(document.getElementById('dimension_l').value) || 0;
         const t = parseFloat(document.getElementById('dimension_t').value) || 0;
@@ -318,20 +325,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // If consolidation is checked, sum the maximum of each individual package's used weight
         if (consolidationEnabled) {
-            // For each package, we use the max of volume-based weight or real weight
-            const usedWeight = Math.max(volume, realWeight);
-            return usedWeight;  // Do not round yet, we'll sum and round the total later
+            // If consolidation is checked, we calculate the max for each package and round it up
+            return Math.ceil(Math.max(volume, realWeight));  // Round individual weights
         }
 
-        // If consolidation is unchecked, we calculate the max for each package and round it up
-        return Math.ceil(Math.max(volume, realWeight));  // Round individual weights
+        // For each package, we use the max of volume-based weight or real weight
+        const usedWeight = Math.max(volume, realWeight);
+        return usedWeight;  // Do not round yet, we'll sum and round the total later
+      
     }
 
-    window.formatTextInput = function (el) {
-        el.value = el.value
-            .toLowerCase()
-            .replace(/\b\w/g, char => char.toUpperCase())
-            .trim()
-            .replace(/\s+/g, ' ');
-    };
 });

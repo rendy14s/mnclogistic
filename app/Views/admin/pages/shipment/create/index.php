@@ -1,4 +1,5 @@
 <?= $this->extend('admin/layout/index') ?>
+    <?php $session = session(); ?>
 
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
@@ -34,7 +35,7 @@
                         <div class="form-group row">
                           <label for="inputMarkingCode" class="col-sm-2 col-form-label">Marking Code</label>
                           <div class="col-sm-4">
-                             <select name="marking_code" class="form-control select2" style="width: 100%;" id="markingCodeSelect" required>
+                             <select name="customer_id" class="form-control select2" style="width: 100%;" id="markingCodeSelect" required>
                                 <option value="" selected disabled>---SELECT MARKING CODE---</option>
                                 <?php foreach ($customers as $customer): ?>
                                     <option value="<?= esc($customer['id']) ?>">
@@ -65,7 +66,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Description</th>
+                                    <th>Tracking Number</th>
                                     <th>P x L x T</th>
                                     <th>Volume</th>
                                     <th>Real Weight</th>
@@ -80,11 +81,11 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                  <th colspan="5" class="text-right" >Consolidation</th>
+                                  <th colspan="5" class="text-right" >Without Consolidation</th>
                                   <th colspan="2">
                                       <!-- <input name="consolidation" type="checkbox" id="consolidationCheckbox"> -->
                                       <input type="hidden" name="consolidation" value="0">
-                                      <input type="checkbox" id="consolidationCheckbox" name="consolidation" value="1" checked>
+                                      <input type="checkbox" id="consolidationCheckbox" name="consolidation" value="1">
                                   </th>
                                 </tr>
                                 <tr>
@@ -92,21 +93,26 @@
                                   <td colspan="2">
                                     <span id="totalUsedWeight">0</span>
                                     <input type="number" id="totalUsedWeightInput" class="form-control d-none mt-1" min="0">
+                                    <input type="hidden" name="total_weight" id="total_weight">
                                   </td>
                                 </tr>
-                                <tr>
+                             
+                                <tr class="<?= ($session->get('user')['role'] !== '3') ? '' : 'd-none' ?>">
                                   <td colspan="5" class="text-right"><strong>Total:</strong></td>
                                   <td colspan="2">
                                     <span id="totalPrice">Rp 0</span>
                                     <input type="number" id="totalInput" class="form-control d-none mt-1" min="0">
                                     <button id="editTotalBtn" type="button" class="btn btn-sm btn-outline-primary mt-1">Edit</button>
+                                    
+                                    <!-- For Save Total Price -->
+                                    <input type="hidden" name="total_price" id="total_price" value="0">
 
+                                    <!-- For flag edit price 1 / 0 -->
                                     <input type="hidden" name="override_total" id="override_total" value="0">
 
                                   </td>
                                 </tr>
                               </tfoot>
-                              <input type="hidden" name="total_price" id="total_price">
                         </table>
                     </div>
                       </div>
@@ -134,7 +140,7 @@
                                 <form id="packageForm">
                                     <div class="card-body">
                                         <div class="form-group row">
-                                            <label for="inputDescription" class="col-sm-3 col-form-label">Description</label>
+                                            <label for="inputDescription" class="col-sm-3 col-form-label">Tracking Number</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="description" class="form-control" id="inputDescription" placeholder="Description" onblur="formatTextInput(this)" required>
                                             </div>

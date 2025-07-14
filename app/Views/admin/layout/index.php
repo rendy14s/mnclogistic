@@ -40,21 +40,16 @@
   <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') ?>">
-
-<!-- <script>
-  console.log("Document Ready: Initializing Select2");
-  jQuery(document).ready(function () {
-    console.log("Document Ready: Initializing Select2");
-
-    // Initialize Select2 for all elements with class .select2
-    jQuery('.select2').select2();
-
-    // Initialize Select2 with Bootstrap4 theme for .select2bs4
-    jQuery('.select2bs4').select2({
-      theme: 'bootstrap4'
-    });
-  });
-</script> -->
+ 
+  <script>   
+    window.formatTextInput = function (el) {
+        el.value = el.value
+            .toLowerCase()
+            .replace(/\b\w/g, char => char.toUpperCase())
+            .trim()
+            .replace(/\s+/g, ' ');
+    };
+  </script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
