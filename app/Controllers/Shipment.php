@@ -29,7 +29,7 @@ class Shipment extends BaseController
     {
         //
         $customerModel      = new MNCCustomer();
-        $data['customers']  = $customerModel->findAll();
+        $data['customers']  = $customerModel->where('status', 1)->findAll();
 
         return view('admin/pages/shipment/create/index', $data);
     }

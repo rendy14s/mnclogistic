@@ -5,12 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MNC Logistic | Dashboard</title>
 
+
+  <!-- jQuery -->
+  <script src="<?= base_url('assets/admin/plugins/jquery/jquery.min.js') ?>"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="<?= base_url('assets/admin/plugins/jquery-ui/jquery-ui.min.js') ?>"></script>
+  <!-- Bootstrap 4 -->
+  <script src="<?= base_url('assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/fontawesome-free/css/all.min.css') ?>">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Select2 -->
+  <script src="<?= base_url('assets/admin/plugins/select2/js/select2.full.min.js') ?>"></script>
+  <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/select2/css/select2.min.css') ?>">
+  <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') ?>">
   <!-- Tempusdominus Bootstrap 4 -->
   <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') ?>">
   <!-- iCheck -->
@@ -29,6 +40,21 @@
   <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') ?>">
+
+<!-- <script>
+  console.log("Document Ready: Initializing Select2");
+  jQuery(document).ready(function () {
+    console.log("Document Ready: Initializing Select2");
+
+    // Initialize Select2 for all elements with class .select2
+    jQuery('.select2').select2();
+
+    // Initialize Select2 with Bootstrap4 theme for .select2bs4
+    jQuery('.select2bs4').select2({
+      theme: 'bootstrap4'
+    });
+  });
+</script> -->
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -59,17 +85,6 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-
-<!-- jQuery -->
-<script src="<?= base_url('assets/admin/plugins/jquery/jquery.min.js') ?>"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="<?= base_url('assets/admin/plugins/jquery-ui/jquery-ui.min.js') ?>"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button)
-</script>
-<!-- Bootstrap 4 -->
-<script src="<?= base_url('assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 <!-- ChartJS -->
 <script src="<?= base_url('assets/admin/plugins/chart.js/Chart.min.js') ?>"></script>
 <!-- Sparkline -->
@@ -193,7 +208,10 @@ function showAlert(message, type = 'success') {
     });
 </script>
 
-
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
 
 </body>
 </html>

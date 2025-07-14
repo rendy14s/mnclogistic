@@ -34,13 +34,13 @@
                         <div class="form-group row">
                           <label for="inputMarkingCode" class="col-sm-2 col-form-label">Marking Code</label>
                           <div class="col-sm-4">
-                            <select name="marking_code" class="form-control select2" style="width: 100%;" id="markingCodeSelect" required>
-                              <option value="" selected disabled>---SELECT MARKING CODE---</option>
-                              <?php foreach ($customers as $customer): ?>
-                                  <option value="<?= esc($customer['id']) ?>">
-                                    <?= esc($customer['marking_code']) ?>
-                                  </option>
-                              <?php endforeach; ?>
+                             <select name="marking_code" class="form-control select2" style="width: 100%;" id="markingCodeSelect" required>
+                                <option value="" selected disabled>---SELECT MARKING CODE---</option>
+                                <?php foreach ($customers as $customer): ?>
+                                    <option value="<?= esc($customer['id']) ?>">
+                                        <?= esc($customer['marking_code']) ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
                           </div>
                         </div>
@@ -84,7 +84,7 @@
                                   <th colspan="2">
                                       <!-- <input name="consolidation" type="checkbox" id="consolidationCheckbox"> -->
                                       <input type="hidden" name="consolidation" value="0">
-                                      <input type="checkbox" id="consolidationCheckbox" name="consolidation" value="1">
+                                      <input type="checkbox" id="consolidationCheckbox" name="consolidation" value="1" checked>
                                   </th>
                                 </tr>
                                 <tr>

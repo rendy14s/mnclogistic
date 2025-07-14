@@ -1,4 +1,12 @@
 $(document).ready(function() {
+     // Initialize Select2 for all elements with class .select2
+    jQuery('.select2').select2();
+
+    // Initialize Select2 with Bootstrap4 theme for .select2bs4
+    jQuery('.select2bs4').select2({
+      theme: 'bootstrap4'
+    });
+    
     // When the marking code is selected
     $('#markingCodeSelect').change(function() {
         var customer_id = $(this).val();
