@@ -32,7 +32,12 @@ class Auth extends BaseController
         }
 
         $user = $userModel->where('username', $username)->first();
-
+        
+        if($user) {
+            if($user['status'] !== '1') {
+                return redirect()->back()->with('error', 'Akun Anda tidak aktif. Silakan hubungi administrator.');
+            }
+        }
         if ($user && password_verify($password, $user['password'])) {
             $session->set('user', [
                 'id'        => $user['id'],
