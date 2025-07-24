@@ -49,16 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    shippingPriceSelect.addEventListener('change', () => {
-        console.log("Changed Price Code:", shippingPriceSelect.value);
-        console.log("Selected Price Per Kg:", getPricePerKg());
-        renderPackagesTable();
-    });
-
-
     function getPricePerKg() {
         const selectedOption = shippingPriceSelect.options[shippingPriceSelect.selectedIndex];
-        return parseInt(selectedOption.dataset.price || '0', 10);
+        return parseInt(selectedOption.value || '0', 10);
     }
 
     // function calculateUsedWeight(volume, realWeight, consolidationEnabled = false) {
@@ -282,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function handleEditTotalClick() {
-        totalInput.value = totalWeightHiddenInput.value;
+        totalInput.value = totalPriceHidden.value;
         totalInput.classList.remove('d-none');
         totalDisplay.classList.add('d-none');
         totalInput.focus();
@@ -291,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleTotalInputBlur() {
         const value = parseFloat(totalInput.value) || 0;
         totalDisplay.textContent = `Rp ${value.toLocaleString('id-ID')}`;
-        totalWeightHiddenInput.value = value;
+        totalPriceHidden.value = value;
 
         document.getElementById('override_total').value = "1";
         totalInput.classList.add('d-none');
@@ -334,5 +327,22 @@ document.addEventListener('DOMContentLoaded', () => {
         return usedWeight;  // Do not round yet, we'll sum and round the total later
       
     }
+
+    // Inside your success callback after options are populated
+    $('#shippingPrice').off('change').on('change', function () {
+        const selectedOption = $(this).find('option:selected');
+        const selectedPriceID = selectedOption.data('price');
+        const selectedPrice = selectedOption.val();
+
+
+        // Set the data-price into the hidden input
+        $('#priceID').val(selectedPriceID);
+
+        console.log('Selected price id :', selectedPriceID); // Debug
+        console.log('Selected price value :', selectedPrice); // Debug
+
+        console.log("Selected Price Per Kg:", getPricePerKg());
+        renderPackagesTable();
+    });
 
 });

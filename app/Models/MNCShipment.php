@@ -12,7 +12,7 @@ class MNCShipment extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['customer_id','marking_code', 'price_code', 'special_case', 'total_price','total_weight', 'consolidation', 'package_json', 'status_tracking', 'status_finance', 'created_by', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['customer_id','marking_code', 'price_id', 'price_kg', 'special_case', 'total_price','total_weight', 'consolidation', 'package_json', 'status_tracking', 'status_finance', 'created_by', 'created_at', 'updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

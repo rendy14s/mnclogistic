@@ -21,8 +21,21 @@ class Shipment extends BaseController
     public function index()
     {
         //
-        $shipmentModel         = new MNCShipment();
-        $data['shipments']     = $shipmentModel->findAll();
+        $shipmentModel              = new MNCShipment();
+        $data['shipments'] = $shipmentModel
+            ->select('
+                mnc_shipment.id, 
+                mnc_shipment.marking_code, 
+                mnc_shipment.consolidation, 
+                mnc_shipment.status_tracking, 
+                mnc_shipment.status_finance, 
+                mnc_shipment.created_at, 
+                mnc_customers_price.price_code
+            ')
+            ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id')
+            ->findAll();
+
+        
         
         return view('admin/pages/shipment/index', $data);
     }
@@ -54,8 +67,10 @@ class Shipment extends BaseController
                              ->getRow()->marking_code;
             // Prepare shipping data
             $dataShipment = [
+                'customer_id'      => $this->request->getPost('customer_id'),
                 'marking_code'      => $markingCode,
-                'price_code'        => $this->request->getPost('price_code'),
+                'price_id'          => $this->request->getPost('price_id'),
+                'price_kg'          => $this->request->getPost('price_kg'),
                 'special_case'      => $this->request->getPost('override_total') ? 1 : 0,
                 'total_price'       => $this->request->getPost('total_price'),
                 'total_weight'      => $this->request->getPost('total_weight'),
@@ -130,7 +145,21 @@ class Shipment extends BaseController
         $courierData            = new MNCCourier();
         $couriers               = $courierData->findAll();
 
-        $shipment = $shipmentModel->find($id);
+        $shipment = $shipmentModel
+            ->select('
+                mnc_shipment.id, 
+                mnc_shipment.marking_code, 
+                mnc_shipment.consolidation, 
+                mnc_shipment.status_tracking, 
+                mnc_shipment.status_finance, 
+                mnc_shipment.total_price, 
+                mnc_shipment.total_weight, 
+                mnc_shipment.created_by, 
+                mnc_shipment.created_at, 
+                mnc_customers_price.price_code
+            ')
+            ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id')
+            ->find($id);
         if (!$shipment) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException("Shipment ID $id tidak ditemukan");
         }

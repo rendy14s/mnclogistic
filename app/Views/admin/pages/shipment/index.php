@@ -56,7 +56,7 @@
                                             <tr>
                                                 <td><?= $id++ ?></td>
                                                 <td>
-                                                    <a href="<?= base_url('shipment/process/' . $shipment['id']) ?>">
+                                                    <a href="<?= base_url('shipment/process/' . esc($shipment['id']) ) ?>">
                                                         <?= esc($shipment['marking_code']) ?>
                                                     </a>
                                                 </td>

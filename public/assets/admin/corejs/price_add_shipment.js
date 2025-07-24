@@ -25,7 +25,7 @@ $(document).ready(function() {
                     if (data.length > 0) {
                         // Loop through and add the new options to the select
                         $.each(data, function(index, price) {
-                            $('#shippingPrice').append('<option value="' + price.price + '" data-price="' + price.price + '">' + price.price_code + '</option>');
+                            $('#shippingPrice').append('<option value="' + price.price + '" data-price="' + price.id + '">' + price.price_code + '</option>');
                         });
                     } else {
                         // If no data is found, display a "No Data" message
@@ -35,8 +35,8 @@ $(document).ready(function() {
                     // Reinitialize select2 (if using it)
                     $('#shippingPrice').select2().trigger('change');
                 },
-                error: function() {
-                    alert('Error fetching prices');
+                error: function(e) {
+                    alert('Error fetching prices', e.responseText);
                 }
             });
         }

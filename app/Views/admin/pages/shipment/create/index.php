@@ -48,9 +48,11 @@
                         <div class="form-group row">
                           <label for="inputTo" class="col-sm-2 col-form-label">Original Shipment</label>
                           <div class="col-sm-4">
-                            <select id="shippingPrice" name="price_code" class="form-control select2" style="width: 100%;" required>
+                            <select id="shippingPrice" name="price_kg" class="form-control select2" style="width: 100%;" required>
                               <option value=""  selected disabled>---SELECT SHIPMENT---</option>
                             </select>
+
+                            <input type="hidden" name="price_id" id="priceID">
                           </div>
                         </div>
 
