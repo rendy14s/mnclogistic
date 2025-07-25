@@ -48,6 +48,7 @@
                                             <th>Status Tracking</th>
                                             <th>Status Finance</th>
                                             <th>Created Time</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -103,6 +104,9 @@
                                                 </td>
                                                 <td>
                                                     <?= !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) :'-' ?>
+                                                </td>
+                                                <td>
+                                                    <a href="<?= base_url('shipment/edit/' . $shipment['id']) ?>" class="btn btn-primary btn-sm">Edit</a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

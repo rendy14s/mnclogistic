@@ -1,5 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
+
     const packageForm = document.getElementById('packageForm');
     const packageModal = $('#packageModal');
     const packagesTableBody = document.querySelector('#packagesTable tbody');
@@ -17,6 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     let packages = [];
+    try {
+        const json = packagesJsonInput.value;
+        packages = json ? JSON.parse(json) : [];
+    } catch (err) {
+        console.error('Invalid packages_json:', err);
+        packages = [];
+    }
+
+
     let editingIndex = null;
 
     packageForm.addEventListener('submit', handleAddOrUpdatePackage);
@@ -50,78 +60,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function getPricePerKg() {
-        const selectedOption = shippingPriceSelect.options[shippingPriceSelect.selectedIndex];
-        return parseInt(selectedOption.value || '0', 10);
+    const shippingPriceSelect = document.getElementById('shippingPrice');
+    const selectedOption = shippingPriceSelect.options[shippingPriceSelect.selectedIndex];
+    
+    if (!selectedOption || !selectedOption.dataset.price) {
+        // No option selected or no data-price attribute, return 0 fallback
+        return 0;
     }
 
-    // function calculateUsedWeight(volume, realWeight, consolidationEnabled = false) {
-    //     return consolidationEnabled
-    //         ? Math.ceil(Math.max(volume, realWeight))
-    //         : Math.ceil(volume + realWeight);
-    // }
+    const price = selectedOption.dataset.price;
+    return parseInt(price, 10) || 0;
+}
 
     function calculateVolume(p, l, t) {
         return (p * l * t) / 6000;
     }
-
-    // function renderPackagesTable() {
-
-    //     packagesTableBody.innerHTML = '';
-
-    //     if (packages.length === 0) {
-    //         packagesTableBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No data available in table</td></tr>`;
-    //         totalDisplay.textContent = 'Rp 0';
-    //         totalWeightHiddenInput.value = 0;
-    //         totalUsedWeightDisplay.textContent = '0'; // Set total used weight to 0 when there's no data
-    //         return;
-    //     }
-
-    //     const pricePerKg = getPricePerKg();
-    //     const updatedPackages = [];
-    //     let total = 0;
-    //     let totalUsedWeight = 0; // Ensure this is a number
-
-
-    //     packages.forEach((pkg, i) => {
-    //         const volume = calculateVolume(pkg.p, pkg.l, pkg.t);
-    //         const usedWeight = calculateUsedWeight(volume, pkg.real_weight);
-    //         const rowTotal = usedWeight * pricePerKg;
-    //         total += rowTotal;
-    //         totalUsedWeight += usedWeight; // Accumulate total used weight
-
-    //         updatedPackages.push({ ...pkg, volume, used_weight: usedWeight });
-
-    //         packagesTableBody.insertAdjacentHTML('beforeend', `
-    //             <tr>
-    //                 <td>${i + 1}</td>
-    //                 <td>${pkg.description}</td>
-    //                 <td>${pkg.p} x ${pkg.l} x ${pkg.t}</td>
-    //                 <td>${volume.toFixed(2)}</td>
-    //                 <td>${pkg.real_weight}</td>
-    //                 <td>
-    //                     <button type="button" class="btn btn-sm btn-warning" data-action="edit" data-index="${i}">Edit</button>
-    //                     <button type="button" class="btn btn-sm btn-danger" data-action="delete" data-index="${i}">Delete</button>
-    //                 </td>
-    //             </tr>
-    //         `);
-    //     });
-
-    //     // Check manual override
-    //     const override = !totalInput.classList.contains('d-none') && !isNaN(parseInt(totalInput.value, 10))
-    //         ? parseInt(totalInput.value, 10)
-    //         : total;
-
-    //     console.log('kiw', parseInt(totalInput.value, 10), total);
-
-    //     totalDisplay.textContent = `Rp ${override.toLocaleString()}`;
-    //     totalWeightHiddenInput.value = override;
-    //     packagesJsonInput.value = JSON.stringify(updatedPackages);
-
-    //     // Update total used weight in the footer
-    //     totalUsedWeightDisplay.textContent = totalUsedWeight.toFixed(2); // Set the calculated total used weight
-
-    //     document.getElementById('override_total').value = "0";
-    // }
 
     function renderPackagesTable() {
         packagesTableBody.innerHTML = '';  // Clear the table
@@ -331,15 +284,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inside your success callback after options are populated
     $('#shippingPrice').off('change').on('change', function () {
         const selectedOption = $(this).find('option:selected');
-        const selectedPriceID = selectedOption.data('price');
-        const selectedPrice = selectedOption.val();
+        const selectedPricePerKg = selectedOption.data('price');
+        const selectedPriceID = selectedOption.val();
 
 
         // Set the data-price into the hidden input
-        $('#priceID').val(selectedPriceID);
+        $('#priceKg').val(selectedPricePerKg);
+        $('#defaultPriceID').val(selectedPriceID);
 
-        console.log('Selected price id :', selectedPriceID); // Debug
-        console.log('Selected price value :', selectedPrice); // Debug
+        console.log('Selected price_kg :', selectedPricePerKg); // Debug
+        console.log('Selected price_id :', selectedPriceID); // Debug
 
         console.log("Selected Price Per Kg:", getPricePerKg());
         renderPackagesTable();

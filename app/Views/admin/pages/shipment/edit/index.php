@@ -9,12 +9,12 @@
             <div class="container-fluid">
               <div class="row mb-2">
                 <div class="col-sm-6">
-                  <h1>Add Shipment</h1>
+                  <h1>Edit Shipment</h1>
                 </div>
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="<?= base_url('shipment') ?>">Data Shipment</a></li>
-                    <li class="breadcrumb-item active">Add New Shipment</li>
+                    <li class="breadcrumb-item active">Edit Shipment</li>
                   </ol>
                 </div>
               </div>
@@ -30,36 +30,39 @@
                   <!-- general form elements -->
                   <div class="card card-primary">
                     <!-- form start -->
-                    <form id="shippingForm" class="form-horizontal" action="api/add" method="post" required>
+                    <form id="shippingForm" class="form-horizontal" action="/shipment/api/edit/<?= $shipment['id'] ?>" method="post" required>
                       <div class="card-body">
                         <div class="form-group row">
                           <label for="inputMarkingCode" class="col-sm-2 col-form-label">Marking Code</label>
                           <div class="col-sm-4">
                              <select name="customer_id" class="form-control select2" style="width: 100%;" id="markingCodeSelect" required>
-                                <option value="" selected disabled>---SELECT MARKING CODE---</option>
+                                <option value="" disabled <?= empty($shipment['customer_id']) ? 'selected' : '' ?>>---SELECT MARKING CODE---</option>
+                                
                                 <?php foreach ($customers as $customer): ?>
-                                    <option value="<?= esc($customer['id']) ?>">
+                                    <option value="<?= esc($customer['id']) ?>" 
+                                        <?= $customer['id'] == $shipment['customer_id'] ? 'selected' : '' ?>>
                                         <?= esc($customer['marking_code']) ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
+
                           </div>
                         </div>
                         <div class="form-group row">
                           <label for="inputTo" class="col-sm-2 col-form-label">Original Shipment</label>
                           <div class="col-sm-4">
                             <select id="shippingPrice" name="price_id" class="form-control select2" style="width: 100%;" required>
-                              <option value=""  selected disabled>---SELECT SHIPMENT---</option>
+                              <option value=""  selected disabled >---SELECT SHIPMENT---</option>
                             </select>
-
-                            <input type="hidden" name="price_kg" id="priceKg">
+                              <input type="hidden" id="defaultPriceID" value="<?= esc($shipment['price_id']) ?>">
+                              <input type="hidden" name="defaultPriceKg" id="priceKg">
                           </div>
                         </div>
 
 
                         <div class="form-group row">
                             <label for="inputTo" class="col-sm-2 col-form-label">Packages Data Box</label>
-                            <input type="hidden" name="packages_json" id="packages_json">
+                            <input type="hidden" name="packages_json" id="packages_json" value="<?= esc($shipment['package_json']) ?>">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#packageModal">Add Package</button>
                         </div>
 
@@ -83,13 +86,20 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                  <th colspan="5" class="text-right" >Without Consolidation</th>
-                                  <th colspan="2">
-                                      <!-- <input name="consolidation" type="checkbox" id="consolidationCheckbox"> -->
-                                      <input type="hidden" name="consolidation" value="0">
-                                      <input type="checkbox" id="consolidationCheckbox" name="consolidation" value="1">
-                                  </th>
+                                    <th colspan="5" class="text-right">Without Consolidation</th>
+                                    <th colspan="2">
+                                        <!-- Hidden input to submit "0" when checkbox is unchecked -->
+                                        <input type="hidden" name="consolidation" value="0">
+                                        
+                                        <!-- Main checkbox, set checked if consolidation is 1 -->
+                                        <input type="checkbox" 
+                                              id="consolidationCheckbox" 
+                                              name="consolidation" 
+                                              value="1"
+                                              <?= ($shipment['consolidation'] ?? 1) == 0 ? 'checked' : '' ?>>
+                                    </th>
                                 </tr>
+
                                 <tr>
                                   <th colspan="5" class="text-right">Total Used Weight (Kg)</th>
                                   <td colspan="2">
@@ -121,7 +131,7 @@
                       <!-- /.card-body -->
                       <div class="card-footer">
                         <!-- <pre id="jsonViewer" style="background:#eee; padding:10px;"></pre> -->
-                        <button type="submit" class="btn btn-info float-right">Create</button>
+                        <button type="submit" class="btn btn-info float-right">Edit</button>
                         <!-- <button type="submit" class="btn btn-default float-right">Cancel</button> -->
                       </div>
                       <!-- /.card-footer -->

@@ -103,6 +103,12 @@ use CodeIgniter\Router\RouteCollection;
       // Form Process Shipment
       $routes->get('shipment/process/(:num)', 'Shipment::process/$1', ['filter' => 'tokenAuth']);
 
+      // Form Edit Shipment
+      $routes->get('shipment/edit/(:num)', 'Shipment::form_edit/$1', ['filter' => 'tokenAuth']);
+
+      // API For Edit Shipment
+      $routes->post('shipment/api/edit/(:num)', 'Shipment::edit/$1', ['filter' => 'tokenAuth']);
+
       // API For Add New Shipment
       $routes->post('shipment/api/add', 'Shipment::add', ['filter' => 'tokenAuth']);
 

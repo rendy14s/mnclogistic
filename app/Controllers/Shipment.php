@@ -368,5 +368,115 @@ class Shipment extends BaseController
         return $this->response->setJSON($prices);
     }
 
+    public function form_edit($id)
+    {
+        // dd($this->request->getPost());exit; // Debugging line, remove in production
+        $customerModel         = new MNCCustomer();
+        $shipmentModel         = new MNCShipment();
+        $shipmentPackageModel  = new MNCShipmentPackage();
+        $shipmentLogModel      = new MNCShipmentLog();
+        
+        $data['shipment'] = $shipmentModel
+            ->select('
+                mnc_shipment.id, 
+                mnc_shipment.customer_id, 
+                mnc_shipment.marking_code, 
+                mnc_shipment.price_id, 
+                mnc_shipment.price_kg, 
+                mnc_shipment.consolidation, 
+                mnc_shipment.package_json, 
+                mnc_shipment.status_tracking, 
+                mnc_shipment.status_finance, 
+                mnc_shipment.total_price, 
+                mnc_shipment.total_weight, 
+                mnc_shipment.created_by, 
+                mnc_shipment.created_at, 
+                mnc_customers_price.price_code
+            ')
+            ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id')
+            ->find($id);
+        if (!$data['shipment']) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Shipment ID $id tidak ditemukan");
+        }
+
+        $data['customers']  = $customerModel->where('status', 1)->findAll();
+
+        // dd($data);exit;
+        
+        return view('admin/pages/shipment/edit/index', $data);
+    }
+
+    public function edit($id)
+    {
+        // dd($this->request->getPost());exit; // Debugging line, remove in production
+        
+        $shipmentModel         = new MNCShipment();
+        $shipmentPackageModel  = new MNCShipmentPackage();
+        $shipmentLogModel      = new MNCShipmentLog();
+        $customerModel         = new MNCCustomer();
+
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        try {
+             $markingCode = $customerModel->where('id', $this->request->getPost('customer_id'))
+                             ->get()
+                             ->getRow()->marking_code;
+
+            // Prepare shipping data
+            $dataShipment = [
+                'customer_id'      => $this->request->getPost('customer_id'),
+                'marking_code'     => $markingCode,
+                'price_id'         => $this->request->getPost('price_id'),
+                'price_kg'         => $this->request->getPost('defaultPriceKg'),
+                'special_case'     => $this->request->getPost('override_total') ? 1 : 0,
+                'total_price'      => $this->request->getPost('total_price'),
+                'total_weight'     => $this->request->getPost('total_weight'),
+                'consolidation'    => $this->request->getPost('consolidation') ? 0 : 1,
+                'package_json'     => $this->request->getPost('packages_json'),
+            ];
+
+            // Update main shipping row
+            $shipmentModel->update($id, $dataShipment);
+
+            // Delete existing packages
+            $shipmentPackageModel->where('shipment_id', $id)->delete();
+
+            // Insert each package
+            $packages = json_decode($this->request->getPost('packages_json'), true);
+            foreach ($packages as $pkg) {
+                $shipmentPackageModel->insert([
+                    'shipment_id'  => $id,
+                    'description'   => $pkg['description'],
+                    'dimension_p'   => $pkg['p'],
+                    'dimension_l'   => $pkg['l'],
+                    'dimension_t'   => $pkg['t'],
+                    'dimension_v'   => $pkg['volume'],
+                    'real_weight'   => $pkg['real_weight'],
+                    'used_weight'   => $pkg['used_weight']
+                ]);
+            }
+
+            // Prepare shipping log data
+            $dataShipmentlog = [
+                'shipment_id'      => $id,
+                'user_id'           => session('user')['id'],
+                'description'       => 'EDIT DATA SHIPMENT [EDIT DATA]',
+            ];  
+            // Insert shipping log
+            $shipmentLogModel->insert($dataShipmentlog);    
+            $db->transComplete(); // COMMIT TRANSACTION
+            if ($db->transStatus() === false) {
+                log_message('error', print_r($dataShipment, true));
+                log_message('error', print_r($shipmentModel->errors(), true));
+                throw new \Exception("Transaction failed");
+            }
+            return redirect()->to('/shipment')->with('success', 'Shipping updated successfully.');
+        } catch (\Exception $e) {
+            $db->transRollback(); // ROLLBACK if anything fails
+            return redirect()->back()->with('error', 'Update failed: ' . $e->getMessage());
+        }
+    }    
+
 
 }

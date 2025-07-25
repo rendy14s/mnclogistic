@@ -1,32 +1,42 @@
 $(document).ready(function() {
-     // Initialize Select2 for all elements with class .select2
-    jQuery('.select2').select2();
+    const defaultPriceId = $('#defaultPriceID').val();
+    console.log('Default Price ID:', defaultPriceId);
 
-    // Initialize Select2 with Bootstrap4 theme for .select2bs4
-    jQuery('.select2bs4').select2({
-      theme: 'bootstrap4'
-    });
-    
-    // When the marking code is selected
-    $('#markingCodeSelect').change(function() {
-        var customer_id = $(this).val();
-        console.log('Selected Marking Code:', customer_id);
+    $('.select2').select2();
+
+    function loadSecondSelect(customerId) {
+        if (!customerId) return;
+
+        // Your AJAX or logic to populate second select
+        console.log('Load second select for customer:', customerId);
+        // e.g., AJAX to get shipping prices and populate #shippingPrice
+        console.log('Selected Marking Code:', customerId);
         
-        if (customer_id) {
+        if (customerId) {
             // AJAX request to fetch prices based on the selected marking code
             $.ajax({
-                url: '/shipment/api/getCustomerPrice/' + customer_id,
+                url: '/shipment/api/getCustomerPrice/' + customerId,
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {
+                    const $select = $('#shippingPrice');
+
+                    $select.empty();  // Clear all options
                     // Clear previous options and re-add the placeholder
                     $('#shippingPrice').html('<option value="" selected disabled>---SELECT SHIPMENT---</option>');
+                     $('#defaultPriceID').val('');  // Reset hidden input
                     
                     if (data.length > 0) {
                         // Loop through and add the new options to the select
                         $.each(data, function(index, price) {
-                            $('#shippingPrice').append('<option value="' + price.price + '" data-price="' + price.id + '">' + price.price_code + '</option>');
+                            $('#shippingPrice').append('<option value="' + price.id + '" data-price="' + price.price + '">' + price.price_code + '</option>');
                         });
+
+                        if(defaultPriceId) {
+                            $('#shippingPrice').val(defaultPriceId).trigger('change');
+                            $('#defaultPriceID').val(defaultPriceId); // Keep in sync
+                        }
+                        
                     } else {
                         // If no data is found, display a "No Data" message
                         $('#shippingPrice').append('<option value="" disabled>No data available</option>');
@@ -40,5 +50,19 @@ $(document).ready(function() {
                 }
             });
         }
+    }
+
+    // When user selects new option
+    $('#markingCodeSelect').on('select2:select', function() {
+        const selectedVal = $(this).val();
+    
+        loadSecondSelect(selectedVal);
     });
+
+    // On page load, check if there is a pre-selected value
+    const preSelected = $('#markingCodeSelect').val();
+    console.log('Pre-selected Marking Code:', preSelected);
+    if (preSelected) {
+        loadSecondSelect(preSelected);
+    }
 });
