@@ -87,3 +87,6 @@ define('DELIVERED_TO_CUSTOMER', 4);
 // Status Finance Constants
 define('WAITING_FOR_PAYMENT', 0);
 define('PAID', 1);
+
+define('INITIATE', 1); // Canceled status data shipment
+define('SOFT_DELETE', 0); // Soft delete status data shipment

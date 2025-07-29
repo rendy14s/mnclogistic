@@ -131,6 +131,9 @@ use CodeIgniter\Router\RouteCollection;
       // API For List Shipment
       $routes->get('shipment/api/list', 'Shipment::list', ['filter' => 'tokenAuth']);
 
+      // API For Delete Shipment
+      $routes->get('shipment/api/delete/(:num)', 'Shipment::delete/$1', ['filter' => 'tokenAuth']);
+
 
 
 

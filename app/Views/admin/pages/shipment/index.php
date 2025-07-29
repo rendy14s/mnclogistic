@@ -52,7 +52,7 @@
                                             <th>Status Tracking</th>
                                             <th>Status Finance</th>
                                             <th>Created Time</th>
-                                             <?php if (in_array($role, [1, 2, 3, 5])): ?>
+                                             <?php if (in_array($role, [1, 3, 5])): ?>
                                                 <th>Action</th>
                                             <?php endif; ?>
                                         </tr>

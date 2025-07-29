@@ -61,6 +61,7 @@ class Shipment extends BaseController
                 'package_json'      => $this->request->getPost('packages_json'),
                 'status_tracking'   => NEW_DATA_SHIPMENT,
                 'status_finance'    => WAITING_FOR_PAYMENT,
+                'status'            => INITIATE, // Canceled status data shipment
                 'created_by'        => session('user')['id'],
             ];
 
@@ -536,7 +537,8 @@ class Shipment extends BaseController
                 mnc_shipment.created_at, 
                 mnc_customers_price.price_code
             ')
-            ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id');
+            ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id')
+             ->where('mnc_shipment.status', 1);
 
         if ($role == 1) {
             // Admin or Super Admin: Show all shipments
@@ -550,14 +552,14 @@ class Shipment extends BaseController
             $shipmentModel->whereIn('mnc_shipment.status_tracking', [2, 3]);
         }
 
-        $shipments = $shipmentModel->findAll();
+        $shipments = $shipments->get()->getResultArray(); 
 
         $data = [];
 
         foreach ($shipments as $shipment) {
             $statusTracking = (int) $shipment['status_tracking'];
 
-             $canShowAction = in_array($role, [1, 2, 5]) || (in_array($role, [3, 4]) && $statusTracking === 1);
+             $canShowAction = in_array($role, [1, 5]) || (in_array($role, [2, 3, 4]) && $statusTracking === 1);
 
             $data[] = [
                 'id' => $shipment['id'],
@@ -571,8 +573,10 @@ class Shipment extends BaseController
                 
                  // Action button (based on $canShowAction)
                 'action' => $canShowAction
-                    ? '<a href="' . base_url('shipment/edit/' . $shipment['id']) . '" class="btn btn-primary btn-sm">Edit</a>'
-                    : '',
+                            ? '<a href="' . base_url('shipment/edit/' . $shipment['id']) . '" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="' . base_url('shipment/api/delete/' . $shipment['id']) . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this shipment?\')">Delete</a>'
+                            : '',
+
 
                 'checkbox' => '<input type="checkbox" class="rowCheckbox" value="' . $shipment['id'] . '">'
             ];
@@ -602,8 +606,39 @@ class Shipment extends BaseController
         }
     }
 
+    public function delete($id)
+    {
+        $shipmentModel = new MNCShipment();
+        $shipmentLogModel = new MNCShipmentLog();
 
+        // Check if the shipment exists
+        $shipment = $shipmentModel->find($id);
+        if (!$shipment) {
+            return redirect()->back()->with('error', 'Shipment not found.');
+        }
 
+        // Begin transaction
+        $db = \Config\Database::connect();
+        $db->transStart();
 
+        $shipmentModel->update($id, ['status' => SOFT_DELETE]); // Manual soft delete
+
+        // Log the deletion
+        $shipmentLogModel->insert([
+            'shipment_id' => $id,
+            'user_id'      => session('user')['id'],
+            'description'  => 'SHIPMENT DELETED BY ' . session('user')['fullname']
+        ]);
+
+        // Complete the transaction
+        $db->transComplete();
+        if ($db->transStatus() === false) {
+            // Rollback occurred
+            return redirect()->back()->with('error', 'Failed to delete shipment.');
+        } else {
+            // Success
+            return redirect()->back()->with('success', 'Shipment deleted successfully.');
+        }
+    }
 
 }
