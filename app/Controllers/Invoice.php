@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\MNCShipment;
 use App\Models\MNCShipmentPackage;
 use App\Models\MNCCustomer;
+use App\Models\MNCCustomerPrice;
 
 class Invoice extends BaseController
 {
@@ -22,10 +23,12 @@ class Invoice extends BaseController
         $customer = new MNCCustomer();
         $shipmentModel = new MNCShipment();
         $detailModel = new MNCShipmentPackage();
+        $customer_price = new MNCCustomerPrice();
 
         $shipment = $shipmentModel->find($id);
         $details = $detailModel->where('shipment_id', $id)->findAll();
         $customerData = $customer->where('marking_code', $shipment['marking_code'])->first();
+        $customerPrice = $customer_price->where('customer_id', $customerData['id'])->first();
 
         if (!$shipment) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Shipment not found');
@@ -34,13 +37,13 @@ class Invoice extends BaseController
         $html = view('admin/pages/invoice/invoice_pdf_template', [
             'detail_shipment' => [
                 'company_logo'     => base_url('assets/admin/dist/img/AdminLTELogo.png'),
-                'sender_name'      => 'PT. MNC Logistics',
-                'sender_address'   => 'Batam, Indonesia',
-                'sender_phone'     => '+62 821 2264 4927',
+                'sender_name'      => 'MNC Logistics',
+                'sender_address'   => 'Jakarta, Indonesia',
             ],
             'customer' => $customerData,
             'shipment' => $shipment,
-            'details' => $details
+            'details' => $details,
+            'price' => $customerPrice,
         ]);
 
         generate_pdf($html, 'invoice_' . '#' . $shipment['id'] . '.pdf');

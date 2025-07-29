@@ -137,13 +137,11 @@
                     <strong>From:</strong><br>
                     <?= esc($detail_shipment['sender_name'] ?? '-') ?><br>
                     <?= esc($detail_shipment['sender_address'] ?? '-') ?><br>
-                    <?= esc($detail_shipment['sender_phone'] ?? '-') ?>
                 </td>
                 <td class="text-right">
                     <!-- <strong>To / C.q:</strong><br> -->
                     <?= esc($shipment['marking_code']) ?><br>
-                    <?= esc($customer['address'] ?? '-') ?><br>
-                    <?= esc($customer['phone_number'] ?? '-') ?>
+                    <?= esc($price['price_code'] ?? '-') ?><br>
                 </td>
             </tr>
         </table>
@@ -192,7 +190,7 @@
         <div class="signature-block">
             <div class="signature">
                 <p><strong>Authorized by:</strong></p>
-                <p style="margin-top: 40px;"><strong><?= esc($detail_shipment['sender_name']) ?></strong></p>
+                <p style="margin-top: 40px;"><strong>Finance MNC Logistics</strong></p>
             </div>
         </div>
     </div>
