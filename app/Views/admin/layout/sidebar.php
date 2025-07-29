@@ -38,19 +38,17 @@
               </p>
             </a>
           </li>
-          <?php $session = session(); ?>
 
-          <?php if ($session->get('user')['role'] === '1'): ?>
-            <li class="nav-item <?= ($segment_first === 'customers') ? 'menu-open' : '' ?>">
-              <a href="<?= base_url('customers') ?>" class="nav-link">
-                <i class="nav-icon fa fa-fw fa-list-alt"></i>
-                <p>
-                  Customer
-                </p>
-              </a>
-            </li>
-          <?php endif; ?>
+          <?php if (in_array($session->get('user')['role'], ['1', '6'])): ?>
+          <li class="nav-item <?= ($segment_first === 'customers') ? 'menu-open' : '' ?>">
+            <a href="<?= base_url('customers') ?>" class="nav-link">
+              <i class="nav-icon fa fa-fw fa-list-alt"></i>
+              <p>Customer</p>
+            </a>
+          </li>
+        <?php endif; ?>
 
+          <?php if ($session->get('user')['role'] !== '6'): ?>
           <li class="nav-item <?= ($segment_first === 'shipment') ? 'menu-open' : '' ?>">
             <a href="<?= base_url('shipment') ?>" class="nav-link">
               <i class="nav-icon fa fa-fw fa-list-alt"></i>
@@ -59,6 +57,7 @@
               </p>
             </a>
           </li>
+        <?php endif; ?>
 
           <?php if ($session->get('user')['role'] === '1'): ?>
             <li class="nav-header">System</li>
