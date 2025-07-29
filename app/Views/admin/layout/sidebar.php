@@ -39,7 +39,7 @@
             </a>
           </li>
 
-          <?php if (in_array($session->get('user')['role'], ['1', '6'])): ?>
+          <?php if (in_array($session->get('user')['role'], ['1', '5', '6'])): ?>
           <li class="nav-item <?= ($segment_first === 'customers') ? 'menu-open' : '' ?>">
             <a href="<?= base_url('customers') ?>" class="nav-link">
               <i class="nav-icon fa fa-fw fa-list-alt"></i>
@@ -59,7 +59,7 @@
           </li>
         <?php endif; ?>
 
-          <?php if ($session->get('user')['role'] === '1'): ?>
+          <?php if (in_array($session->get('user')['role'], ['1', '5'])): ?>
             <li class="nav-header">System</li>
             <li class="nav-item <?= ($segment_first === 'users') ? 'menu-open' : '' ?>">
               <a href="<?= base_url('users') ?>" class="nav-link">

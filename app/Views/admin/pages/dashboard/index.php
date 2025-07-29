@@ -32,7 +32,7 @@
                     <div class="icon">
                         <i class="ion ion-bag"></i>
                     </div>
-                    <?php if ($session->get('user')['role'] === '1'): ?>
+                    <?php if (in_array($session->get('user')['role'], ['1', '5'])): ?>
                     <a href="<?= base_url('shipment') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     <?php endif ?>
                     </div>
@@ -49,45 +49,49 @@
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
                     </div>
-                        <?php if ($session->get('user')['role'] === '1'): ?>
+                        <?php if (in_array($session->get('user')['role'], ['1', '5'])): ?>
                         <a href="<?= base_url('shipment') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         <?php endif ?>
                     </div>
                 </div>
                 <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                    <div class="inner">
-                        <h3><?= esc($totalRowsUsers) ?></h3>
+                 <?php if (in_array($session->get('user')['role'], ['1', '5'])): ?>
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3><?= esc($totalRowsUsers) ?></h3>
 
-                        <p>User Access System</p>
+                            <p>User Access System</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+                        
+                            <a href="<?= base_url('users') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                    </div>
-                    <?php if ($session->get('user')['role'] === '1'): ?>
-                        <a href="<?= base_url('users') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    <?php endif ?>
-                    </div>
-                </div>
+                <?php endif ?>
                 <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-danger">
-                    <div class="inner">
-                        <h3><?= esc($totalRowsCustomers) ?></h3>
+                 <?php if (in_array($session->get('user')['role'], ['1', '5'])): ?>
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3><?= esc($totalRowsCustomers) ?></h3>
 
-                        <p>Unique Customer</p>
+                            <p>Unique Customer</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-pie-graph"></i>
+                        </div>
+                        
+                            <a href="<?= base_url('customers') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                    </div>
-                    <?php if ($session->get('user')['role'] === '1'): ?>
-                        <a href="<?= base_url('customers') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    <?php endif ?>
-                    </div>
-                </div>
+                <?php endif ?>
                 <!-- ./col -->
                 </div>
                 <!-- /.row -->

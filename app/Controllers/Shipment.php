@@ -282,9 +282,15 @@ class Shipment extends BaseController
             'courier_id'      => $courierId
         ]);
 
-        $uploadPath = FCPATH . 'delivery';
+       $uploadPath = FCPATH . 'delivery';
+
         if (!is_dir($uploadPath)) {
             mkdir($uploadPath, 0775, true);
+        }
+
+        if (!is_writable($uploadPath)) {
+            $db->transRollback();
+            return redirect()->back()->with('error', 'Upload path is not writable: ' . $uploadPath);
         }
 
         $allowedTypes = ['jpg', 'jpeg', 'png'];
@@ -312,10 +318,17 @@ class Shipment extends BaseController
             $uid = uniqid();
             $finalName = $uid . '.' . $ext;
 
-            if (!$image->move($uploadPath, $finalName)) {
+            try {
+                if (!$image->move($uploadPath, $finalName)) {
+                    $db->transRollback();
+                    return redirect()->back()->with('error', 'Image move failed (no internal error reported).');
+                }
+            } catch (\Exception $e) {
                 $db->transRollback();
-                return redirect()->back()->with('error', 'Image upload failed.');
+                return redirect()->back()->with('error', 'Move threw exception: ' . $e->getMessage());
             }
+
+
 
             $imageModel->insert([
                 'shipment_delivery_id' => $deliveryId,
@@ -534,7 +547,7 @@ class Shipment extends BaseController
         } else if ($role == 3) {
            $shipmentModel->where('mnc_shipment.status_tracking', 1);
         } else if ($role == 4) {
-            $shipmentModel->whereIn('mnc_shipment.status_tracking', [2]);
+            $shipmentModel->whereIn('mnc_shipment.status_tracking', [2, 3]);
         }
 
         $shipments = $shipmentModel->findAll();
