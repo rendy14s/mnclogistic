@@ -125,6 +125,14 @@ use CodeIgniter\Router\RouteCollection;
       $routes->get('shipment/deliver/(:num)', 'Shipment::setDelivery/$1');
       $routes->post('shipment/deliverycustomer/(:num)', 'Shipment::saveDeliveryCustomer/$1');
 
+      // API For Bulk Sending Shipment
+      $routes->post('shipment/api/bulkSending', 'Shipment::bulkSending', ['filter' => 'tokenAuth']);
+
+      // API For List Shipment
+      $routes->get('shipment/api/list', 'Shipment::list', ['filter' => 'tokenAuth']);
+
+
+
 
       // Core Invoice
       $routes->get('invoice/pdf/(:num)', 'Invoice::exportPdf/$1');

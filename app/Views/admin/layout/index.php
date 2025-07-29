@@ -120,22 +120,81 @@
 <script src="<?= base_url('assets/admin/plugins/datatables-buttons/js/buttons.colVis.min.js') ?>"></script>
 <!-- Page specific script Table-->
 <script>
+  const userRole = <?= session()->get('user')['role'] ?? 'null' ?>;
+
   $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
+    const columns = [];
+
+    if (userRole === 3) {
+      columns.push({ data: "checkbox", orderable: false, searchable: false });
+    }
+
+    columns.push(
+      {
+        data: null,
+        render: function (data, type, row, meta) {
+          return meta.row + meta.settings._iDisplayStart + 1;
+        }
+      },
+      { data: "marking_code" },
+      { data: "price_code" },
+      { data: "consolidation" },
+      { data: "status_tracking" },
+      { data: "status_finance" },
+      { data: "created_at" },
+      { data: "action", orderable: false, searchable: false }
+    );
+
+    const buttons = [];
+
+    if (userRole === 3) {
+      buttons.push({
+        text: 'Send',
+        className: 'btn btn-warning',
+        action: function (e, dt, node, config) {
+          const selectedIds = $('.rowCheckbox:checked').map(function () {
+            return this.value;
+          }).get();
+
+          if (selectedIds.length === 0) {
+            alert('Please select at least one item.');
+            return;
+          }
+
+          if (confirm(`Are you sure for Sending ${selectedIds.length} selected item(s)?`)) {
+            $.post('/shipment/api/bulkSending', { ids: selectedIds }, function (response) {
+              alert('Selected shipments status sending successfully!');
+              dt.ajax.reload(null, false);
+            }).fail(function () {
+              alert('Error occurred while updating status.');
+            });
+          }
+        }
+      });
+    }
+
+    const table = $("#example1").DataTable({
+      responsive: true,
+      lengthChange: false,
+      autoWidth: false,
+      ordering: true,
+      paging: true,
+      info: true,
+      ajax: "/shipment/api/list",
+      columns: columns,
+      order: [[0, 'asc']],
+      buttons: buttons,
+      initComplete: function () {
+        if (userRole === 3) {
+          this.api().buttons().container()
+            .appendTo('#example1_wrapper .col-md-6:eq(0)');
+        }
+      }
     });
   });
 </script>
+
+
 
 <script>
 function showAlert(message, type = 'success') {
@@ -166,6 +225,9 @@ function showAlert(message, type = 'success') {
 
 <!-- Core JS Price Add Shipment -->
 <script src="<?= base_url('assets/admin/corejs/price_add_shipment.js') ?>"></script>
+
+<!-- Core JS Shipment Process -->
+<script src="<?= base_url('assets/admin/corejs/plugin_custom/primary_table_index_shipment.js') ?>"></script>
 
 <!-- Image Preview Script -->
 <script>

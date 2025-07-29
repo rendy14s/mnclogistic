@@ -20,24 +20,7 @@ class Shipment extends BaseController
 {
     public function index()
     {
-        //
-        $shipmentModel              = new MNCShipment();
-        $data['shipments'] = $shipmentModel
-            ->select('
-                mnc_shipment.id, 
-                mnc_shipment.marking_code, 
-                mnc_shipment.consolidation, 
-                mnc_shipment.status_tracking, 
-                mnc_shipment.status_finance, 
-                mnc_shipment.created_at, 
-                mnc_customers_price.price_code
-            ')
-            ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id')
-            ->findAll();
-
-        
-        
-        return view('admin/pages/shipment/index', $data);
+        return view('admin/pages/shipment/index');
     }
 
     public function form_add()
@@ -224,14 +207,14 @@ class Shipment extends BaseController
         // Begin transaction
         $db->transStart();
 
-        // Update shipment status to "Paid" (status = 2)
-        $shipmentModel->update($id, ['status_tracking' => '2']);
+        // Update shipment status to "Arrived at Warehouse" (status = 3)
+        $shipmentModel->update($id, ['status_tracking' => '3']);
 
         // Insert shipment log
         $shipmentLogModel->insert([
             'shipment_id' => $id,
             'user_id'       => session('user')['id'],
-            'description'  => 'SHIPMENT ARRIVED STATUS UPDATE BY ' . session('user')['fullname'],
+            'description'  => 'SHIPMENT ARRIVED At Warehouse Jakarta, STATUS UPDATE BY ' . session('user')['fullname'],
             'created_at'   => date('Y-m-d H:i:s'),
         ]);
 
@@ -476,7 +459,117 @@ class Shipment extends BaseController
             $db->transRollback(); // ROLLBACK if anything fails
             return redirect()->back()->with('error', 'Update failed: ' . $e->getMessage());
         }
-    }    
+    }
+    
+    public function bulkSending()
+    {
+        $request = service('request');
+
+        $ids = $request->getPost('ids');
+
+        if (!$ids || !is_array($ids)) {
+            return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'No shipment IDs provided']);
+        }
+
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        try {
+            $shipmentModel = new MNCShipment;
+
+            $shipmentModel->set('status_tracking', 2)
+                        ->whereIn('id', $ids)
+                        ->update();
+
+            $db->transComplete();
+
+            if ($db->transStatus() === FALSE) {
+                // Transaction failed
+                return $this->response->setStatusCode(500)->setJSON(['status' => 'error', 'message' => 'Transaction failed']);
+            }
+
+            return $this->response->setJSON(['status' => 'success', 'message' => 'Shipments updated successfully']);
+        } catch (\Exception $e) {
+            $db->transRollback();
+
+            return $this->response->setStatusCode(500)->setJSON(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function list()
+    {
+        $shipmentModel = new MNCShipment();
+        $user = session()->get('user');
+        $role = $user['role'] ?? null;
+
+        $shipments = $shipmentModel
+            ->select('
+                mnc_shipment.id, 
+                mnc_shipment.marking_code, 
+                mnc_shipment.consolidation, 
+                mnc_shipment.status_tracking, 
+                mnc_shipment.status_finance, 
+                mnc_shipment.created_at, 
+                mnc_customers_price.price_code
+            ')
+            ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id');
+
+        if ($role == 1) {
+            // Admin or Super Admin: Show all shipments
+            $shipments->where('mnc_shipment.status_tracking !=', 0);
+        } else if ($role == 2) {
+            // Finance: Show shipments that are paid or in unpaid status
+            $shipments->whereIn('mnc_shipment.status_tracking', [2, 3]);
+        } else if ($role == 3) {
+           $shipmentModel->where('mnc_shipment.status_tracking', 1);
+        } else if ($role == 4) {
+            $shipmentModel->where('mnc_shipment.status_tracking', 2);
+        }
+
+        $shipments = $shipmentModel->findAll();
+
+        $data = [];
+
+        foreach ($shipments as $shipment) {
+            $data[] = [
+                'id' => $shipment['id'],
+                'marking_code' => '<a href="' . base_url('shipment/process/' . $shipment['id']) . '">' . esc($shipment['marking_code']) . '</a>',
+                'price_code' => esc($shipment['price_code']),
+                'consolidation' => $shipment['consolidation'] == 1 ? 'Yes' : 'No',
+                'status_tracking' => $this->getStatusTrackingBadge($shipment['status_tracking']),
+                'status_finance' => $this->getStatusFinanceBadge($shipment['status_finance']),
+                'created_at' => !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) : '-',
+                'action' => '<a href="' . base_url('shipment/edit/' . $shipment['id']) . '" class="btn btn-primary btn-sm">Edit</a>',
+                'checkbox' => '<input type="checkbox" class="rowCheckbox" value="' . $shipment['id'] . '">'
+            ];
+        }
+
+        return $this->response->setJSON(['data' => $data]);
+    }
+
+    // Helper functions to build badges:
+    private function getStatusTrackingBadge($status)
+    {
+        switch ($status) {
+            case 1: return '<span class="badge badge-warning">NEW DATA SHIPMENT</span>';
+            case 2: return '<span class="badge badge-secondary">ON PROGRESS</span>';
+            case 3: return '<span class="badge badge-success">ARRIVED AT WAREHOUSE</span>';
+            case 4: return '<span class="badge badge-success">DELIVERED TO CUSTOMER</span>';
+            default: return '<span class="badge badge-secondary">PENDING</span>';
+        }
+    }
+
+    private function getStatusFinanceBadge($status)
+    {
+        switch ($status) {
+            case 0: return '<span class="badge badge-warning">UN PAID</span>';
+            case 1: return '<span class="badge badge-success">PAID</span>';
+            default: return '<span class="badge badge-secondary">Pending</span>';
+        }
+    }
+
+
+
 
 
 }

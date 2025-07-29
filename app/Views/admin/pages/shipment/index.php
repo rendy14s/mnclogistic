@@ -38,9 +38,12 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <table id="example2" class="table table-bordered table-hover">
+                                <table id="example1" class="table table-bordered table-hover">
                                     <thead>
-                                        <tr>
+                                            <tr>
+                                            <?php if (session()->get('user')['role'] == 3): ?>
+                                                <th><input type="checkbox" id="selectAll"></th>
+                                            <?php endif; ?> 
                                             <th>No</th>
                                             <th>Marking Code</th>
                                             <th>Destination</th>
@@ -52,64 +55,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php $id = 1; ?>
-                                        <?php foreach ($shipments as $shipment): ?>
-                                            <tr>
-                                                <td><?= $id++ ?></td>
-                                                <td>
-                                                    <a href="<?= base_url('shipment/process/' . esc($shipment['id']) ) ?>">
-                                                        <?= esc($shipment['marking_code']) ?>
-                                                    </a>
-                                                </td>
-                                                <td><?= esc($shipment['price_code']) ?></td>
-                                                <td>
-                                                    <?= $shipment['consolidation'] == 1 ? 'Yes' : 'No' ?>
-                                                </td>
-                                                <td>
-                                                    <?php
-                                                        switch ($shipment['status_tracking']) {
-                                                            case 1:
-                                                                echo '<span class="badge badge-warning">NEW DATA SHIPMENT</span>';
-                                                                break;
-                                                            case 2:
-                                                                echo '<span class="badge badge-secondary">ON PROGRESS</span>';
-                                                                break;
-                                                            case 3:
-                                                                echo '<span class="badge badge-success">ARRIVED AT WAREHOUSE</span>';
-                                                                break;
-                                                            case 4:
-                                                                echo '<span class="badge badge-success">DELIVERED TO CUSTOMER</span>';
-                                                                break;
-                                                            case 0:
-                                                            default:
-                                                                echo '<span class="badge badge-secondary">PENDING</span>';
-                                                                break;
-                                                        }
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?php
-                                                        switch ($shipment['status_finance']) {
-                                                            case 0:
-                                                                echo '<span class="badge badge-warning">UN PAID</span>';
-                                                                break;
-                                                            case 1:
-                                                                echo '<span class="badge badge-success">PAID</span>';
-                                                                break;
-                                                            default:
-                                                                echo '<span class="badge badge-secondary">Pending</span>';
-                                                                break;
-                                                        }
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?= !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) :'-' ?>
-                                                </td>
-                                                <td>
-                                                    <a href="<?= base_url('shipment/edit/' . $shipment['id']) ?>" class="btn btn-primary btn-sm">Edit</a>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
+                                        <!-- Will be loaded by DataTables ajax -->
                                     </tbody>
                                 </table>
                             </div>
