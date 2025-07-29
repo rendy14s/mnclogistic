@@ -93,7 +93,7 @@ class Shipment extends BaseController
             // dd($shipmentPackageModel);die;
 
 
-            // // Prepare shipping log data
+            // Prepare shipping log data
             $dataShipmentlog = [
                 'shipment_id'      => $shippingId,
                 'user_id'           => session('user')['id'],
@@ -174,8 +174,8 @@ class Shipment extends BaseController
         // Begin transaction
         $db->transStart();
 
-        // Update shipment status to "Paid" (status = 2)
-        $shipmentModel->update($id, ['status_finance' => '1']);
+        // Update shipment status to "Paid"
+        $shipmentModel->update($id, ['status_finance' => PAID]);
 
         // Insert shipment log
         $shipmentLogModel->insert([
@@ -207,8 +207,8 @@ class Shipment extends BaseController
         // Begin transaction
         $db->transStart();
 
-        // Update shipment status to "Arrived at Warehouse" (status = 3)
-        $shipmentModel->update($id, ['status_tracking' => '3']);
+        // Update shipment status to "Arrived at Warehouse"
+        $shipmentModel->update($id, ['status_tracking' => ARRIVED_AT_WAREHOUSE]);
 
         // Insert shipment log
         $shipmentLogModel->insert([
@@ -238,8 +238,8 @@ class Shipment extends BaseController
         // Begin transaction
         $db->transStart();
 
-        // Update shipment status to "Paid" (status = 2)
-        $shipmentModel->update($id, ['status_tracking' => '3']);
+        // Update shipment status to "Delivered to Customer"
+        $shipmentModel->update($id, ['status_tracking' => DELIVERED_TO_CUSTOMER]);
 
         // Insert shipment log
         $shipmentLogModel->insert([
@@ -332,7 +332,7 @@ class Shipment extends BaseController
         ]);
 
         $shipmentModel = new MNCShipment();
-        $shipmentModel->update($id, ['status_tracking' => '3']); // Update status to Delivered
+        $shipmentModel->update($id, ['status_tracking' => DELIVERED_TO_CUSTOMER]); // Update status to Delivered
 
         $db->transCommit();
         return redirect()->back()->with('success', 'Delivery and images saved successfully.');
@@ -476,10 +476,21 @@ class Shipment extends BaseController
 
         try {
             $shipmentModel = new MNCShipment;
+            $shipmentLogModel = new MNCShipmentLog();
 
-            $shipmentModel->set('status_tracking', 2)
+
+            $shipmentModel->set('status_tracking', ON_PROGRESS)
                         ->whereIn('id', $ids)
                         ->update();
+
+            foreach ($ids as $id) {
+                $shipmentLogModel->insert([
+                    'shipment_id'      => $id,
+                    'user_id'           => session('user')['id'],
+                    'description'       => 'Shipment Sent [Item Sending] to Warehouse Jakarta',
+                ]);
+            }
+
 
             $db->transComplete();
 
@@ -523,7 +534,7 @@ class Shipment extends BaseController
         } else if ($role == 3) {
            $shipmentModel->where('mnc_shipment.status_tracking', 1);
         } else if ($role == 4) {
-            $shipmentModel->where('mnc_shipment.status_tracking', 2);
+            $shipmentModel->whereIn('mnc_shipment.status_tracking', [2]);
         }
 
         $shipments = $shipmentModel->findAll();
@@ -531,6 +542,10 @@ class Shipment extends BaseController
         $data = [];
 
         foreach ($shipments as $shipment) {
+            $statusTracking = (int) $shipment['status_tracking'];
+
+             $canShowAction = in_array($role, [1, 2, 5]) || (in_array($role, [3, 4]) && $statusTracking === 1);
+
             $data[] = [
                 'id' => $shipment['id'],
                 'marking_code' => '<a href="' . base_url('shipment/process/' . $shipment['id']) . '">' . esc($shipment['marking_code']) . '</a>',
@@ -539,7 +554,13 @@ class Shipment extends BaseController
                 'status_tracking' => $this->getStatusTrackingBadge($shipment['status_tracking']),
                 'status_finance' => $this->getStatusFinanceBadge($shipment['status_finance']),
                 'created_at' => !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) : '-',
-                'action' => '<a href="' . base_url('shipment/edit/' . $shipment['id']) . '" class="btn btn-primary btn-sm">Edit</a>',
+                
+                
+                 // Action button (based on $canShowAction)
+                'action' => $canShowAction
+                    ? '<a href="' . base_url('shipment/edit/' . $shipment['id']) . '" class="btn btn-primary btn-sm">Edit</a>'
+                    : '',
+
                 'checkbox' => '<input type="checkbox" class="rowCheckbox" value="' . $shipment['id'] . '">'
             ];
         }

@@ -129,6 +129,8 @@
       columns.push({ data: "checkbox", orderable: false, searchable: false });
     }
 
+    
+
     columns.push(
       {
         data: null,
@@ -141,15 +143,19 @@
       { data: "consolidation" },
       { data: "status_tracking" },
       { data: "status_finance" },
-      { data: "created_at" },
-      { data: "action", orderable: false, searchable: false }
+      { data: "created_at" }
+      
     );
+
+    if ([1, 2, 3, 5].includes(userRole)) {
+      columns.push({ data: "action", orderable: false, searchable: false }); // Hidden Action column
+    }
 
     const buttons = [];
 
     if (userRole === 3) {
       buttons.push({
-        text: 'Send',
+        text: 'Item Send',
         className: 'btn btn-warning',
         action: function (e, dt, node, config) {
           const selectedIds = $('.rowCheckbox:checked').map(function () {

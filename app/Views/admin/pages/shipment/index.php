@@ -38,6 +38,7 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
+                                <?php $role = session()->get('user')['role'] ?? null; ?>
                                 <table id="example1" class="table table-bordered table-hover">
                                     <thead>
                                             <tr>
@@ -51,7 +52,9 @@
                                             <th>Status Tracking</th>
                                             <th>Status Finance</th>
                                             <th>Created Time</th>
-                                            <th>Action</th>
+                                             <?php if (in_array($role, [1, 2, 3, 5])): ?>
+                                                <th>Action</th>
+                                            <?php endif; ?>
                                         </tr>
                                     </thead>
                                     <tbody>
