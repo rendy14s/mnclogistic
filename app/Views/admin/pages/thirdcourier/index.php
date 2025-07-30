@@ -45,6 +45,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                         <?php if (empty($couriers)): ?>
+                                            <tr>
+                                                <td colspan="7" class="text-center">No data available in table</td>
+                                            </tr>
+                                        <?php else: ?>
+
                                         <?php $id = 1; ?>
                                         <?php foreach ($couriers as $courier): ?>
                                             <tr>
@@ -59,6 +65,7 @@
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
+                                        <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>
