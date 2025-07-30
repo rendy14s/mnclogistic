@@ -14,13 +14,13 @@ class Courier extends BaseController
         $model = new MNCCourier();
         $data['couriers'] = $model->where('status', 1)->findAll();
         
-        return view('admin/pages/3rdcourier/index', $data);
+        return view('admin/pages/thirdcourier/index', $data);
     }
 
     public function form_add()
     {
         //
-        return view('admin/pages/3rdcourier/create/index');
+        return view('admin/pages/thirdcourier/create/index');
     }
 
     public function create()
@@ -34,7 +34,7 @@ class Courier extends BaseController
 
         $courierModel->save($data);
 
-        return redirect()->to('/3rdcourier')->with('message', 'Customer created successfully!');
+        return redirect()->to('/thirdcourier')->with('message', 'Customer created successfully!');
     }
 
     public function edit($id) {
@@ -58,7 +58,7 @@ class Courier extends BaseController
             // Update the courir data
             if ($courierModel->update($id, $data)) {
                 log_message('debug', 'courir updated successfully.');
-                return redirect()->to('/3rdcourier'); // Redirect to the courirs list page
+                return redirect()->to('/thirdcourier'); // Redirect to the courirs list page
             } else {
                 // If the update fails, log the error
                 log_message('error', 'Failed to update courir with ID: ' . $id);
@@ -66,7 +66,7 @@ class Courier extends BaseController
         }
 
         // Pass courir data to the view
-        return view('admin/pages/3rdcourier/edit/index', ['courir' => $courir]);
+        return view('admin/pages/thirdcourier/edit/index', ['courir' => $courir]);
     }
 
         public function softDelete($id)
@@ -89,7 +89,7 @@ class Courier extends BaseController
 
         if ($courierModel->update($id, $data)) {
             // Redirect to couriers list with a success message
-            return redirect()->to('/3rdcourier')->with('message', 'courier soft-deleted successfully.');
+            return redirect()->to('/thirdcourier')->with('message', 'courier soft-deleted successfully.');
         } else {
             // If update fails
             return redirect()->back()->with('error', 'Failed to soft delete the courier.');

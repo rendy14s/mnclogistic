@@ -76,22 +76,22 @@ use CodeIgniter\Router\RouteCollection;
 
    // 3rd Courier
       // Index Page
-      $routes->get('3rdcourier', 'Courier::index', ['filter' => 'tokenAuth']);
+      $routes->get('thirdcourier', 'Courier::index', ['filter' => 'tokenAuth']);
 
       // Form Add 3rd Courier
-      $routes->get('3rdcourier/register', 'Courier::form_add', ['filter' => 'tokenAuth']);
+      $routes->get('thirdcourier/register', 'Courier::form_add', ['filter' => 'tokenAuth']);
 
       // Form Edit 3rd Courier
-      $routes->get('3rdcourier/edit/(:num)', 'Courier::edit/$1', ['filter' => 'tokenAuth']);
+      $routes->get('thirdcourier/edit/(:num)', 'Courier::edit/$1', ['filter' => 'tokenAuth']);
 
       // API For Add 3rd Courier
-      $routes->post('3rdcourier/api/register', 'Courier::create', ['filter' => 'tokenAuth']);
+      $routes->post('thirdcourier/api/register', 'Courier::create', ['filter' => 'tokenAuth']);
 
       // API For Edit Courier
-      $routes->post('3rdcourier/api/edit/(:num)', 'Courier::edit/$1', ['filter' => 'tokenAuth']);
+      $routes->post('thirdcourier/api/edit/(:num)', 'Courier::edit/$1', ['filter' => 'tokenAuth']);
 
       // API For Soft Delete User
-      $routes->get('3rdcourier/softDelete/(:num)', 'Courier::softDelete/$1', ['filter' => 'tokenAuth']);
+      $routes->get('thirdcourier/softDelete/(:num)', 'Courier::softDelete/$1', ['filter' => 'tokenAuth']);
 
    // Core Shipment
       //Index Page
