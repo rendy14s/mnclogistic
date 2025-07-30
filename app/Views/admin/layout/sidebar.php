@@ -68,8 +68,8 @@
               </a>
             </li>
 
-            <li class="nav-item <?= ($segment_first === '3rdcourier') ? 'menu-open' : '' ?>">
-              <a href="<?= base_url('3rdcourier') ?>" class="nav-link">
+            <li class="nav-item <?= ($segment_first === 'thirdcourier') ? 'menu-open' : '' ?>">
+              <a href="<?= base_url('thirdcourier') ?>" class="nav-link">
                 <i class="nav-icon fas ion-android-car"></i>
                 <p>3rd Courier</p>
               </a>
