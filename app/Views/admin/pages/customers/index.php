@@ -48,24 +48,31 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php $id = 1; ?>
-                                        <?php foreach ($customers as $customer): ?>
+                                        <?php if (empty($customers)): ?>
                                             <tr>
-                                                <td><?= $id++ ?></td>
-                                                <td><?= esc($customer['marking_code']) ?></td>
-                                                <td><?= esc($customer['customer_name']) ?></td>
-                                                <td><?= esc($customer['phone_number']) ?></td>
-                                                <td><?= esc($customer['address']) ?></td>
-                                                <td>
-                                                    <?= !empty($customer['created_at']) ? date('H:i:s A d/m/Y', strtotime($customer['created_at'])) :'-' ?>
-                                                </td>
-                                                <td> <!-- Action Buttons -->
-                                                    <a href="<?= base_url('customers/edit/' . $customer['id']) ?>" class="btn btn-primary btn-sm">Edit Info</a>
-                                                    <a href="<?= base_url('customers/edit/pricing/' . $customer['id']) ?>" class="btn btn-warning btn-sm">Edit Price</a>
-                                                    <a href="<?= base_url('customers/softDelete/' . $customer['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this customer?')">Delete</a>
-                                                </td>
+                                                <td colspan="7" class="text-center">No data available in table</td>
                                             </tr>
-                                        <?php endforeach; ?>
+                                        <?php else: ?>
+
+                                            <?php $id = 1; ?>
+                                            <?php foreach ($customers as $customer): ?>
+                                                <tr>
+                                                    <td><?= $id++ ?></td>
+                                                    <td><?= esc($customer['marking_code']) ?></td>
+                                                    <td><?= esc($customer['customer_name']) ?></td>
+                                                    <td><?= esc($customer['phone_number']) ?></td>
+                                                    <td><?= esc($customer['address']) ?></td>
+                                                    <td>
+                                                        <?= !empty($customer['created_at']) ? date('H:i:s A d/m/Y', strtotime($customer['created_at'])) :'-' ?>
+                                                    </td>
+                                                    <td> <!-- Action Buttons -->
+                                                        <a href="<?= base_url('customers/edit/' . $customer['id']) ?>" class="btn btn-primary btn-sm">Edit Info</a>
+                                                        <a href="<?= base_url('customers/edit/pricing/' . $customer['id']) ?>" class="btn btn-warning btn-sm">Edit Price</a>
+                                                        <a href="<?= base_url('customers/softDelete/' . $customer['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this customer?')">Delete</a>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>
