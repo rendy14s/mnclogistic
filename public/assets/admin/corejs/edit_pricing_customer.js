@@ -12,13 +12,13 @@ $(document).ready(function() {
         $('#editTablePricing tbody').append(noDataRow);
     } else {
         pricingData.forEach(function(pricing, index) {
-            var service = (pricing.service == 1) ? 'Air' : 'Sea';
+
             var row = `
                 <tr>
                     <td>${index + 1}</td>
                     <td>${pricing.from}</td>
                     <td>${pricing.to}</td>
-                    <td>${service}</td>
+                    <td>${pricing.service}</td>
                     <td>${pricing.price}</td>
                     <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
                 </tr>
