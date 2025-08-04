@@ -49,7 +49,8 @@ class Auth extends BaseController
 
             // Token
             $accessToken   = bin2hex(random_bytes(32));
-            $expiresToken  = date('Y-m-d H:i:s', time() + 900); // 15 minutes
+            $expiresInSeconds = 18 * 60 * 60; // 18 hours
+            $expiresToken     = date('Y-m-d H:i:s', time() + $expiresInSeconds);
             $ipAddress     = $this->request->getIPAddress();
             $userAgent     = $this->request->getUserAgent()->getAgentString();
 
@@ -65,7 +66,7 @@ class Auth extends BaseController
             ]);
 
             // Set access_token cookie (adjust secure flag on production)
-            setcookie('access_token', $accessToken, time() + 900, '/', '', false, true);
+            setcookie('access_token', $accessToken, time() + $expiresInSeconds, '/', '', false, true);
 
             // ✅ Redirect ke halaman yang akan inject JS (lihat view selanjutnya)
             return redirect()->to('/dashboard');
