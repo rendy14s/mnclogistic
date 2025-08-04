@@ -53,6 +53,7 @@
                             </select>
 
                             <input type="hidden" name="price_kg" id="priceKg">
+                            <input type="hidden" name="service" id="service">
                           </div>
                         </div>
 

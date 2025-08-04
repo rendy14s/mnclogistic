@@ -73,7 +73,12 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
     function calculateVolume(p, l, t) {
-        return (p * l * t) / 6000;
+        let serviceValue = document.getElementById('service').value;
+        if (serviceValue === 'Sea') {
+            return p * l * t / 5000; // Volume in cubic meters for Sea service
+        } else if (serviceValue === 'Air') {
+            return p * l * t / 6000; // Volume in cubic centimeters for Air service
+        }
     }
 
     function renderPackagesTable() {
@@ -285,14 +290,17 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#shippingPrice').off('change').on('change', function () {
         const selectedOption = $(this).find('option:selected');
         const selectedPricePerKg = selectedOption.data('price');
+        const selectedService = selectedOption.data('service');
         const selectedPriceID = selectedOption.val();
 
 
         // Set the data-price into the hidden input
         $('#priceKg').val(selectedPricePerKg);
+        $('#service').val(selectedService);
         $('#defaultPriceID').val(selectedPriceID);
 
         console.log('Selected price_kg :', selectedPricePerKg); // Debug
+        console.log('Selected service :', selectedService); // Debug
         console.log('Selected price_id :', selectedPriceID); // Debug
 
         console.log("Selected Price Per Kg:", getPricePerKg());
