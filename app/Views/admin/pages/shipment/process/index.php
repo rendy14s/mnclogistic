@@ -1,4 +1,5 @@
 <?= $this->extend('admin/layout/index') ?>
+    <?php $session = session(); ?>
 
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
@@ -31,7 +32,7 @@
                     <div class="card-body">
                         <p><strong>Marking Code:</strong> <?= esc($shipment['marking_code']) ?></p>
                         <p><strong>Price Code:</strong> <?= esc($shipment['price_code']) ?></p>
-                        <p><strong>Total Price:</strong> Rp <?= number_format($shipment['total_price'], 0, ',', '.') ?></p>
+                        <p class="<?= ($session->get('user')['role'] !== '3') ? '' : 'd-none' ?>"><strong>Total Price:</strong> Rp <?= number_format($shipment['total_price'], 0, ',', '.') ?></p>
                         <p><strong>Status Shipment:</strong> 
                             <?=
                                 $statusText = '';
