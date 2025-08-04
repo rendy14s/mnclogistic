@@ -125,9 +125,9 @@ class Shipment extends BaseController
         $shipmentModel         = new MNCShipment();
         $shipmentPackageModel  = new MNCShipmentPackage();
         $shipmentLogModel      = new MNCShipmentLog();
-        $userModel              = new MNCUser();
-        $courierData            = new MNCCourier();
-        $couriers               = $courierData->findAll();
+        $userModel             = new MNCUser();
+        $courierData           = new MNCCourier();
+        $couriers              = $courierData->findAll();
 
         $shipment = $shipmentModel
             ->select('
@@ -149,6 +149,7 @@ class Shipment extends BaseController
         }
 
         $packages   = $shipmentPackageModel->where('shipment_id', $id)->findAll();
+        $total_packages   = count($packages); // or ->where()->countAllResults() if not fetching all
         $users      = $userModel->where('id', $shipment['created_by'])->first();
         
         $logs = $shipmentLogModel
@@ -160,6 +161,7 @@ class Shipment extends BaseController
         return view('admin/pages/shipment/process/index', [
             'shipment' => $shipment,
             'packages' => $packages,
+            'total_packages' => $total_packages,
             'users' => $users,
             'logs' => $logs,
             'couriers' => $couriers
