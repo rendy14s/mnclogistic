@@ -56,6 +56,7 @@
                             </select>
                               <input type="hidden" id="defaultPriceID" value="<?= esc($shipment['price_id']) ?>">
                               <input type="hidden" name="defaultPriceKg" id="priceKg">
+                              <input type="hidden" name="service" id="service">
                           </div>
                         </div>
 
