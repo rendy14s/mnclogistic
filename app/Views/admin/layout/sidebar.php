@@ -22,7 +22,7 @@
           <img src="<?= base_url('assets/admin/dist/img/user2-160x160.jpg') ?>" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block"><?= esc($session->get('user')['fullname']) ?></a>
+          <a href="#" class="d-block"><?= esc($session->get('user')['fullname'] ?? 'Guest') ?></a>
         </div>
       </div>
 
@@ -38,8 +38,7 @@
               </p>
             </a>
           </li>
-
-          <?php if (in_array($session->get('user')['role'], ['1', '5', '6'])): ?>
+          <?php if (($user = $session->get('user')) && in_array($user['role'], ['1', '5', '6'])): ?>
           <li class="nav-item <?= ($segment_first === 'customers') ? 'menu-open' : '' ?>">
             <a href="<?= base_url('customers') ?>" class="nav-link">
               <i class="nav-icon fa fa-fw fa-list-alt"></i>
@@ -48,7 +47,7 @@
           </li>
         <?php endif; ?>
 
-          <?php if ($session->get('user')['role'] !== '6'): ?>
+          <?php if (($user = $session->get('user')) && in_array($user['role'], ['6'])): ?>
           <li class="nav-item <?= ($segment_first === 'shipment') ? 'menu-open' : '' ?>">
             <a href="<?= base_url('shipment') ?>" class="nav-link">
               <i class="nav-icon fa fa-fw fa-list-alt"></i>
@@ -59,7 +58,7 @@
           </li>
         <?php endif; ?>
 
-          <?php if (in_array($session->get('user')['role'], ['1', '5'])): ?>
+          <?php if (($user = $session->get('user')) && in_array($user['role'], ['1', '5', '6'])): ?>
             <li class="nav-header">System</li>
             <li class="nav-item <?= ($segment_first === 'users') ? 'menu-open' : '' ?>">
               <a href="<?= base_url('users') ?>" class="nav-link">
