@@ -32,7 +32,7 @@
                     <div class="icon">
                         <i class="ion ion-bag"></i>
                     </div>
-                    <?php if (in_array($session->get('user')['role'], ['1', '5'])): ?>
+                    <?php if (($user = $session->get('user')) && in_array($user['role'], ['1', '5'])): ?>
                     <a href="<?= base_url('shipment') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     <?php endif ?>
                     </div>
