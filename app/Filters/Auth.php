@@ -25,14 +25,13 @@ class Auth implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        //
-        $user = session()->get('user');
-        
-        if (!$user || !isset($user['logged_in']) || !$user['logged_in']) {
+        $session = session();
+        $user = $session->get('user');
+
+        // If not logged in → go to login page
+        if (!$user) {
             return redirect()->to('/login');
         }
-
-        return redirect()->to('/dashboard');
     }
 
     /**
