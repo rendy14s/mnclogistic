@@ -47,7 +47,7 @@
           </li>
         <?php endif; ?>
 
-          <?php if (($user = $session->get('user')) && in_array($user['role'], ['6'])): ?>
+          <?php if (($user = $session->get('user')) && $user['role'] !== '6'): ?>
           <li class="nav-item <?= ($segment_first === 'shipment') ? 'menu-open' : '' ?>">
             <a href="<?= base_url('shipment') ?>" class="nav-link">
               <i class="nav-icon fa fa-fw fa-list-alt"></i>
