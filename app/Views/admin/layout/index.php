@@ -147,7 +147,7 @@
       
     );
 
-    if ([1, 3, 5].includes(userRole)) {
+    if ([1, 2, 3, 5].includes(userRole)) {
       columns.push({ data: "action", orderable: false, searchable: false }); // Hidden Action column
     }
 

@@ -561,7 +561,7 @@ class Shipment extends BaseController
         foreach ($shipments as $shipment) {
             $statusTracking = (int) $shipment['status_tracking'];
 
-             $canShowAction = in_array($role, [1, 5]) || (in_array($role, [2, 3, 4]) && $statusTracking === 1);
+             $canShowAction = in_array($role, [1, 2, 5]) || (in_array($role, [2, 3, 4]) && $statusTracking === 1);
 
             $data[] = [
                 'id' => $shipment['id'],
