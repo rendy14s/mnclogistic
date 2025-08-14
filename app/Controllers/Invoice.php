@@ -27,6 +27,8 @@ class Invoice extends BaseController
 
         $shipment = $shipmentModel->find($id);
         $details = $detailModel->where('shipment_id', $id)->findAll();
+        $total_packages   = count($details); // or ->where()->countAllResults() if not fetching all
+
         $customerData = $customer->where('marking_code', $shipment['marking_code'])->first();
         $customerPrice = $customer_price->where('customer_id', $customerData['id'])->first();
 
@@ -42,6 +44,7 @@ class Invoice extends BaseController
             ],
             'customer' => $customerData,
             'shipment' => $shipment,
+            'total_packages' => $total_packages,
             'details' => $details,
             'price' => $customerPrice,
         ]);

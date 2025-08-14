@@ -495,9 +495,12 @@ class Shipment extends BaseController
             $shipmentLogModel = new MNCShipmentLog();
 
 
-            $shipmentModel->set('status_tracking', ON_PROGRESS)
-                        ->whereIn('id', $ids)
-                        ->update();
+            $shipmentModel->set([
+                                'status_tracking' => ON_PROGRESS,
+                                'shipment_flag_date' => date('Y-m-d H:i:s')
+                            ])
+                            ->whereIn('id', $ids)
+                            ->update();
 
             foreach ($ids as $id) {
                 $shipmentLogModel->insert([

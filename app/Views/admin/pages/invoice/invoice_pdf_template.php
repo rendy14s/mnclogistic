@@ -132,18 +132,38 @@
 
         <table class="mb-20">
             <tr>
-                <td>
-                    <strong style="font-size: 14px;">Invoice No:</strong> <span style="font-size: 14px;"><?= esc($shipment['id']) ?></span><br><br>
-                    <strong>From:</strong><br>
-                    <?= esc($detail_shipment['sender_name'] ?? '-') ?><br>
-                    <?= esc($detail_shipment['sender_address'] ?? '-') ?><br>
-                </td>
-                <td class="text-right">
-                    <!-- <strong>To / C.q:</strong><br> -->
-                    <?= esc($shipment['marking_code']) ?><br>
-                    <?= esc($price['price_code'] ?? '-') ?><br>
-                </td>
-            </tr>
+    <td style="vertical-align: top; width: 60%;">
+        <div style="margin-bottom: 20px;">
+            <strong style="font-size: 16px; color: #333;">INVOICE #<?= esc($shipment['id']) ?></strong>
+            <div style="margin-top: 5px;">
+                <div style="font-size: 12px; color: #666;">
+                    <strong>Issued:</strong> <?= date('F j, Y') ?>
+                </div>
+                <div style="font-size: 12px; color: #666; margin-top: 3px;">
+                    <strong>Shipment:</strong> <?= date('F j, Y', strtotime(esc($shipment['shipment_flag_date']))) ?>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 20px; border-left: 3px solid #3498db; padding-left: 10px;">
+            <strong style="display: block; font-size: 14px; margin-bottom: 5px;">FROM:</strong>
+            <?= esc($detail_shipment['sender_name'] ?? '-') ?><br>
+            <?= esc($detail_shipment['sender_address'] ?? '-') ?>
+        </div>
+    </td>
+    
+    <td style="vertical-align: top; text-align: right; width: 40%;">
+        <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; display: inline-block; float: right;">
+            <strong style="display: block; font-size: 14px; margin-bottom: 5px;">SHIPMENT DETAILS:</strong>
+            <span style="font-family: monospace; font-size: 15px;">
+                <?= esc($shipment['marking_code']) ?>
+            </span><br>
+            <span style="color: #27ae60; font-weight: 500;">
+                <?= esc($price['price_code'] ?? '-') ?>
+            </span>
+        </div>
+    </td>
+</tr>
         </table>
 
         <table>
@@ -183,6 +203,10 @@
             <tr class="total">
                 <td colspan="7" class="text-right">Grand Total:</td>
                 <td colspan="2" class="text-left"><strong>Rp <?= number_format($shipment['total_price'], 0, ',', '.') ?></strong></td>
+            </tr>
+            <tr>
+                <td colspan="7" class="text-right">Total Packages / Box:</td>
+                <td colspan="2"><?= esc($total_packages) ?></td>
             </tr>
         </table>
 
