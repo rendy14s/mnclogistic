@@ -140,7 +140,7 @@
                     <strong>Issued:</strong> <?= date('F j, Y') ?>
                 </div>
                 <div style="font-size: 12px; color: #666; margin-top: 3px;">
-                    <strong>Shipment:</strong> <?= date('F j, Y', strtotime(esc($shipment['shipment_flag_date']))) ?>
+                    <strong>Shipment:</strong> <?= date('F j, Y', strtotime(esc($shipment['shipment_flag_date'] ?: date('Y-m-d')))) ?>
                 </div>
             </div>
         </div>
