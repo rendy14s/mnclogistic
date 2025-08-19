@@ -205,6 +205,10 @@
                 <td colspan="2" class="text-left"><strong>Rp <?= number_format($shipment['total_price'], 0, ',', '.') ?></strong></td>
             </tr>
             <tr>
+                <td colspan="7" class="text-right">Total Weight / Kg:</td>
+                <td colspan="2"><?= esc($shipment['total_weight']) ?></td>
+            </tr>
+            <tr>
                 <td colspan="7" class="text-right">Total Packages / Box:</td>
                 <td colspan="2"><?= esc($total_packages) ?></td>
             </tr>
