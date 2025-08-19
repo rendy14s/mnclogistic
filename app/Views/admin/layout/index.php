@@ -179,7 +179,7 @@
       });
     }
 
-    const table = $("#example1").DataTable({
+    const table = $("#shipmenttable").DataTable({
       responsive: true,
       lengthChange: false,
       autoWidth: false,
@@ -193,9 +193,46 @@
       initComplete: function () {
         if (userRole === 3) {
           this.api().buttons().container()
-            .appendTo('#example1_wrapper .col-md-6:eq(0)');
+            .appendTo('#shipmenttable_wrapper .col-md-6:eq(0)');
         }
       }
+    });
+  });
+
+  $(function () {
+    const columns = [];
+    
+
+    columns.push(
+      {
+        data: null,
+        render: function (data, type, row, meta) {
+          return meta.row + meta.settings._iDisplayStart + 1;
+        }
+      },
+      { data: "marking_code" },
+      { data: "price_code" },
+      { data: "consolidation" },
+      { data: "status_tracking" },
+      { data: "status_finance" },
+      { data: "created_at" }
+      
+    );
+
+    if ([1, 2, 3, 5].includes(userRole)) {
+      columns.push({ data: "action", orderable: false, searchable: false }); // Hidden Action column
+    }
+
+    const table = $("#datashipmenttable").DataTable({
+      responsive: true,
+      lengthChange: false,
+      autoWidth: false,
+      ordering: true,
+      paging: true,
+      info: true,
+      ajax: "/shipment/api/datashipment",
+      columns: columns,
+      order: [[0, 'asc']]
     });
   });
 

@@ -532,6 +532,97 @@ class Shipment extends BaseController
         $user = session()->get('user');
         $role = $user['role'] ?? null;
 
+       $shipments = $shipmentModel
+            ->select('
+                mnc_shipment.id, 
+                mnc_shipment.marking_code, 
+                mnc_shipment.consolidation, 
+                mnc_shipment.status_tracking, 
+                mnc_shipment.status_finance, 
+                mnc_shipment.created_at, 
+                mnc_customers_price.price_code
+            ')
+            ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id')
+            ->where('mnc_shipment.status', 1)
+            ->groupStart()
+                // show tracking 1-4 with finance = 0
+                ->whereIn('mnc_shipment.status_tracking', [1,2,3,4])
+                ->where('mnc_shipment.status_finance', 0)
+            ->groupEnd()
+            ->orGroupStart()
+                // exclude tracking 3,4 with finance = 1
+                ->whereNotIn('mnc_shipment.status_tracking', [3,4])
+                ->where('mnc_shipment.status_finance !=', 1)
+            ->groupEnd()
+            ->orderBy('mnc_shipment.created_at', 'DESC');
+
+
+            // Role-based filter
+            switch ($role) {
+                case 1:
+                    // Admin or Super Admin: Show all shipments
+                    $shipments->where('mnc_shipment.status_tracking !=', 0);
+                    break;
+
+                case 2:
+                    // Finance: Show shipments that are paid or unpaid
+                    $shipments->whereIn('mnc_shipment.status_tracking', [2, 3]);
+                    break;
+
+                case 3:
+                    // Role 3: Only status_tracking = 1
+                    $shipments->where('mnc_shipment.status_tracking', 1);
+                    break;
+
+                case 4:
+                    // Role 4: status_tracking in [2, 3]
+                    $shipments->whereIn('mnc_shipment.status_tracking', [2, 3]);
+                    break;
+
+                default:
+                    // Optional: no additional filter for other roles
+                    break;
+            }
+
+            $shipments = $shipments->get()->getResultArray();
+
+        $data = [];
+
+        foreach ($shipments as $shipment) {
+            $statusTracking = (int) $shipment['status_tracking'];
+
+             $canShowAction = in_array($role, [1, 2, 5]) || (in_array($role, [2, 3, 4]) && $statusTracking === 1);
+
+            $data[] = [
+                'id' => $shipment['id'],
+                'marking_code' => '<a href="' . base_url('shipment/process/' . $shipment['id']) . '">' . esc($shipment['marking_code']) . '</a>',
+                'price_code' => esc($shipment['price_code']),
+                'consolidation' => $shipment['consolidation'] == 1 ? 'Yes' : 'No',
+                'status_tracking' => $this->getStatusTrackingBadge($shipment['status_tracking']),
+                'status_finance' => $this->getStatusFinanceBadge($shipment['status_finance']),
+                'created_at' => !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) : '-',
+                
+                
+                 // Action button (based on $canShowAction)
+                'action' => $canShowAction
+                            ? '<a href="' . base_url('shipment/edit/' . $shipment['id']) . '" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="' . base_url('shipment/api/delete/' . $shipment['id']) . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this shipment?\')">Delete</a>'
+                            : '',
+
+
+                'checkbox' => '<input type="checkbox" class="rowCheckbox" value="' . $shipment['id'] . '">'
+            ];
+        }
+
+        return $this->response->setJSON(['data' => $data]);
+    }
+
+    public function datashipment()
+    {
+        $shipmentModel = new MNCShipment();
+        $user = session()->get('user');
+        $role = $user['role'] ?? null;
+
         $shipments = $shipmentModel
             ->select('
                 mnc_shipment.id, 
@@ -544,19 +635,10 @@ class Shipment extends BaseController
             ')
             ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id')
              ->where('mnc_shipment.status', 1)
+             ->where('mnc_shipment.status_tracking', 3)
+             ->where('mnc_shipment.status_finance', 1)
+             
              ->orderBy('mnc_shipment.created_at', 'DESC');
-
-        if ($role == 1) {
-            // Admin or Super Admin: Show all shipments
-            $shipments->where('mnc_shipment.status_tracking !=', 0);
-        } else if ($role == 2) {
-            // Finance: Show shipments that are paid or in unpaid status
-            $shipments->whereIn('mnc_shipment.status_tracking', [2, 3]);
-        } else if ($role == 3) {
-           $shipmentModel->where('mnc_shipment.status_tracking', 1);
-        } else if ($role == 4) {
-            $shipmentModel->whereIn('mnc_shipment.status_tracking', [2, 3]);
-        }
 
         $shipments = $shipments->get()->getResultArray(); 
 
