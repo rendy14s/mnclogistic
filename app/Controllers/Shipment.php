@@ -543,7 +543,8 @@ class Shipment extends BaseController
                 mnc_customers_price.price_code
             ')
             ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id')
-             ->where('mnc_shipment.status', 1);
+             ->where('mnc_shipment.status', 1)
+             ->orderBy('mnc_shipment.created_at', 'DESC');
 
         if ($role == 1) {
             // Admin or Super Admin: Show all shipments

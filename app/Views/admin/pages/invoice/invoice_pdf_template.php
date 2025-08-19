@@ -206,7 +206,7 @@
             </tr>
             <tr>
                 <td colspan="7" class="text-right">Total Weight / Kg:</td>
-                <td colspan="2"><?= esc($shipment['total_weight']) ?></td>
+                <td colspan="2"><?= esc($shipment['total_weight']) ?> Kg </td>
             </tr>
             <tr>
                 <td colspan="7" class="text-right">Total Packages / Box:</td>
