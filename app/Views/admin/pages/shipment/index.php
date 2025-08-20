@@ -33,7 +33,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link active" id="custom-tabs-one-shipment-tab" data-toggle="pill" href="#custom-tabs-one-shipment" role="tab" aria-controls="custom-tabs-one-shipment" aria-selected="true">Shipment</a>
                                     </li>
-                                    <?php if (in_array($role, [1, 5])): ?>
+                                    <?php if (in_array($role, [1, 2, 5])): ?>
                                         <li class="nav-item">
                                             <a class="nav-link" id="custom-tabs-one-data-shipment-tab" data-toggle="pill" href="#custom-tabs-one-data-shipment" role="tab" aria-controls="custom-tabs-one-data-shipment" aria-selected="false">Data Shipment Paid & Arrived Jakarta</a>
                                         </li>

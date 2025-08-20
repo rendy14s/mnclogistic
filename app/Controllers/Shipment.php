@@ -533,29 +533,28 @@ class Shipment extends BaseController
         $role = $user['role'] ?? null;
 
        $shipments = $shipmentModel
-            ->select('
-                mnc_shipment.id, 
-                mnc_shipment.marking_code, 
-                mnc_shipment.consolidation, 
-                mnc_shipment.status_tracking, 
-                mnc_shipment.status_finance, 
-                mnc_shipment.created_at, 
-                mnc_customers_price.price_code
-            ')
-            ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id')
-            ->where('mnc_shipment.status', 1)
-            ->groupStart()
-                // show tracking 1-4 with finance = 0
-                ->whereIn('mnc_shipment.status_tracking', [1,2,3,4])
-                ->where('mnc_shipment.status_finance', 0)
-            ->groupEnd()
-            ->orGroupStart()
-                // exclude tracking 3,4 with finance = 1
-                ->whereNotIn('mnc_shipment.status_tracking', [3,4])
-                ->where('mnc_shipment.status_finance !=', 1)
-            ->groupEnd()
-            ->orderBy('mnc_shipment.created_at', 'DESC');
-
+                ->select('
+                    mnc_shipment.id, 
+                    mnc_shipment.marking_code, 
+                    mnc_shipment.consolidation, 
+                    mnc_shipment.status_tracking, 
+                    mnc_shipment.status_finance, 
+                    mnc_shipment.created_at, 
+                    mnc_customers_price.price_code
+                ')
+                ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id', 'left')
+                ->groupStart()
+                    ->groupStart()
+                        ->whereIn('mnc_shipment.status_tracking', [1,2,3,4])
+                        ->where('mnc_shipment.status_finance', 0)
+                    ->groupEnd()
+                    ->orGroupStart()
+                        ->whereNotIn('mnc_shipment.status_tracking', [3,4])
+                        ->where('mnc_shipment.status_finance !=', 1)
+                    ->groupEnd()
+                ->groupEnd()
+                ->where('mnc_shipment.status', 1)
+                ->orderBy('mnc_shipment.created_at', 'DESC');
 
             // Role-based filter
             switch ($role) {
@@ -633,9 +632,9 @@ class Shipment extends BaseController
                 mnc_shipment.created_at, 
                 mnc_customers_price.price_code
             ')
-            ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id')
+            ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id', 'left')
+             ->whereIn('mnc_shipment.status_tracking', [3, 4])
              ->where('mnc_shipment.status', 1)
-             ->where('mnc_shipment.status_tracking', 3)
              ->where('mnc_shipment.status_finance', 1)
              
              ->orderBy('mnc_shipment.created_at', 'DESC');

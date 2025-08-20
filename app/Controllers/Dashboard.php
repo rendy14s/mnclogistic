@@ -21,13 +21,24 @@ class Dashboard extends BaseController
 
         $countCustomers = new MNCCustomer();
 
-        $totalRowsShipment          = $countShipmentData->countAll();
+        $totalRowsShipment          = $countShipmentData
+                        ->where('status', 1)
+                        ->countAllResults();
 
-        $totalRowsShipmentSuccess   = $countShipmentData->where('status_tracking', 3)->countAllResults();
+        $totalRowsShipmentSuccess = $countShipmentData
+                        ->whereIn('status_tracking', [3, 4])
+                        ->where('status_finance', 1)
+                        ->where('status', 1)
+                        ->countAllResults();
         
-        $totalRowsUsers             = $countUsers->countAll();
+        $totalRowsUsers = $countUsers
+                        ->where('status', 1)
+                        ->countAllResults();
 
-        $totalRowsCustomers         = $countCustomers->countAll();
+        $totalRowsCustomers = $countCustomers
+                        ->where('status', 1)
+                        ->countAllResults();
+
 
 
         return view('admin/pages/dashboard/index', [
