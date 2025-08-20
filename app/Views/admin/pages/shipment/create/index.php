@@ -54,6 +54,7 @@
 
                             <input type="hidden" name="price_kg" id="priceKg">
                             <input type="hidden" name="service" id="service">
+                            <input type="hidden" name="country" id="country">
                           </div>
                         </div>
 

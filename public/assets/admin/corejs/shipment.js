@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalInput = document.getElementById('totalInput');
     const totalWeightHiddenInput = document.getElementById('total_weight');
     const packagesJsonInput = document.getElementById('packages_json');
-    const shippingPriceSelect = document.getElementById('shippingPrice');
     const editTotalBtn = document.getElementById('editTotalBtn');
     const consolidationCheckbox = document.getElementById('consolidationCheckbox');
     const form = document.getElementById('shippingForm');
@@ -73,13 +72,31 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
     function calculateVolume(p, l, t) {
+        var selectedCountry = $('#country').val();
+        console.log('Selected Country For Calculate Volume :', selectedCountry);
+
         let serviceValue = document.getElementById('service').value;
-        if (serviceValue === 'Sea') {
-            return p * l * t / 5000; // Volume in cubic meters for Sea service
-        } else if (serviceValue === 'Air') {
-            return p * l * t / 6000; // Volume in cubic centimeters for Air service
+
+        // Configuration for volume divisors
+        const volumeRules = {
+            default: { Sea: 5000, Air: 6000 },  // fallback rule
+            KR: { Sea: 5000, Air: 5000 },
+            KP: { Sea: 5000, Air: 5000 },
+            JP: { Sea: 5000, Air: 5000 }
+        };
+
+        // Pick rules: if country exists use it, otherwise use default
+        const rules = volumeRules[selectedCountry] || volumeRules.default;
+
+        // Ensure service exists in rules, then calculate
+        if (rules[serviceValue]) {
+            return p * l * t / rules[serviceValue];
         }
+
+        console.warn('Unknown service type:', serviceValue);
+        return null; // or 0 if you prefer
     }
+
 
     function renderPackagesTable() {
         packagesTableBody.innerHTML = '';  // Clear the table
@@ -291,16 +308,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedOption = $(this).find('option:selected');
         const selectedPricePerKg = selectedOption.data('price');
         const selectedService = selectedOption.data('service');
+        const selectedCountry = selectedOption.data('country');
         const selectedPriceID = selectedOption.val();
 
 
         // Set the data-price into the hidden input
         $('#priceKg').val(selectedPricePerKg);
         $('#service').val(selectedService);
+        $('#country').val(selectedCountry);
         $('#defaultPriceID').val(selectedPriceID);
 
         console.log('Selected price_kg :', selectedPricePerKg); // Debug
         console.log('Selected service :', selectedService); // Debug
+        console.log('Selected Country :', selectedCountry); // Debug
         console.log('Selected price_id :', selectedPriceID); // Debug
 
         console.log("Selected Price Per Kg:", getPricePerKg());

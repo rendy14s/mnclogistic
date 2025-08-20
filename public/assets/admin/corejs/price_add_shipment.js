@@ -29,7 +29,7 @@ $(document).ready(function() {
                     if (data.length > 0) {
                         // Loop through and add the new options to the select
                         $.each(data, function(index, price) {
-                            $('#shippingPrice').append('<option value="' + price.id + '" data-price="' + price.price + '"  data-service="' + price.service + '">' + price.price_code + '</option>');
+                            $('#shippingPrice').append('<option value="' + price.id + '" data-price="' + price.price + '"  data-service="' + price.service + '" data-country="' + price.from + '">' + price.price_code + '</option>');
                         });
 
                         if(defaultPriceId) {
