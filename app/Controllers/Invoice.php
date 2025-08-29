@@ -30,7 +30,9 @@ class Invoice extends BaseController
         $total_packages   = count($details); // or ->where()->countAllResults() if not fetching all
 
         $customerData = $customer->where('marking_code', $shipment['marking_code'])->first();
-        $customerPrice = $customer_price->where('customer_id', $customerData['id'])->first();
+        $customerPrice = $customer_price
+                        ->where('id', $shipment['price_id'])
+                        ->where('customer_id', $shipment['customer_id'])->first();
 
         if (!$shipment) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Shipment not found');
