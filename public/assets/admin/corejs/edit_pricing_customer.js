@@ -29,21 +29,22 @@ $(document).ready(function() {
 
     // Handle row deletion
     $(document).on('click', '.delete-row', function() {
-        var row = $(this).closest('tr');
-        if (confirm("Are you sure you want to delete this row?")) {
-            row.remove();
-            updateEditPricingData();
-        }
+         alert("Please contact administrator");
+        // var row = $(this).closest('tr');
+        // if (confirm("Are you sure you want to delete this row?")) {
+        //     row.remove();
+        //     updateEditPricingData();
+        // }
 
-        // Check if the table becomes empty after removal
-        if ($('#editTablePricing tbody tr').length === 0) {
-            var noDataRow = `
-                <tr id="noDataRow">
-                    <td colspan="6" class="text-center">No Data Available</td>
-                </tr>
-            `;
-            $('#editTablePricing tbody').append(noDataRow);
-        }
+        // // Check if the table becomes empty after removal
+        // if ($('#editTablePricing tbody tr').length === 0) {
+        //     var noDataRow = `
+        //         <tr id="noDataRow">
+        //             <td colspan="6" class="text-center">No Data Available</td>
+        //         </tr>
+        //     `;
+        //     $('#editTablePricing tbody').append(noDataRow);
+        // }
     });
 
     // Function to update the hidden input with the table data
