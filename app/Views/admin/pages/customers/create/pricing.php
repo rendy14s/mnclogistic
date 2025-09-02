@@ -73,6 +73,8 @@
                                     <option value="" selected disabled>---SELECT SERVICE---</option>
                                     <option value="1">Air</option>
                                     <option value="2">Sea</option>
+                                    <option value="3">LCL</option>
+                                    <option value="4">Cargo Service</option>
                                 </select>
                             </div>
                         </div>

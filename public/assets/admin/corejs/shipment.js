@@ -79,7 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Configuration for volume divisors
         const volumeRules = {
-            default: { Sea: 5000, Air: 6000 },  // fallback rule
+            default: { 
+                Sea: 5000, 
+                Air: 6000,
+                LCL: 5000,          // ✅ new
+                "Cargo Service": 5000 // ✅ new
+            },
             KR: { Sea: 5000, Air: 5000 },
             KP: { Sea: 5000, Air: 5000 },
             JP: { Sea: 5000, Air: 5000 }

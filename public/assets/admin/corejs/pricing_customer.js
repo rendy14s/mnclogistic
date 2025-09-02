@@ -27,11 +27,20 @@ $(document).ready(function() {
             return;
         }
 
+        // service map
+        const serviceMap = {
+            1: 'Air',
+            2: 'Sea',
+            3: 'LCL',
+            4: 'Cargo Service'
+        };
+
+
         table.row.add([
             '#',  // Placeholder for row number
             from,
             to,
-            (service == 1 ? 'Air' : 'Sea'),
+            serviceMap[service] || 'Unknown', // fallback if invalid value
             price,
             '<button type="button" class="btn btn-danger btn-delete">Delete</button>'
         ]).draw();
@@ -39,6 +48,7 @@ $(document).ready(function() {
         pricingData.push({ from: from, to: to, service: service, price: price });
         $('#pricingData').val(JSON.stringify(pricingData));
         $('form')[0].reset();
+        $('form select').val('');
     });
 
     // Update hidden pricing data field after row deletion

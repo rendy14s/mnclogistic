@@ -92,7 +92,14 @@ $(document).ready(function() {
         }
 
         // Determine service name (Air or Sea)
-        var serviceName = (service == 1) ? 'Air' : 'Sea';
+        // service map
+        const serviceMap = {
+            1: 'Air',
+            2: 'Sea',
+            3: 'LCL',
+            4: 'Cargo Service'
+        };
+        var serviceName = serviceMap[service] || 'Unknown';
 
         // Add a new row to the table
         var row = `
