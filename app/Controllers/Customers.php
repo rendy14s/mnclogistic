@@ -192,46 +192,50 @@ class Customers extends BaseController
 
     public function editPricing()
     {
-        // dd($this->request->getPost());exit;
-        $customerPricing = new MNCCustomerPrice();
         $db = \Config\Database::connect();
         $db->transStart();
 
         try {
-            // Get the customer ID from the POST request
+            // Get the customer ID
             $customerId = $this->request->getPost('id');
             if (!$customerId) {
                 throw new \Exception('Customer ID is required.');
             }
 
-            // Delete existing pricing for the customer
-            $customerPricing->where('customer_id', $customerId)->delete();
-
-            // Get pricing data from the POST request
+            // Get pricing data from POST
             $prices = json_decode($this->request->getPost('editpricingData'), true);
             if (empty($prices)) {
                 throw new \Exception('No pricing data provided.');
             }
 
             foreach ($prices as $price) {
-                // Prepare pricing data
-                $customerPricing->insert([
+                $data = [
                     'customer_id' => $customerId,
                     'price_code' => 'MNC-' . $price['from'] . '-' . $price['to'] . '-' . $price['service'],
                     'from' => $price['from'],
                     'to' => $price['to'],
                     'service' => $price['service'],
                     'price' => $price['price']
-                ]);
+                ];
+
+                // Gunakan raw SQL upsert (insert or update)
+                $db->query("
+                    INSERT INTO mnc_customers_price 
+                        (customer_id, price_code, `from`, `to`, service, price)
+                    VALUES 
+                        (:customer_id:, :price_code:, :from:, :to:, :service:, :price:)
+                    ON DUPLICATE KEY UPDATE 
+                        price_code = VALUES(price_code),
+                        price = VALUES(price)
+                ", $data);
             }
-        }
-        catch (\Exception $e) {
-            $db->transRollback(); // ROLLBACK TRANSACTION
+        } catch (\Exception $e) {
+            $db->transRollback();
             log_message('error', 'Error updating customer pricing: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to update customer pricing: ' . $e->getMessage());
         }
 
-        $db->transComplete(); // COMMIT TRANSACTION
+        $db->transComplete();
 
         if ($db->transStatus() === false) {
             log_message('error', 'Transaction failed while updating customer pricing.');
