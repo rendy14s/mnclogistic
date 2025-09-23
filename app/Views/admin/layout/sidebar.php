@@ -3,6 +3,7 @@
   $uri = service('uri'); // CI 4 URI service
 
   $segment_first = $uri->getSegment(1); // e.g. 'users'
+  $segment_second = $uri->getSegment(2); // e.g. 'edit'
 ?>
 
   <!-- Main Sidebar Container -->
@@ -47,7 +48,7 @@
           </li>
         <?php endif; ?>
 
-          <?php if (($user = $session->get('user')) && $user['role'] !== '6'): ?>
+        <?php if (($user = $session->get('user')) && $user['role'] !== '6'): ?>
           <li class="nav-item <?= ($segment_first === 'shipment') ? 'menu-open' : '' ?>">
             <a href="<?= base_url('shipment') ?>" class="nav-link">
               <i class="nav-icon fa fa-fw fa-list-alt"></i>
@@ -55,6 +56,26 @@
                 Shipment
               </p>
             </a>
+          </li>
+        <?php endif; ?>
+
+        <?php if (($user = $session->get('user')) && $user['role'] !== '6'): ?>
+          <li class="nav-item has-treeview <?= ($segment_first === 'reports') ? 'menu-open' : '' ?>">
+              <a href="#" class="nav-link  <?= ($segment_first === 'reports') ? 'active' : '' ?>">
+                  <i class="nav-icon fas fa-table"></i>
+                  <p>
+                      Reports
+                      <i class="fas fa-angle-left right"></i>
+                  </p>
+              </a>
+              <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                      <a href="<?= base_url('reports/way-bill') ?>" class="nav-link <?= ($segment_first === 'reports' && $segment_second === 'way-bill') ? 'active' : '' ?>">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Way Bill</p>
+                      </a>
+                  </li>
+              </ul>
           </li>
         <?php endif; ?>
 

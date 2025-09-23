@@ -15,6 +15,7 @@ use App\Models\MNCUser;
 use App\Models\MNCCourier;
 use App\Models\MNCDelivery;
 use App\Models\MNCDeliveryImage;
+use App\Models\MNCWayBill;
 
 class Shipment extends BaseController
 {
@@ -479,50 +480,64 @@ class Shipment extends BaseController
     
     public function bulkSending()
     {
-        $request = service('request');
+        $ids = $this->request->getPost('ids');
 
-        $ids = $request->getPost('ids');
-
-        if (!$ids || !is_array($ids)) {
-            return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'No shipment IDs provided']);
+        if (empty($ids) || !is_array($ids)) {
+            return $this->response->setStatusCode(400)->setJSON([
+                'status'  => 'error',
+                'message' => 'No shipment IDs provided'
+            ]);
         }
 
-        $db = \Config\Database::connect();
-        $db->transStart();
+        $shipmentModel    = new MNCShipment();
+        $shipmentLogModel = new MNCShipmentLog();
+        $waybillModel     = new MNCWayBill();
+        $db = $shipmentModel->db;
 
-        try {
-            $shipmentModel = new MNCShipment;
-            $shipmentLogModel = new MNCShipmentLog();
+        $db->transException(true);
 
+         try {
+            $now    = date('Y-m-d H:i:s');
+            $userId = session('user')['id'];
 
+            // Bulk update shipments
             $shipmentModel->set([
-                                'status_tracking' => ON_PROGRESS,
-                                'shipment_flag_date' => date('Y-m-d H:i:s')
-                            ])
-                            ->whereIn('id', $ids)
-                            ->update();
+                'status_tracking'    => ON_PROGRESS,
+                'shipment_flag_date' => $now
+            ])->whereIn('id', $ids)->update();
 
-            foreach ($ids as $id) {
-                $shipmentLogModel->insert([
-                    'shipment_id'      => $id,
-                    'user_id'           => session('user')['id'],
-                    'description'       => 'Shipment Sent [Item Sending] to Warehouse Jakarta',
-                ]);
-            }
+            // Buat logs dan waybills sekali jalan
+            $logs = array_map(function($id) use ($userId) {
+                return [
+                    'shipment_id' => $id,
+                    'user_id'     => $userId,
+                    'description' => 'Shipment Sent [Item Sending] to Warehouse Jakarta',
+                ];
+            }, $ids);
 
+            $waybills = array_map(function($id) use ($now) {
+                return [
+                    'shipment_id'  => $id,
+                    'date_reports' => $now,
+                ];
+            }, $ids);
 
-            $db->transComplete();
+            // Bulk insert
+            $shipmentLogModel->insertBatch($logs);
+            $waybillModel->insertBatch($waybills);
 
-            if ($db->transStatus() === FALSE) {
-                // Transaction failed
-                return $this->response->setStatusCode(500)->setJSON(['status' => 'error', 'message' => 'Transaction failed']);
-            }
+            $db->transCommit();
 
-            return $this->response->setJSON(['status' => 'success', 'message' => 'Shipments updated successfully']);
-        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'status'  => 'success',
+                'message' => count($ids) . ' shipments updated successfully'
+            ]);
+        } catch (\Throwable $e) {
             $db->transRollback();
-
-            return $this->response->setStatusCode(500)->setJSON(['status' => 'error', 'message' => $e->getMessage()]);
+            return $this->response->setStatusCode(500)->setJSON([
+                'status'  => 'error',
+                'message' => $e->getMessage()
+            ]);
         }
     }
 

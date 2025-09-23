@@ -138,7 +138,11 @@ use CodeIgniter\Router\RouteCollection;
       $routes->get('shipment/api/delete/(:num)', 'Shipment::delete/$1', ['filter' => 'tokenAuth']);
 
 
-
-
-      // Core Invoice
+   // Core Invoice
       $routes->get('invoice/pdf/(:num)', 'Invoice::exportPdf/$1');
+
+   // Core Reports
+      $routes->get('reports/way-bill', 'Reports::Waybill', ['filter' => 'tokenAuth']);
+
+      // API For Generate Way Bill
+      $routes->post('reports/way-bill/generatePdf', 'Reports::GenerateWayBill', ['filter' => 'tokenAuth']); 
