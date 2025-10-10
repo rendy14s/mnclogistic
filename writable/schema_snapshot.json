@@ -1,0 +1,844 @@
+{
+    "mnc_3rd_courier": {
+        "id": {
+            "column_type_raw": "int",
+            "type": "INT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": true
+        },
+        "courier_name": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "status": {
+            "column_type_raw": "tinyint",
+            "type": "TINYINT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "created_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        },
+        "updated_at": {
+            "column_type_raw": "timestamp",
+            "type": "TIMESTAMP",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        }
+    },
+    "mnc_constant_city": {
+        "id": {
+            "column_type_raw": "int",
+            "type": "INT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": true
+        },
+        "city_name": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "iso_code": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "created_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        },
+        "updated_at": {
+            "column_type_raw": "timestamp",
+            "type": "TIMESTAMP",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        }
+    },
+    "mnc_constant_country": {
+        "id": {
+            "column_type_raw": "int",
+            "type": "INT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": true
+        },
+        "country": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "iso_code": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "created_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        },
+        "updated_at": {
+            "column_type_raw": "timestamp",
+            "type": "TIMESTAMP",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        }
+    },
+    "mnc_customers": {
+        "id": {
+            "column_type_raw": "int",
+            "type": "INT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": true
+        },
+        "marking_code": {
+            "column_type_raw": "varchar(255)",
+            "type": "VARCHAR",
+            "length": 255,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "customer_name": {
+            "column_type_raw": "varchar(255)",
+            "type": "VARCHAR",
+            "length": 255,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "phone_number": {
+            "column_type_raw": "varchar(255)",
+            "type": "VARCHAR",
+            "length": 255,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "address": {
+            "column_type_raw": "varchar(255)",
+            "type": "VARCHAR",
+            "length": 255,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "status": {
+            "column_type_raw": "tinyint",
+            "type": "TINYINT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "created_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        },
+        "updated_at": {
+            "column_type_raw": "timestamp",
+            "type": "TIMESTAMP",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        }
+    },
+    "mnc_customers_price": {
+        "id": {
+            "column_type_raw": "int",
+            "type": "INT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": true
+        },
+        "customer_id": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "price_code": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "from": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "to": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "service": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "price": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "created_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        },
+        "updated_at": {
+            "column_type_raw": "timestamp",
+            "type": "TIMESTAMP",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        }
+    },
+    "mnc_reports_way_bill": {
+        "id": {
+            "column_type_raw": "bigint",
+            "type": "BIGINT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": true
+        },
+        "shipment_id": {
+            "column_type_raw": "varchar(255)",
+            "type": "VARCHAR",
+            "length": 255,
+            "null": true,
+            "default": null,
+            "auto_increment": false
+        },
+        "date_reports": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": null,
+            "auto_increment": false
+        },
+        "created_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        },
+        "updated_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        }
+    },
+    "mnc_shipment": {
+        "id": {
+            "column_type_raw": "int",
+            "type": "INT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": true
+        },
+        "customer_id": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "marking_code": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "price_id": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "price_kg": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "special_case": {
+            "column_type_raw": "tinyint",
+            "type": "TINYINT",
+            "length": null,
+            "null": true,
+            "default": null,
+            "auto_increment": false
+        },
+        "total_price": {
+            "column_type_raw": "float",
+            "type": "FLOAT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "total_weight": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": true,
+            "default": null,
+            "auto_increment": false
+        },
+        "consolidation": {
+            "column_type_raw": "tinyint",
+            "type": "TINYINT",
+            "length": null,
+            "null": true,
+            "default": null,
+            "auto_increment": false
+        },
+        "package_json": {
+            "column_type_raw": "text",
+            "type": "TEXT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "status_tracking": {
+            "column_type_raw": "tinyint",
+            "type": "TINYINT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "status_finance": {
+            "column_type_raw": "tinyint",
+            "type": "TINYINT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "status": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "shipment_flag_date": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": null,
+            "auto_increment": false
+        },
+        "updated_at": {
+            "column_type_raw": "timestamp",
+            "type": "TIMESTAMP",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        },
+        "created_by": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "created_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        }
+    },
+    "mnc_shipment_delivery": {
+        "id": {
+            "column_type_raw": "int",
+            "type": "INT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": true
+        },
+        "shipment_id": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "tracking_number": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "courier_id": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": true,
+            "default": null,
+            "auto_increment": false
+        },
+        "created_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        },
+        "updated_at": {
+            "column_type_raw": "timestamp",
+            "type": "TIMESTAMP",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        }
+    },
+    "mnc_shipment_delivery_image": {
+        "id": {
+            "column_type_raw": "int",
+            "type": "INT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": true
+        },
+        "shipment_delivery_id": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "path": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "image": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "created_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        },
+        "updated_at": {
+            "column_type_raw": "timestamp",
+            "type": "TIMESTAMP",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        }
+    },
+    "mnc_shipment_logs": {
+        "id": {
+            "column_type_raw": "int",
+            "type": "INT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": true
+        },
+        "shipment_id": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "user_id": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "description": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "created_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        },
+        "updated_at": {
+            "column_type_raw": "timestamp",
+            "type": "TIMESTAMP",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        }
+    },
+    "mnc_shipment_package": {
+        "id": {
+            "column_type_raw": "int",
+            "type": "INT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": true
+        },
+        "shipment_id": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "description": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "dimension_p": {
+            "column_type_raw": "float",
+            "type": "FLOAT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "dimension_l": {
+            "column_type_raw": "float",
+            "type": "FLOAT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "dimension_t": {
+            "column_type_raw": "float",
+            "type": "FLOAT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "dimension_v": {
+            "column_type_raw": "float",
+            "type": "FLOAT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "real_weight": {
+            "column_type_raw": "float",
+            "type": "FLOAT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "used_weight": {
+            "column_type_raw": "float",
+            "type": "FLOAT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "created_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        },
+        "updated_at": {
+            "column_type_raw": "timestamp",
+            "type": "TIMESTAMP",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        }
+    },
+    "mnc_users": {
+        "id": {
+            "column_type_raw": "int",
+            "type": "INT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": true
+        },
+        "employee_id": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "first_name": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "last_name": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "full_name": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "username": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "password": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "role": {
+            "column_type_raw": "tinytext",
+            "type": "TINYTEXT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "status": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": true,
+            "default": null,
+            "auto_increment": false
+        },
+        "created_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        },
+        "updated_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        }
+    },
+    "mnc_users_token": {
+        "id": {
+            "column_type_raw": "int",
+            "type": "INT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": true
+        },
+        "user_id": {
+            "column_type_raw": "int",
+            "type": "INT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "access_token": {
+            "column_type_raw": "text",
+            "type": "TEXT",
+            "length": null,
+            "null": false,
+            "default": null,
+            "auto_increment": false
+        },
+        "user_agent": {
+            "column_type_raw": "varchar(255)",
+            "type": "VARCHAR",
+            "length": 255,
+            "null": true,
+            "default": null,
+            "auto_increment": false
+        },
+        "ip_address": {
+            "column_type_raw": "varchar(100)",
+            "type": "VARCHAR",
+            "length": 100,
+            "null": true,
+            "default": null,
+            "auto_increment": false
+        },
+        "expires_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": null,
+            "auto_increment": false
+        },
+        "created_at": {
+            "column_type_raw": "datetime",
+            "type": "DATETIME",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        },
+        "updated_at": {
+            "column_type_raw": "timestamp",
+            "type": "TIMESTAMP",
+            "length": null,
+            "null": true,
+            "default": "CURRENT_TIMESTAMP",
+            "auto_increment": false
+        }
+    }
+}

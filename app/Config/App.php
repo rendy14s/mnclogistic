@@ -17,6 +17,11 @@ class App extends BaseConfig
      * E.g., http://example.com/
      */
     // public string $baseURL = 'http://localhost:8080/';
+    
+    // Production
+    // public string $baseURL = 'https://mnclogisticsandshipping.com/';
+    
+    // Localhost / Testing
     public string $baseURL = 'http://mnclogistic.local/';
 
     /**
