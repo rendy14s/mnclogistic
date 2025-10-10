@@ -159,13 +159,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // If consolidation is enabled, sum up the total weight and round it
         if (consolidationEnabled !== false) {
-            totalUsedWeight = Math.ceil(totalPackagesWeight);  // Round the consolidated total weight
+            totalUsedWeight = Math.round(totalPackagesWeight);  // Round the consolidated total weight
         }
 
         // Calculate the total price based on the final used weight
         const override = !totalInput.classList.contains('d-none') && !isNaN(parseInt(totalInput.value, 10))
             ? parseInt(totalInput.value, 10)
-            : Math.ceil(totalUsedWeight);
+            : Math.round(totalUsedWeight);
 
         total = override * pricePerKg;  // Calculate the total cost
 
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         packagesJsonInput.value = JSON.stringify(updatedPackages);
 
         // Update total used weight in the footer
-        totalUsedWeightDisplay.textContent = Math.ceil(totalUsedWeight.toFixed(2));  // Update the total used weight in kg
+        totalUsedWeightDisplay.textContent = Math.round(totalUsedWeight.toFixed(2));  // Update the total used weight in kg
 
         document.getElementById('override_total').value = "0";
     }
