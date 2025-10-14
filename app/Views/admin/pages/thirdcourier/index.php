@@ -28,7 +28,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="col-2">
-                                    <button type="button" class="btn btn-block btn-success btn-sm" onclick="location.href='<?= base_url('3rdcourier/register') ?>'">
+                                    <button type="button" class="btn btn-block btn-success btn-sm" onclick="location.href='<?= base_url('thirdcourier/register') ?>'">
                                         <i class="fas fa-plus"></i> Add 3rd Couriers
                                     </button>
                                 </div>
@@ -60,8 +60,8 @@
                                                     <?= !empty($courier['created_at']) ? date('H:i:s A d/m/Y', strtotime($courier['created_at'])) :'-' ?>
                                                 </td>
                                                 <td> <!-- Action Buttons -->
-                                                    <a href="<?= base_url('3rdcourier/edit/' . $courier['id']) ?>" class="btn btn-primary btn-sm">Edit</a>
-                                                    <a href="<?= base_url('3rdcourier/softDelete/' . $courier['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
+                                                    <a href="<?= base_url('thirdcourier/edit/' . $courier['id']) ?>" class="btn btn-primary btn-sm">Edit</a>
+                                                    <a href="<?= base_url('thirdcourier/softDelete/' . $courier['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
