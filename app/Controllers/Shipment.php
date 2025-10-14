@@ -548,53 +548,51 @@ class Shipment extends BaseController
         $role = $user['role'] ?? null;
 
        $shipments = $shipmentModel
-                ->select('
-                    mnc_shipment.id, 
-                    mnc_shipment.marking_code, 
-                    mnc_shipment.consolidation, 
-                    mnc_shipment.status_tracking, 
-                    mnc_shipment.status_finance, 
-                    mnc_shipment.created_at, 
-                    mnc_customers_price.price_code
-                ')
-                ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id', 'left')
-                ->groupStart()
-                    ->groupStart()
-                        ->whereIn('mnc_shipment.status_tracking', [1,2,3,4])
-                        ->where('mnc_shipment.status_finance', 0)
-                    ->groupEnd()
-                    ->orGroupStart()
-                        ->whereNotIn('mnc_shipment.status_tracking', [3,4])
-                        ->where('mnc_shipment.status_finance !=', 1)
-                    ->groupEnd()
-                ->groupEnd()
-                ->where('mnc_shipment.status', 1)
-                ->orderBy('mnc_shipment.created_at', 'DESC');
+                        ->select('
+                            mnc_shipment.id,
+                            mnc_shipment.marking_code,
+                            mnc_shipment.consolidation,
+                            mnc_shipment.status_tracking,
+                            mnc_shipment.status_finance,
+                            mnc_shipment.created_at,
+                            mnc_customers_price.price_code
+                        ')
+                        ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id', 'left')
+                        ->where('mnc_shipment.status', 1)
+                        ->orderBy('mnc_shipment.created_at', 'DESC');
 
             // Role-based filter
             switch ($role) {
                 case 1:
-                    // Admin or Super Admin: Show all shipments
+                    // Admin / Super Admin: see all shipments (any finance state)
                     $shipments->where('mnc_shipment.status_tracking !=', 0);
                     break;
 
                 case 2:
-                    // Finance: Show shipments that are paid or unpaid
-                    $shipments->whereIn('mnc_shipment.status_tracking', [2, 3]);
+                    // Finance: see paid or unpaid shipments, both (finance = 0 or 1)
+                    $shipments
+                        ->whereIn('mnc_shipment.status_tracking', [2, 3])
+                        ->whereIn('mnc_shipment.status_finance', [0, 1]);
                     break;
 
                 case 3:
-                    // Role 3: Only status_tracking = 1
-                    $shipments->where('mnc_shipment.status_tracking', 1);
+                    // Role 3: only status_tracking = 1, and only unpaid
+                    $shipments
+                        ->where('mnc_shipment.status_tracking', 1)
+                        ->where('mnc_shipment.status_finance', 0);
                     break;
 
                 case 4:
-                    // Role 4: status_tracking in [2, 3]
-                    $shipments->whereIn('mnc_shipment.status_tracking', [2, 3]);
+                    // Role 4: status_tracking in [2,3]
+                    // → show both paid and unpaid (fix for your problem!)
+                    $shipments
+                        ->whereIn('mnc_shipment.status_tracking', [2, 3])
+                        ->whereIn('mnc_shipment.status_finance', [0, 1]);
                     break;
 
                 default:
-                    // Optional: no additional filter for other roles
+                    // Any other roles: safe fallback
+                    $shipments->where('mnc_shipment.status_tracking !=', 0);
                     break;
             }
 
@@ -615,7 +613,7 @@ class Shipment extends BaseController
                 'status_tracking' => $this->getStatusTrackingBadge($shipment['status_tracking']),
                 'status_finance' => $this->getStatusFinanceBadge($shipment['status_finance']),
                 'created_at' => !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) : '-',
-                
+                'role' => $role,
                 
                  // Action button (based on $canShowAction)
                 'action' => $canShowAction
