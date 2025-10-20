@@ -104,44 +104,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function renderPackagesTable() {
-        packagesTableBody.innerHTML = '';  // Clear the table
+        packagesTableBody.innerHTML = '';
 
         if (packages.length === 0) {
             packagesTableBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No data available in table</td></tr>`;
             totalDisplay.textContent = 'Rp 0';
             totalWeightHiddenInput.value = 0;
-            totalUsedWeightDisplay.textContent = '0'; // Set total used weight to 0 when there's no data
+            totalUsedWeightDisplay.textContent = '0';
             return;
         }
 
-        const pricePerKg = getPricePerKg();  // Fetch price per kg from your pricing logic
+        const pricePerKg = getPricePerKg();
         const consolidationCheckbox = document.getElementById('consolidationCheckbox');
-        const consolidationEnabled = consolidationCheckbox?.checked;
+        const consolidationEnabled = consolidationCheckbox?.checked; // checked = NO consolidation
 
-        let total = 0;  // This will accumulate the total price
-        let totalUsedWeight = 0;    // For consolidation, we'll accumulate weight for all packages
-        let totalPackagesWeight = 0;   // This will accumulate the total used weight (kg)
-
+        let total = 0;
+        let totalUsedWeight = 0;
+        let totalPackagesWeight = 0;
         const updatedPackages = [];
 
         packages.forEach((pkg, i) => {
             const volume = calculateVolume(pkg.p, pkg.l, pkg.t);
-            const usedWeight = calculateUsedWeight(volume, pkg.real_weight, consolidationEnabled !== false);  // Use consolidation logic here
-            // const rowTotal = usedWeight * pricePerKg;
+            const usedWeight = calculateUsedWeight(volume, pkg.real_weight, consolidationEnabled);
 
-            // For consolidation, accumulate total weight to sum later
-            if (consolidationEnabled !== false) {
-                totalPackagesWeight += usedWeight;
-                console.log(totalPackagesWeight, 'totalPackagesWeight', consolidationEnabled);
+            if (consolidationEnabled) {
+                // Tanpa konsolidasi → hitung per paket langsung
+                totalUsedWeight += usedWeight;
             } else {
-                 totalUsedWeight += usedWeight;  // Regular behavior without consolidation
-                console.log(totalUsedWeight, 'totalUsedWeight', consolidationEnabled);
-
+                // Dengan konsolidasi → jumlah total, bulatkan nanti
+                totalPackagesWeight += usedWeight;
             }
 
             updatedPackages.push({ ...pkg, volume, used_weight: usedWeight });
 
-            // Insert the row for the table
             packagesTableBody.insertAdjacentHTML('beforeend', `
                 <tr>
                     <td>${i + 1}</td>
@@ -157,27 +152,30 @@ document.addEventListener('DOMContentLoaded', () => {
             `);
         });
 
-        // If consolidation is enabled, sum up the total weight and round it
-        if (consolidationEnabled !== false) {
-            totalUsedWeight = Math.round(totalPackagesWeight);  // Round the consolidated total weight
+        if (!consolidationEnabled) {
+            // Konsolidasi aktif → hitung total semua, lalu pembulatan custom
+            const cleanWeight = parseFloat(totalPackagesWeight.toFixed(2));
+            const decimalPart = cleanWeight - Math.floor(cleanWeight);
+
+            // Custom rule: naik jika desimal >= 0.1
+            totalUsedWeight = decimalPart >= 0.1
+                ? Math.ceil(cleanWeight)
+                : Math.floor(cleanWeight);
         }
 
-        // Calculate the total price based on the final used weight
-        const override = !totalInput.classList.contains('d-none') && !isNaN(parseInt(totalInput.value, 10))
-            ? parseInt(totalInput.value, 10)
-            : Math.round(totalUsedWeight);
+        const override =
+            !totalInput.classList.contains('d-none') && !isNaN(parseInt(totalInput.value, 10))
+                ? parseInt(totalInput.value, 10)
+                : totalUsedWeight;
 
-        total = override * pricePerKg;  // Calculate the total cost
+        total = override * pricePerKg;
 
-        // Display the results
         totalDisplay.textContent = `Rp ${total.toLocaleString()}`;
-        totalPriceHidden.value = total;  // Hidden input for the form submission
-        totalWeightHiddenInput.value = override;  // Hidden input for the form submission
+        totalPriceHidden.value = total;
+        totalWeightHiddenInput.value = override;
         packagesJsonInput.value = JSON.stringify(updatedPackages);
 
-        // Update total used weight in the footer
-        totalUsedWeightDisplay.textContent = Math.round(totalUsedWeight.toFixed(2));  // Update the total used weight in kg
-
+        totalUsedWeightDisplay.textContent = totalUsedWeight.toFixed(2);
         document.getElementById('override_total').value = "0";
     }
 
@@ -293,19 +291,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    // Fungsi hitung berat dengan logika pembulatan sesuai mode
     function calculateUsedWeight(volume, realWeight, consolidationEnabled) {
-        console.log("Calculating used weight with volume:", volume, "and real weight:", realWeight);
+        const baseWeight = Math.max(volume, realWeight);
+        const clean = parseFloat(baseWeight.toFixed(2));
 
-        // If consolidation is checked, sum the maximum of each individual package's used weight
         if (consolidationEnabled) {
-            // If consolidation is checked, we calculate the max for each package and round it up
-            return Math.ceil(Math.max(volume, realWeight));  // Round individual weights
+            // Tanpa konsolidasi (checkbox dicentang)
+            return Math.ceil(clean); // per paket dibulatkan ke atas
         }
 
-        // For each package, we use the max of volume-based weight or real weight
-        const usedWeight = Math.max(volume, realWeight);
-        return usedWeight;  // Do not round yet, we'll sum and round the total later
-      
+        // Dengan konsolidasi → jangan bulatkan dulu, nanti di total baru dibulatkan
+        return clean;
     }
 
     // Inside your success callback after options are populated
