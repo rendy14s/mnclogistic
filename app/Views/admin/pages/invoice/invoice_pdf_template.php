@@ -199,7 +199,10 @@
                 <td><?= esc($item['used_weight']) ?></td>
             </tr>
             <?php endforeach; ?>
-
+            <tr>
+                <td colspan="7" class="text-right">Unit Price (Per Kg):</td>
+                <td colspan="2" class="text-left">Rp <?= number_format($price['price'], 0, ',', '.') ?></td>
+            </tr>
             <tr class="total">
                 <td colspan="7" class="text-right">Grand Total:</td>
                 <td colspan="2" class="text-left"><strong>Rp <?= number_format($shipment['total_price'], 0, ',', '.') ?></strong></td>
