@@ -49,14 +49,67 @@
         <?php endif; ?>
 
         <?php if (($user = $session->get('user')) && $user['role'] !== '6'): ?>
-          <li class="nav-item <?= ($segment_first === 'shipment') ? 'menu-open' : '' ?>">
+          <li class="nav-item has-treeview <?= ($segment_first === 'shipment') ? 'menu-open' : '' ?>">
+              <a href="#" class="nav-link  <?= ($segment_first === 'shipment') ? 'active' : '' ?>">
+                  <i class="nav-icon fas fa-table"></i>
+                  <p>
+                      Shipment
+                      <i class="fas fa-angle-left right"></i>
+                  </p>
+              </a>
+              <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                      <a href="<?= base_url('shipment/newdata') ?>" class="nav-link <?= ($segment_first === 'shipment' && $segment_second === 'newdata') ? 'active' : '' ?>">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>New Data</p>
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="<?= base_url('shipment/ongoing') ?>" class="nav-link <?= ($segment_first === 'shipment' && $segment_second === 'ongoing') ? 'active' : '' ?>">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>On Going</p>
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="<?= base_url('shipment/arrived') ?>" class="nav-link <?= ($segment_first === 'shipment' && $segment_second === 'arrived') ? 'active' : '' ?>">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Arrived at Warehouse</p>
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="<?= base_url('shipment/outfordelivery') ?>" class="nav-link <?= ($segment_first === 'shipment' && $segment_second === 'outfordelivery') ? 'active' : '' ?>">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Out for Delivery</p>
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="<?= base_url('shipment/delivered') ?>" class="nav-link <?= ($segment_first === 'shipment' && $segment_second === 'delivered') ? 'active' : '' ?>">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Delivered</p>
+                      </a>
+                  </li>
+                  <!-- <li class="nav-item">
+                      <a href="<?= base_url('shipment/finished') ?>" class="nav-link <?= ($segment_first === 'shipment' && $segment_second === 'finished') ? 'active' : '' ?>">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Finished</p>
+                      </a>
+                  </li> -->
+                  <li class="nav-item">
+                      <a href="<?= base_url('shipment/faileddelivered') ?>" class="nav-link <?= ($segment_first === 'shipment' && $segment_second === 'faileddelivered') ? 'active' : '' ?>">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Failed Delivery</p>
+                      </a>
+                  </li>
+              </ul>
+          </li>
+          <!-- <li class="nav-item <?= ($segment_first === 'shipment') ? 'menu-open' : '' ?>">
             <a href="<?= base_url('shipment') ?>" class="nav-link">
               <i class="nav-icon fa fa-fw fa-list-alt"></i>
               <p>
                 Shipment
               </p>
             </a>
-          </li>
+          </li> -->
         <?php endif; ?>
 
         <?php if (($user = $session->get('user')) && $user['role'] !== '6'): ?>

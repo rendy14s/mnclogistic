@@ -24,6 +24,41 @@ class Shipment extends BaseController
         return view('admin/pages/shipment/index');
     }
 
+    public function NewData()
+    {
+        return view('admin/pages/shipment/view/shipment_newdata');
+    }
+
+    public function Ongoing()
+    {
+        return view('admin/pages/shipment/view/shipment_ongoing');
+    }
+
+    public function Arrived()
+    {
+        return view('admin/pages/shipment/view/shipment_arrived_warehouse');
+    }
+
+    public function OutForDelivery()
+    {
+        return view('admin/pages/shipment/view/shipment_out_for_delivery');
+    }
+
+    public function Delivered()
+    {
+        return view('admin/pages/shipment/view/shipment_delivered');
+    }
+
+    public function FailedDelivered()
+    {
+        return view('admin/pages/shipment/view/shipment_failed_delivery');
+    }
+
+     public function FinishedDelivery()
+    {
+        return view('admin/pages/shipment/view/shipment_finished');
+    }
+
     public function form_add()
     {
         //
@@ -360,7 +395,10 @@ class Shipment extends BaseController
         $shipmentModel->update($id, ['status_tracking' => DELIVERED_TO_CUSTOMER]); // Update status to Delivered
 
         $db->transCommit();
-        return redirect()->back()->with('success', 'Delivery and images saved successfully.');
+        return redirect()
+                ->to(base_url('shipment/arrived'))
+                ->with('success', 'Success Set Shipment Delivery as Failed.');
+        // return redirect()->back()->with('success', 'Delivery and images saved successfully.');
     }
 
     // This method handles the route '/shipment/api/getCustomerPrice/{customer_id}'
@@ -638,6 +676,384 @@ class Shipment extends BaseController
         return $this->response->setJSON(['data' => $data]);
     }
 
+    public function ListNewData()
+    {
+        $shipmentModel = new MNCShipment();
+        $user = session()->get('user');
+        $role = $user['role'] ?? null;
+
+       $shipments = $shipmentModel
+                        ->select('
+                            mnc_shipment.id,
+                            mnc_shipment.marking_code,
+                            mnc_shipment.consolidation,
+                            mnc_shipment.status_tracking,
+                            mnc_shipment.status_finance,
+                            mnc_shipment.created_at,
+                            mnc_customers_price.price_code
+                        ')
+                        ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id', 'left')
+                        ->where('mnc_shipment.status', 1)
+                        ->where('mnc_shipment.status_tracking', 1)
+                        ->orderBy('mnc_shipment.created_at', 'DESC');
+
+            $shipments = $shipments->get()->getResultArray();
+
+        $data = [];
+
+        foreach ($shipments as $shipment) {
+            $statusTracking = (int) $shipment['status_tracking'];
+
+             $canShowAction = in_array($role, [1, 2, 5]) || (in_array($role, [2, 3, 4]) && $statusTracking === 1);
+
+            $data[] = [
+                'id' => $shipment['id'],
+                'marking_code' => '<a href="' . base_url('shipment/process/' . $shipment['id']) . '">' . esc($shipment['marking_code']) . '</a>',
+                'price_code' => esc($shipment['price_code']),
+                'consolidation' => $shipment['consolidation'] == 1 ? 'Yes' : 'No',
+                'status_tracking' => $this->getStatusTrackingBadge($shipment['status_tracking']),
+                'status_finance' => $this->getStatusFinanceBadge($shipment['status_finance']),
+                'created_at' => !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) : '-',
+                'role' => $role,
+                
+                 // Action button (based on $canShowAction)
+                'action' => $canShowAction
+                            ? '<a href="' . base_url('shipment/edit/' . $shipment['id']) . '" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="' . base_url('shipment/api/delete/' . $shipment['id']) . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this shipment?\')">Delete</a>'
+                            : '',
+
+
+                'checkbox' => '<input type="checkbox" class="rowCheckbox" value="' . $shipment['id'] . '">'
+            ];
+        }
+
+        return $this->response->setJSON(['data' => $data]);
+    }
+
+    public function ListOnGoing()
+    {
+        $shipmentModel = new MNCShipment();
+        $user = session()->get('user');
+        $role = $user['role'] ?? null;
+
+       $shipments = $shipmentModel
+                        ->select('
+                            mnc_shipment.id,
+                            mnc_shipment.marking_code,
+                            mnc_shipment.consolidation,
+                            mnc_shipment.status_tracking,
+                            mnc_shipment.status_finance,
+                            mnc_shipment.created_at,
+                            mnc_customers_price.price_code
+                        ')
+                        ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id', 'left')
+                        ->where('mnc_shipment.status', 1)
+                        ->where('mnc_shipment.status_tracking', 2)
+                        ->orderBy('mnc_shipment.created_at', 'DESC');
+
+            $shipments = $shipments->get()->getResultArray();
+
+        $data = [];
+
+        foreach ($shipments as $shipment) {
+            $statusTracking = (int) $shipment['status_tracking'];
+
+             $canShowAction = in_array($role, [1, 2, 5]) || (in_array($role, [2, 3, 4]) && $statusTracking === 1);
+
+            $data[] = [
+                'id' => $shipment['id'],
+                'marking_code' => '<a href="' . base_url('shipment/process/' . $shipment['id']) . '">' . esc($shipment['marking_code']) . '</a>',
+                'price_code' => esc($shipment['price_code']),
+                'consolidation' => $shipment['consolidation'] == 1 ? 'Yes' : 'No',
+                'status_tracking' => $this->getStatusTrackingBadge($shipment['status_tracking']),
+                'status_finance' => $this->getStatusFinanceBadge($shipment['status_finance']),
+                'created_at' => !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) : '-',
+                'role' => $role,
+                
+                 // Action button (based on $canShowAction)
+                'action' => $canShowAction
+                            ? '<a href="' . base_url('shipment/edit/' . $shipment['id']) . '" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="' . base_url('shipment/api/delete/' . $shipment['id']) . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this shipment?\')">Delete</a>'
+                            : '',
+
+
+                'checkbox' => '<input type="checkbox" class="rowCheckbox" value="' . $shipment['id'] . '">'
+            ];
+        }
+
+        return $this->response->setJSON(['data' => $data]);
+    }
+
+    public function ListArrived()
+    {
+        $shipmentModel = new MNCShipment();
+        $user = session()->get('user');
+        $role = $user['role'] ?? null;
+
+       $shipments = $shipmentModel
+                        ->select('
+                            mnc_shipment.id,
+                            mnc_shipment.marking_code,
+                            mnc_shipment.consolidation,
+                            mnc_shipment.status_tracking,
+                            mnc_shipment.status_finance,
+                            mnc_shipment.created_at,
+                            mnc_customers_price.price_code
+                        ')
+                        ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id', 'left')
+                        ->where('mnc_shipment.status', 1)
+                        ->where('mnc_shipment.status_tracking', 3)
+                        ->orderBy('mnc_shipment.created_at', 'DESC');
+
+            $shipments = $shipments->get()->getResultArray();
+
+        $data = [];
+
+        foreach ($shipments as $shipment) {
+            $statusTracking = (int) $shipment['status_tracking'];
+
+             $canShowAction = in_array($role, [1, 2, 5]) || (in_array($role, [2, 3, 4]) && $statusTracking === 1);
+
+            $data[] = [
+                'id' => $shipment['id'],
+                'marking_code' => '<a href="' . base_url('shipment/process/' . $shipment['id']) . '">' . esc($shipment['marking_code']) . '</a>',
+                'price_code' => esc($shipment['price_code']),
+                'consolidation' => $shipment['consolidation'] == 1 ? 'Yes' : 'No',
+                'status_tracking' => $this->getStatusTrackingBadge($shipment['status_tracking']),
+                'status_finance' => $this->getStatusFinanceBadge($shipment['status_finance']),
+                'created_at' => !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) : '-',
+                'role' => $role,
+                
+                 // Action button (based on $canShowAction)
+                'action' => $canShowAction
+                            ? '<a href="' . base_url('shipment/edit/' . $shipment['id']) . '" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="' . base_url('shipment/api/delete/' . $shipment['id']) . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this shipment?\')">Delete</a>'
+                            : '',
+
+
+                'checkbox' => '<input type="checkbox" class="rowCheckbox" value="' . $shipment['id'] . '">'
+            ];
+        }
+
+        return $this->response->setJSON(['data' => $data]);
+    }
+
+    public function ListOutForDelivery()
+    {
+        $shipmentModel = new MNCShipment();
+        $user = session()->get('user');
+        $role = $user['role'] ?? null;
+
+       $shipments = $shipmentModel
+                        ->select('
+                            mnc_shipment.id,
+                            mnc_shipment.marking_code,
+                            mnc_shipment.consolidation,
+                            mnc_shipment.status_tracking,
+                            mnc_shipment.status_finance,
+                            mnc_shipment.created_at,
+                            mnc_customers_price.price_code
+                        ')
+                        ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id', 'left')
+                        ->where('mnc_shipment.status', 1)
+                        ->where('mnc_shipment.status_tracking', 4)
+                        ->orderBy('mnc_shipment.created_at', 'DESC');
+
+            $shipments = $shipments->get()->getResultArray();
+
+        $data = [];
+
+        foreach ($shipments as $shipment) {
+            $statusTracking = (int) $shipment['status_tracking'];
+
+             $canShowAction = in_array($role, [1, 2, 5]) || (in_array($role, [2, 3, 4]) && $statusTracking === 1);
+
+            $data[] = [
+                'id' => $shipment['id'],
+                'marking_code' => '<a href="' . base_url('shipment/process/' . $shipment['id']) . '">' . esc($shipment['marking_code']) . '</a>',
+                'price_code' => esc($shipment['price_code']),
+                'consolidation' => $shipment['consolidation'] == 1 ? 'Yes' : 'No',
+                'status_tracking' => $this->getStatusTrackingBadge($shipment['status_tracking']),
+                'status_finance' => $this->getStatusFinanceBadge($shipment['status_finance']),
+                'created_at' => !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) : '-',
+                'role' => $role,
+                
+                 // Action button (based on $canShowAction)
+                'action' => $canShowAction
+                            ? '<a href="' . base_url('shipment/edit/' . $shipment['id']) . '" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="' . base_url('shipment/api/delete/' . $shipment['id']) . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this shipment?\')">Delete</a>'
+                            : '',
+
+
+                'checkbox' => '<input type="checkbox" class="rowCheckbox" value="' . $shipment['id'] . '">'
+            ];
+        }
+
+        return $this->response->setJSON(['data' => $data]);
+    }
+
+    public function ListDelivered()
+    {
+        $shipmentModel = new MNCShipment();
+        $user = session()->get('user');
+        $role = $user['role'] ?? null;
+
+       $shipments = $shipmentModel
+                        ->select('
+                            mnc_shipment.id,
+                            mnc_shipment.marking_code,
+                            mnc_shipment.consolidation,
+                            mnc_shipment.status_tracking,
+                            mnc_shipment.status_finance,
+                            mnc_shipment.created_at,
+                            mnc_customers_price.price_code
+                        ')
+                        ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id', 'left')
+                        ->where('mnc_shipment.status', 1)
+                        ->where('mnc_shipment.status_tracking', 5)
+                        ->orderBy('mnc_shipment.created_at', 'DESC');
+
+            $shipments = $shipments->get()->getResultArray();
+
+        $data = [];
+
+        foreach ($shipments as $shipment) {
+            $statusTracking = (int) $shipment['status_tracking'];
+
+             $canShowAction = in_array($role, [1, 2, 5]) || (in_array($role, [2, 3, 4]) && $statusTracking === 1);
+
+            $data[] = [
+                'id' => $shipment['id'],
+                'marking_code' => '<a href="' . base_url('shipment/process/' . $shipment['id']) . '">' . esc($shipment['marking_code']) . '</a>',
+                'price_code' => esc($shipment['price_code']),
+                'consolidation' => $shipment['consolidation'] == 1 ? 'Yes' : 'No',
+                'status_tracking' => $this->getStatusTrackingBadge($shipment['status_tracking']),
+                'status_finance' => $this->getStatusFinanceBadge($shipment['status_finance']),
+                'created_at' => !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) : '-',
+                'role' => $role,
+                
+                 // Action button (based on $canShowAction)
+                'action' => $canShowAction
+                            ? '<a href="' . base_url('shipment/edit/' . $shipment['id']) . '" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="' . base_url('shipment/api/delete/' . $shipment['id']) . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this shipment?\')">Delete</a>'
+                            : '',
+
+
+                'checkbox' => '<input type="checkbox" class="rowCheckbox" value="' . $shipment['id'] . '">'
+            ];
+        }
+
+        return $this->response->setJSON(['data' => $data]);
+    }
+
+    public function ListFailedDelivered()
+    {
+        $shipmentModel = new MNCShipment();
+        $user = session()->get('user');
+        $role = $user['role'] ?? null;
+
+       $shipments = $shipmentModel
+                        ->select('
+                            mnc_shipment.id,
+                            mnc_shipment.marking_code,
+                            mnc_shipment.consolidation,
+                            mnc_shipment.status_tracking,
+                            mnc_shipment.status_finance,
+                            mnc_shipment.created_at,
+                            mnc_customers_price.price_code
+                        ')
+                        ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id', 'left')
+                        ->where('mnc_shipment.status', 1)
+                        ->where('mnc_shipment.status_tracking', 6)
+                        ->orderBy('mnc_shipment.created_at', 'DESC');
+
+            $shipments = $shipments->get()->getResultArray();
+
+        $data = [];
+
+        foreach ($shipments as $shipment) {
+            $statusTracking = (int) $shipment['status_tracking'];
+
+             $canShowAction = in_array($role, [1, 2, 5]) || (in_array($role, [2, 3, 4]) && $statusTracking === 1);
+
+            $data[] = [
+                'id' => $shipment['id'],
+                'marking_code' => '<a href="' . base_url('shipment/process/' . $shipment['id']) . '">' . esc($shipment['marking_code']) . '</a>',
+                'price_code' => esc($shipment['price_code']),
+                'consolidation' => $shipment['consolidation'] == 1 ? 'Yes' : 'No',
+                'status_tracking' => $this->getStatusTrackingBadge($shipment['status_tracking']),
+                'status_finance' => $this->getStatusFinanceBadge($shipment['status_finance']),
+                'created_at' => !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) : '-',
+                'role' => $role,
+                
+                 // Action button (based on $canShowAction)
+                'action' => $canShowAction
+                            ? '<a href="' . base_url('shipment/edit/' . $shipment['id']) . '" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="' . base_url('shipment/api/delete/' . $shipment['id']) . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this shipment?\')">Delete</a>'
+                            : '',
+
+
+                'checkbox' => '<input type="checkbox" class="rowCheckbox" value="' . $shipment['id'] . '">'
+            ];
+        }
+
+        return $this->response->setJSON(['data' => $data]);
+    }
+
+    public function ListFinishedDelivered()
+    {
+        $shipmentModel = new MNCShipment();
+        $user = session()->get('user');
+        $role = $user['role'] ?? null;
+
+       $shipments = $shipmentModel
+                        ->select('
+                            mnc_shipment.id,
+                            mnc_shipment.marking_code,
+                            mnc_shipment.consolidation,
+                            mnc_shipment.status_tracking,
+                            mnc_shipment.status_finance,
+                            mnc_shipment.created_at,
+                            mnc_customers_price.price_code
+                        ')
+                        ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id', 'left')
+                        ->where('mnc_shipment.status', 1)
+                        ->where('mnc_shipment.status_tracking', 6) //ubah ini aja
+                        ->orderBy('mnc_shipment.created_at', 'DESC');
+
+            $shipments = $shipments->get()->getResultArray();
+
+        $data = [];
+
+        foreach ($shipments as $shipment) {
+            $statusTracking = (int) $shipment['status_tracking'];
+
+             $canShowAction = in_array($role, [1, 2, 5]) || (in_array($role, [2, 3, 4]) && $statusTracking === 1);
+
+            $data[] = [
+                'id' => $shipment['id'],
+                'marking_code' => '<a href="' . base_url('shipment/process/' . $shipment['id']) . '">' . esc($shipment['marking_code']) . '</a>',
+                'price_code' => esc($shipment['price_code']),
+                'consolidation' => $shipment['consolidation'] == 1 ? 'Yes' : 'No',
+                'status_tracking' => $this->getStatusTrackingBadge($shipment['status_tracking']),
+                'status_finance' => $this->getStatusFinanceBadge($shipment['status_finance']),
+                'created_at' => !empty($shipment['created_at']) ? date('H:i:s A d/m/Y', strtotime($shipment['created_at'])) : '-',
+                'role' => $role,
+                
+                 // Action button (based on $canShowAction)
+                'action' => $canShowAction
+                            ? '<a href="' . base_url('shipment/edit/' . $shipment['id']) . '" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="' . base_url('shipment/api/delete/' . $shipment['id']) . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this shipment?\')">Delete</a>'
+                            : '',
+
+
+                'checkbox' => '<input type="checkbox" class="rowCheckbox" value="' . $shipment['id'] . '">'
+            ];
+        }
+
+        return $this->response->setJSON(['data' => $data]);
+    }
+
     public function datashipment()
     {
         $shipmentModel = new MNCShipment();
@@ -702,6 +1118,8 @@ class Shipment extends BaseController
             case 2: return '<span class="badge badge-secondary">ON PROGRESS</span>';
             case 3: return '<span class="badge badge-success">ARRIVED AT WAREHOUSE</span>';
             case 4: return '<span class="badge badge-success">DELIVERED TO CUSTOMER</span>';
+            case 5: return '<span class="badge badge-success">SUCCESS DELIVERED TO CUSTOMER</span>';
+            case 6: return '<span class="badge badge-success">FAILED DELIVERED TO CUSTOMER</span>';
             default: return '<span class="badge badge-secondary">PENDING</span>';
         }
     }
@@ -747,6 +1165,41 @@ class Shipment extends BaseController
         } else {
             // Success
             return redirect()->back()->with('success', 'Shipment deleted successfully.');
+        }
+    }
+
+    public function DeliverySuccess($id)
+    {
+        // dd($id);
+        $ShipmentModel = new MNCShipment();
+        $update = $ShipmentModel->update($id, ['status_tracking' => SUCCESS_DELIVERY]);
+
+        if ($update) {
+            return redirect()
+                ->to(base_url('shipment/outfordelivery'))
+                ->with('success', 'Success Set Shipment Delivery as Failed.');
+        } else {
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to update shipment status tracking.');
+        }
+
+    }
+
+    public function DeliveryFailed($id)
+    {
+        // dd($id);
+        $ShipmentModel = new MNCShipment();
+        $update = $ShipmentModel->update($id, ['status_tracking' => FAILED_DELIVERY]);
+
+        if ($update) {
+            return redirect()
+                ->to(base_url('shipment/outfordelivery'))
+                ->with('success', 'Success Set Shipment Delivery as Failed.');
+        } else {
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to update shipment status tracking.');
         }
     }
 

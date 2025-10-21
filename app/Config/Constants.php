@@ -83,6 +83,8 @@ define('NEW_DATA_SHIPMENT', 1);
 define('ON_PROGRESS', 2);
 define('ARRIVED_AT_WAREHOUSE', 3);
 define('DELIVERED_TO_CUSTOMER', 4);
+define('SUCCESS_DELIVERY', 5);
+define('FAILED_DELIVERY', 6);
 
 // Status Finance Constants
 define('WAITING_FOR_PAYMENT', 0);

@@ -158,6 +158,22 @@
                                   Delivery to Customer
                               </button>
                           <?php endif; ?>
+                          <div class="d-flex gap-2">
+                            <?php if ($shipment['status_tracking'] == '4'): ?>
+                                <form action="<?= base_url('shipment/delivery/success/' . $shipment['id']) ?>" method="post" onsubmit="return confirm('Mark this Success Delivery Shipment?')" class="ml-2">
+                                    <?= csrf_field() ?>
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                    Success Delivery Shipment
+                                    </button>
+                                </form>
+                                <form action="<?= base_url('shipment/delivery/failed/' . $shipment['id']) ?>" method="post" onsubmit="return confirm('Mark this Failed Delivery Shipment?')" class="ml-2">
+                                    <?= csrf_field() ?>
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                    Failed Delivery Shipment
+                                    </button>
+                                </form>
+                            <?php endif; ?>
+                          </div>
                         <?php endif; ?>
                     </div>
                   </div>

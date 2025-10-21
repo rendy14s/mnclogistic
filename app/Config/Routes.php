@@ -97,6 +97,27 @@ use CodeIgniter\Router\RouteCollection;
       //Index Page
       $routes->get('shipment', 'Shipment::index', ['filter' => 'tokenAuth']);
 
+      //Index Page Shipment New Data
+      $routes->get('shipment/newdata', 'Shipment::NewData', ['filter' => 'tokenAuth']);
+
+      // Index Page Shipment On Going
+      $routes->get('shipment/ongoing', 'Shipment::Ongoing', ['filter' => 'tokenAuth']);
+
+      // Index Page Shipment Arrived at Warehouse
+      $routes->get('shipment/arrived', 'Shipment::Arrived', ['filter' => 'tokenAuth']);
+
+      // Index Page Shipment Out for Delivery
+      $routes->get('shipment/outfordelivery', 'Shipment::OutForDelivery', ['filter' => 'tokenAuth']);
+
+      // Index Page Shipment Delivered
+      $routes->get('shipment/delivered', 'Shipment::Delivered', ['filter' => 'tokenAuth']);
+
+      // Index Page Shipment Failed Delivered
+      $routes->get('shipment/faileddelivered', 'Shipment::FailedDelivered', ['filter' => 'tokenAuth']);
+
+      // Index Page Shipment Finished
+      $routes->get('shipment/finished', 'Shipment::FinishedDelivery', ['filter' => 'tokenAuth']);
+
       // Form Add New Shipment
       $routes->get('shipment/add', 'Shipment::form_add', ['filter' => 'tokenAuth']);
 
@@ -125,11 +146,38 @@ use CodeIgniter\Router\RouteCollection;
       $routes->get('shipment/deliver/(:num)', 'Shipment::setDelivery/$1');
       $routes->post('shipment/deliverycustomer/(:num)', 'Shipment::saveDeliveryCustomer/$1');
 
+      // Make Success Delivery to Customer
+      $routes->post('shipment/delivery/success/(:num)', 'Shipment::DeliverySuccess/$1');
+
+      // Make Failed Delivery to Customer
+      $routes->post('shipment/delivery/failed/(:num)', 'Shipment::DeliveryFailed/$1');
+
       // API For Bulk Sending Shipment
       $routes->post('shipment/api/bulkSending', 'Shipment::bulkSending', ['filter' => 'tokenAuth']);
 
       // API For List Shipment
       $routes->get('shipment/api/list', 'Shipment::list', ['filter' => 'tokenAuth']);
+
+      // API For List Shipment New Data
+      $routes->get('shipment/api/listnewdata', 'Shipment::ListNewData', ['filter' => 'tokenAuth']);
+
+      // API For List Shipment On Going
+      $routes->get('shipment/api/listongoing', 'Shipment::ListOnGoing', ['filter' => 'tokenAuth']);
+
+      // API For List Shipment Arrived at Warehouse
+      $routes->get('shipment/api/listarrived', 'Shipment::ListArrived', ['filter' => 'tokenAuth']);
+
+      // API For List Shipment Out for Delivery
+      $routes->get('shipment/api/listoutfordelivery', 'Shipment::ListOutForDelivery', ['filter' => 'tokenAuth']);
+
+      // API For List Shipment Delivered
+      $routes->get('shipment/api/listdelivered', 'Shipment::ListDelivered', ['filter' => 'tokenAuth']);
+
+      // API For List Shipment Failed Delivered
+      $routes->get('shipment/api/listfaileddelivered', 'Shipment::ListFailedDelivered', ['filter' => 'tokenAuth']);
+
+      // API For List Shipment Failed Delivered
+      $routes->get('shipment/api/listfinished', 'Shipment::ListFinished', ['filter' => 'tokenAuth']);
 
       // API For Data Shipment
       $routes->get('shipment/api/datashipment', 'Shipment::datashipment', ['filter' => 'tokenAuth']);

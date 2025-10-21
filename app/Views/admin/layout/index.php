@@ -197,6 +197,79 @@
         }
       }
     });
+
+    const tableongoing = $("#shipmenttableongoing").DataTable({
+      responsive: true,
+      lengthChange: false,
+      autoWidth: false,
+      ordering: true,
+      paging: true,
+      info: true,
+      ajax: "/shipment/api/listongoing",
+      columns: columns,
+      order: [[0, 'asc']]
+    });
+
+    const tablearrived = $("#shipmenttablearrived").DataTable({
+      responsive: true,
+      lengthChange: false,
+      autoWidth: false,
+      ordering: true,
+      paging: true,
+      info: true,
+      ajax: "/shipment/api/listarrived",
+      columns: columns,
+      order: [[0, 'asc']]
+    });
+
+    const tableoutfordelivery = $("#shipmenttableoutfordelivery").DataTable({
+      responsive: true,
+      lengthChange: false,
+      autoWidth: false,
+      ordering: true,
+      paging: true,
+      info: true,
+      ajax: "/shipment/api/listoutfordelivery",
+      columns: columns,
+      order: [[0, 'asc']]
+    });
+
+    const tabledelivered = $("#shipmenttabledelivered").DataTable({
+      responsive: true,
+      lengthChange: false,
+      autoWidth: false,
+      ordering: true,
+      paging: true,
+      info: true,
+      ajax: "/shipment/api/listdelivered",
+      columns: columns,
+      order: [[0, 'asc']]
+    });
+
+    const tablefaileddelivered = $("#shipmenttablefaileddelivered").DataTable({
+      responsive: true,
+      lengthChange: false,
+      autoWidth: false,
+      ordering: true,
+      paging: true,
+      info: true,
+      ajax: "/shipment/api/listfaileddelivered",
+      columns: columns,
+      order: [[0, 'asc']]
+    });
+
+    const tablefinish = $("#shipmenttablefinished").DataTable({
+      responsive: true,
+      lengthChange: false,
+      autoWidth: false,
+      ordering: true,
+      paging: true,
+      info: true,
+      ajax: "/shipment/api/listfaileddelivered",
+      columns: columns,
+      order: [[0, 'asc']]
+    });
+
   });
 
   $(function () {
