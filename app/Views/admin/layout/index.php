@@ -236,6 +236,16 @@
     });
   });
 
+  const table_jakarta_waybill = $("#jakartawaybilltable").DataTable({
+    responsive: true,
+    lengthChange: false,
+    autoWidth: false,
+    ordering: true,
+    paging: true,
+    info: true,
+    order: [[0, 'asc']]
+  });
+
   const table_customer = $("#table_customer").DataTable({
       responsive: true,
       lengthChange: false,

@@ -141,8 +141,15 @@ use CodeIgniter\Router\RouteCollection;
    // Core Invoice
       $routes->get('invoice/pdf/(:num)', 'Invoice::exportPdf/$1');
 
-   // Core Reports
-      $routes->get('reports/way-bill', 'Reports::Waybill', ['filter' => 'tokenAuth']);
+   // Core Waybill
+      // Index Page Waybill Batam
+      $routes->get('waybill/waybillbatam', 'Waybill::WaybillBatam', ['filter' => 'tokenAuth']);
 
-      // API For Generate Way Bill
-      $routes->post('reports/way-bill/generatePdf', 'Reports::GenerateWayBill', ['filter' => 'tokenAuth']); 
+      // Index Page Waybill Jakarta
+      $routes->get('waybill/waybilljakarta', 'Waybill::WaybillJakarta', ['filter' => 'tokenAuth']);
+
+      // API For Generate Way Bill Batam
+      $routes->post('waybill/api/generatewaybillbatam', 'Waybill::GenerateWayBillBatam', ['filter' => 'tokenAuth']); 
+
+      // API For Generate Way Bill Jakarta
+      $routes->post('waybill/api/generatewaybilljakarta', 'Waybill::GenerateWayBillJakarta', ['filter' => 'tokenAuth']); 

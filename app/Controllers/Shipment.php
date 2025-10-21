@@ -207,10 +207,12 @@ class Shipment extends BaseController
         $db = \Config\Database::connect();
         $shipmentModel = new MNCShipment();
         $shipmentLogModel = new MNCShipmentLog();
+        $waybillModel     = new MNCWayBill();
 
         // Begin transaction
         $db->transStart();
 
+        $now    = date('Y-m-d H:i:s');
         // Update shipment status to "Arrived at Warehouse"
         $shipmentModel->update($id, ['status_tracking' => ARRIVED_AT_WAREHOUSE]);
 
@@ -220,6 +222,12 @@ class Shipment extends BaseController
             'user_id'       => session('user')['id'],
             'description'  => 'SHIPMENT ARRIVED At Warehouse Jakarta, STATUS UPDATE BY ' . session('user')['fullname'],
             'created_at'   => date('Y-m-d H:i:s'),
+        ]);
+
+        $waybillModel->insert([
+            'shipment_id'  => $id,
+            'date_reports' => $now,
+            'type' => FROM_JAKARTA
         ]);
 
         // Complete the transaction
@@ -519,6 +527,7 @@ class Shipment extends BaseController
                 return [
                     'shipment_id'  => $id,
                     'date_reports' => $now,
+                    'type' => FROM_BATAM
                 ];
             }, $ids);
 

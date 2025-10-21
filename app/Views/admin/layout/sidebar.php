@@ -60,19 +60,25 @@
         <?php endif; ?>
 
         <?php if (($user = $session->get('user')) && $user['role'] !== '6'): ?>
-          <li class="nav-item has-treeview <?= ($segment_first === 'reports') ? 'menu-open' : '' ?>">
-              <a href="#" class="nav-link  <?= ($segment_first === 'reports') ? 'active' : '' ?>">
+          <li class="nav-item has-treeview <?= ($segment_first === 'waybill') ? 'menu-open' : '' ?>">
+              <a href="#" class="nav-link  <?= ($segment_first === 'waybill') ? 'active' : '' ?>">
                   <i class="nav-icon fas fa-table"></i>
                   <p>
-                      Reports
+                      Way Bill
                       <i class="fas fa-angle-left right"></i>
                   </p>
               </a>
               <ul class="nav nav-treeview">
                   <li class="nav-item">
-                      <a href="<?= base_url('reports/way-bill') ?>" class="nav-link <?= ($segment_first === 'reports' && $segment_second === 'way-bill') ? 'active' : '' ?>">
+                      <a href="<?= base_url('waybill/waybillbatam') ?>" class="nav-link <?= ($segment_first === 'waybill' && $segment_second === 'waybillbatam') ? 'active' : '' ?>">
                           <i class="far fa-circle nav-icon"></i>
-                          <p>Way Bill</p>
+                          <p>Batam</p>
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="<?= base_url('waybill/waybilljakarta') ?>" class="nav-link <?= ($segment_first === 'waybill' && $segment_second === 'waybilljakarta') ? 'active' : '' ?>">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Jakarta</p>
                       </a>
                   </li>
               </ul>

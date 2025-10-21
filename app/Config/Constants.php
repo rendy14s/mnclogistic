@@ -90,3 +90,7 @@ define('PAID', 1);
 
 define('INITIATE', 1); // Canceled status data shipment
 define('SOFT_DELETE', 0); // Soft delete status data shipment
+
+// Status Waybill Constants
+define('FROM_BATAM', 1);
+define('FROM_JAKARTA', 2);

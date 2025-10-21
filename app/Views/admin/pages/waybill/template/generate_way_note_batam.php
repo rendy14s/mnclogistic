@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Waybill <?= date('d-m-Y', strtotime($dateReports ?? 'now')) ?></title>
+    <title>Waybill Batam <?= date('d-m-Y', strtotime($dateReports ?? 'now')) ?></title>
     <style>
         body {
             font-family: DejaVu Sans, sans-serif;
