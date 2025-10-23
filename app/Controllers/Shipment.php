@@ -149,7 +149,7 @@ class Shipment extends BaseController
                 throw new \Exception("Transaction failed");
             }
 
-            return redirect()->to('/shipment')->with('success', 'Shipping created successfully.');
+            return redirect()->to('shipment/newdata')->with('success', 'Shipping created successfully.');
         } catch (\Exception $e) {
                 $db->transRollback(); // ROLLBACK if anything fails
                 return redirect()->back()->with('error', 'Save failed: ' . $e->getMessage());
@@ -1184,7 +1184,7 @@ class Shipment extends BaseController
         $shipmentLogModel->insert([
             'shipment_id' => $id,
             'user_id'      => session('user')['id'],
-            'description'  => 'SHIPMENT HAS BEEN UPDATE SUCCESSFULLY DELIVERED TO CUSTOMER ' . session('user')['fullname']
+            'description'  => 'SHIPMENT HAS BEEN UPDATE SUCCESSFULLY DELIVERED TO CUSTOMER BY' . session('user')['fullname']
         ]);
 
         // Complete the transaction

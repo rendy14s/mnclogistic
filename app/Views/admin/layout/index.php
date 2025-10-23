@@ -187,7 +187,7 @@
       ordering: true,
       paging: true,
       info: true,
-      ajax: "/shipment/api/list",
+      ajax: "/shipment/api/listnewdata",
       columns: columns,
       order: [[0, 'asc']],
       buttons: buttons,
@@ -248,18 +248,6 @@
     });
 
     const tablefaileddelivered = $("#shipmenttablefaileddelivered").DataTable({
-      responsive: true,
-      lengthChange: false,
-      autoWidth: false,
-      ordering: true,
-      paging: true,
-      info: true,
-      ajax: "/shipment/api/listfaileddelivered",
-      columns: columns,
-      order: [[0, 'asc']]
-    });
-
-    const tablefinish = $("#shipmenttablefinished").DataTable({
       responsive: true,
       lengthChange: false,
       autoWidth: false,

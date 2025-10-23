@@ -38,8 +38,8 @@
                                             <button type="button" class="btn btn-block btn-success btn-sm" onclick="location.href='<?= base_url('shipment/add') ?>'">
                                                 <i class="fas fa-plus"></i> Add Shipment
                                             </button>
-                                        <!-- <?php endif; ?> -->
-                                    </div>
+                                        <?php endif; ?>
+                                    <!-- </div> -->
                                     <br>
                                     <table id="shipmenttable" class="table table-bordered table-hover">
                                         <thead>
