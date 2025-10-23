@@ -1172,16 +1172,33 @@ class Shipment extends BaseController
     {
         // dd($id);
         $ShipmentModel = new MNCShipment();
-        $update = $ShipmentModel->update($id, ['status_tracking' => SUCCESS_DELIVERY]);
+        $shipmentLogModel = new MNCShipmentLog();
 
-        if ($update) {
-            return redirect()
-                ->to(base_url('shipment/outfordelivery'))
-                ->with('success', 'Success Set Shipment Delivery as Failed.');
-        } else {
+         // Begin transaction
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        $ShipmentModel->update($id, ['status_tracking' => SUCCESS_DELIVERY]);
+
+        // Log the deletion
+        $shipmentLogModel->insert([
+            'shipment_id' => $id,
+            'user_id'      => session('user')['id'],
+            'description'  => 'SHIPMENT HAS BEEN UPDATE SUCCESSFULLY DELIVERED TO CUSTOMER ' . session('user')['fullname']
+        ]);
+
+        // Complete the transaction
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
             return redirect()
                 ->back()
                 ->with('error', 'Failed to update shipment status tracking.');
+            
+        } else {
+           return redirect()
+                ->to(base_url('shipment/outfordelivery'))
+                ->with('success', 'Success Set Shipment Delivery as Failed.');
         }
 
     }
@@ -1190,16 +1207,31 @@ class Shipment extends BaseController
     {
         // dd($id);
         $ShipmentModel = new MNCShipment();
-        $update = $ShipmentModel->update($id, ['status_tracking' => FAILED_DELIVERY]);
+        $shipmentLogModel = new MNCShipmentLog();
 
-        if ($update) {
+         // Begin transaction
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        $ShipmentModel->update($id, ['status_tracking' => FAILED_DELIVERY]);
+
+        // Log the deletion
+        $shipmentLogModel->insert([
+            'shipment_id' => $id,
+            'user_id'      => session('user')['id'],
+            'description'  => 'SHIPMENT HAS BEEN UPDATE FAILED DELIVERED TO CUSTOMER BY ' . session('user')['fullname']
+        ]);
+
+        // Complete the transaction
+        $db->transComplete();
+        if ($db->transStatus() === false) {
+             return redirect()
+                ->back()
+                ->with('error', 'Failed to update shipment status tracking.');
+        } else {
             return redirect()
                 ->to(base_url('shipment/outfordelivery'))
                 ->with('success', 'Success Set Shipment Delivery as Failed.');
-        } else {
-            return redirect()
-                ->back()
-                ->with('error', 'Failed to update shipment status tracking.');
         }
     }
 
