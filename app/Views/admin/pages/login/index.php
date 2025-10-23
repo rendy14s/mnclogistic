@@ -17,7 +17,7 @@
   <!-- Custom CSS for background -->
   <style>
     body.login-page {
-      background: url("<?= base_url('img/login-image.jpg') ?>") no-repeat center center fixed;
+      background: url("<?= base_url('assets/img/login-image.jpg') ?>") no-repeat center center fixed;
       background-size: cover;
       background-attachment: fixed;
       background-color: #000;
