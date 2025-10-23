@@ -29,7 +29,7 @@ class WayBill extends BaseController
         return view('admin/pages/waybill/index', $data);
     }
 
-    public function waybilljakarta()
+    public function WaybillJakarta()
     {
         $waybill = new MNCWayBill();
         $data['waybills_jakarta'] = $waybill

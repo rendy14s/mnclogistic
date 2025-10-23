@@ -195,13 +195,13 @@ use CodeIgniter\Router\RouteCollection;
 
    // Core Waybill
       // Index Page Waybill Batam
-      $routes->get('waybill/waybillbatam', 'Waybill::WaybillBatam', ['filter' => 'tokenAuth']);
+      $routes->get('waybill/waybillbatam', 'WayBill::WaybillBatam', ['filter' => 'tokenAuth']);
 
       // Index Page Waybill Jakarta
-      $routes->get('waybill/waybilljakarta', 'Waybill::WaybillJakarta', ['filter' => 'tokenAuth']);
+      $routes->get('waybill/waybilljakarta', 'WayBill::WaybillJakarta', ['filter' => 'tokenAuth']);
 
       // API For Generate Way Bill Batam
-      $routes->post('waybill/api/generatewaybillbatam', 'Waybill::GenerateWayBillBatam', ['filter' => 'tokenAuth']); 
+      $routes->post('waybill/api/generatewaybillbatam', 'WayBill::GenerateWayBillBatam', ['filter' => 'tokenAuth']); 
 
       // API For Generate Way Bill Jakarta
-      $routes->post('waybill/api/generatewaybilljakarta', 'Waybill::GenerateWayBillJakarta', ['filter' => 'tokenAuth']); 
+      $routes->post('waybill/api/generatewaybilljakarta', 'WayBill::GenerateWayBillJakarta', ['filter' => 'tokenAuth']); 
