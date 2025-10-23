@@ -8,8 +8,12 @@ use CodeIgniter\Router\RouteCollection;
 
    // Get Page
 
-    $routes->get('/', 'Home::index');
+   //  $routes->get('/', 'Home::index');
 
+   $routes->get('/', function() {
+      return redirect()->to('/login');
+   });
+   
     $routes->get('login', 'Auth::login');
 
     $routes->get('logout', 'Auth::logout');
