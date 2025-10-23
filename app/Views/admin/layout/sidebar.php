@@ -48,7 +48,6 @@
           </li>
         <?php endif; ?>
 
-        <?php if (($user = $session->get('user')) && $user['role'] !== '6'): ?>
           <li class="nav-item has-treeview <?= ($segment_first === 'shipment') ? 'menu-open' : '' ?>">
               <a href="#" class="nav-link  <?= ($segment_first === 'shipment') ? 'active' : '' ?>">
                   <i class="nav-icon fas fa-table"></i>
@@ -58,18 +57,23 @@
                   </p>
               </a>
               <ul class="nav nav-treeview">
+                <?php if (($user = $session->get('user')) && in_array($user['role'], ['1', '5', '6', '3'])): ?>
                   <li class="nav-item">
                       <a href="<?= base_url('shipment/newdata') ?>" class="nav-link <?= ($segment_first === 'shipment' && $segment_second === 'newdata') ? 'active' : '' ?>">
                           <i class="far fa-circle nav-icon"></i>
                           <p>New Data</p>
                       </a>
                   </li>
+                <?php endif; ?>
+                <?php if (($user = $session->get('user')) && in_array($user['role'], ['1', '5', '6', '4'])): ?>
                   <li class="nav-item">
                       <a href="<?= base_url('shipment/ongoing') ?>" class="nav-link <?= ($segment_first === 'shipment' && $segment_second === 'ongoing') ? 'active' : '' ?>">
                           <i class="far fa-circle nav-icon"></i>
                           <p>On Going</p>
                       </a>
                   </li>
+                <?php endif; ?>
+                <?php if (($user = $session->get('user')) && in_array($user['role'], ['1', '2', '5', '6', '4'])): ?>
                   <li class="nav-item">
                       <a href="<?= base_url('shipment/arrived') ?>" class="nav-link <?= ($segment_first === 'shipment' && $segment_second === 'arrived') ? 'active' : '' ?>">
                           <i class="far fa-circle nav-icon"></i>
@@ -88,31 +92,17 @@
                           <p>Delivered</p>
                       </a>
                   </li>
-                  <!-- <li class="nav-item">
-                      <a href="<?= base_url('shipment/finished') ?>" class="nav-link <?= ($segment_first === 'shipment' && $segment_second === 'finished') ? 'active' : '' ?>">
-                          <i class="far fa-circle nav-icon"></i>
-                          <p>Finished</p>
-                      </a>
-                  </li> -->
                   <li class="nav-item">
                       <a href="<?= base_url('shipment/faileddelivered') ?>" class="nav-link <?= ($segment_first === 'shipment' && $segment_second === 'faileddelivered') ? 'active' : '' ?>">
                           <i class="far fa-circle nav-icon"></i>
                           <p>Failed Delivery</p>
                       </a>
                   </li>
+                <?php endif; ?>
               </ul>
           </li>
-          <!-- <li class="nav-item <?= ($segment_first === 'shipment') ? 'menu-open' : '' ?>">
-            <a href="<?= base_url('shipment') ?>" class="nav-link">
-              <i class="nav-icon fa fa-fw fa-list-alt"></i>
-              <p>
-                Shipment
-              </p>
-            </a>
-          </li> -->
-        <?php endif; ?>
 
-        <?php if (($user = $session->get('user')) && $user['role'] !== '6'): ?>
+        <?php if (($user = $session->get('user')) && in_array($user['role'], ['1', '3', '4', '5'])): ?>
           <li class="nav-item has-treeview <?= ($segment_first === 'waybill') ? 'menu-open' : '' ?>">
               <a href="#" class="nav-link  <?= ($segment_first === 'waybill') ? 'active' : '' ?>">
                   <i class="nav-icon fas fa-table"></i>
@@ -122,37 +112,44 @@
                   </p>
               </a>
               <ul class="nav nav-treeview">
+                <?php if (($user = $session->get('user')) && in_array($user['role'], ['1', '5', '3'])): ?>
                   <li class="nav-item">
                       <a href="<?= base_url('waybill/waybillbatam') ?>" class="nav-link <?= ($segment_first === 'waybill' && $segment_second === 'waybillbatam') ? 'active' : '' ?>">
                           <i class="far fa-circle nav-icon"></i>
                           <p>Batam</p>
                       </a>
                   </li>
+                <?php endif; ?>
+                <?php if (($user = $session->get('user')) && in_array($user['role'], ['1', '5', '4'])): ?>
                   <li class="nav-item">
                       <a href="<?= base_url('waybill/waybilljakarta') ?>" class="nav-link <?= ($segment_first === 'waybill' && $segment_second === 'waybilljakarta') ? 'active' : '' ?>">
                           <i class="far fa-circle nav-icon"></i>
                           <p>Jakarta</p>
                       </a>
                   </li>
+                <?php endif; ?>
               </ul>
           </li>
         <?php endif; ?>
 
-          <?php if (($user = $session->get('user')) && in_array($user['role'], ['1', '5', '6'])): ?>
+          <?php if (($user = $session->get('user')) && in_array($user['role'], ['1', '5', '2', '6', '4'])): ?>
             <li class="nav-header">System</li>
-            <li class="nav-item <?= ($segment_first === 'users') ? 'menu-open' : '' ?>">
-              <a href="<?= base_url('users') ?>" class="nav-link">
-                <i class="nav-icon fas fa-user"></i>
-                <p>User</p>
-              </a>
-            </li>
-
-            <li class="nav-item <?= ($segment_first === 'thirdcourier') ? 'menu-open' : '' ?>">
-              <a href="<?= base_url('thirdcourier') ?>" class="nav-link">
-                <i class="nav-icon fas ion-android-car"></i>
-                <p>3rd Courier</p>
-              </a>
-            </li>
+            <?php if (($user = $session->get('user')) && in_array($user['role'], ['1', '5'])): ?>
+              <li class="nav-item <?= ($segment_first === 'users') ? 'menu-open' : '' ?>">
+                <a href="<?= base_url('users') ?>" class="nav-link">
+                  <i class="nav-icon fas fa-user"></i>
+                  <p>User</p>
+                </a>
+              </li>
+            <?php endif; ?>
+            <?php if (($user = $session->get('user')) && in_array($user['role'], ['1', '5', '2', '6', '4'])): ?>
+              <li class="nav-item <?= ($segment_first === 'thirdcourier') ? 'menu-open' : '' ?>">
+                <a href="<?= base_url('thirdcourier') ?>" class="nav-link">
+                  <i class="nav-icon fas ion-android-car"></i>
+                  <p>3rd Courier</p>
+                </a>
+              </li>
+            <?php endif; ?>
           <?php endif; ?>
         </ul>
       </nav>

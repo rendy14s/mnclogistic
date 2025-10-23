@@ -1119,7 +1119,7 @@ class Shipment extends BaseController
             case 3: return '<span class="badge badge-success">ARRIVED AT WAREHOUSE</span>';
             case 4: return '<span class="badge badge-success">DELIVERED TO CUSTOMER</span>';
             case 5: return '<span class="badge badge-success">SUCCESS DELIVERED TO CUSTOMER</span>';
-            case 6: return '<span class="badge badge-success">FAILED DELIVERED TO CUSTOMER</span>';
+            case 6: return '<span class="badge badge-danger">FAILED DELIVERED TO CUSTOMER</span>';
             default: return '<span class="badge badge-secondary">PENDING</span>';
         }
     }
