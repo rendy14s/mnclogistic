@@ -153,7 +153,7 @@
                                 </button>
                             </form>
                           <?php endif; ?>
-                         <?php if ($shipment['status_tracking'] == '3' && $shipment['status_finance'] == '1'): ?>
+                         <?php if ($shipment['status_tracking'] == '3'): ?>
                               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deliveryModal">
                                   Delivery to Customer
                               </button>
