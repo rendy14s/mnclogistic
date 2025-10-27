@@ -48,6 +48,15 @@
                                     case 3:
                                         $statusText = 'ARRIVED AT WAREHOUSE JAKARTA';
                                         break;
+                                    case 4:
+                                        $statusText = 'DELIVERED TO CUSTOMER';
+                                        break;
+                                    case 5:
+                                        $statusText = 'SUCCESS DELIVERY';
+                                        break;
+                                    case 6:
+                                        $statusText = 'FAILED DELIVERY';
+                                        break;
                                     default:
                                         $statusText = 'UNKNOWN STATUS';
                                 } 
