@@ -189,7 +189,7 @@
       info: true,
       ajax: "/shipment/api/listnewdata",
       columns: columns,
-      order: [[0, 'asc']],
+      order: [[1, 'asc']],
       buttons: buttons,
       initComplete: function () {
         if (userRole === 3) {
