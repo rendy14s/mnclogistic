@@ -49,7 +49,10 @@
                                         $statusText = 'ARRIVED AT WAREHOUSE JAKARTA';
                                         break;
                                     case 4:
-                                        $statusText = 'DELIVERED TO CUSTOMER';
+                                        $statusText = 'DELIVERY TO CUSTOMER';
+                                        break;
+                                    case 14:
+                                        $statusText = 'PARTIAL DELIVERY TO CUSTOMER';
                                         break;
                                     case 5:
                                         $statusText = 'SUCCESS DELIVERY';
@@ -162,7 +165,10 @@
                                 </button>
                             </form>
                           <?php endif; ?>
-                         <?php if ($shipment['status_tracking'] == '3'): ?>
+                         <?php if (in_array($shipment['status_tracking'], ['3', '14'])): ?>
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#partialdeliveryModal">
+                                  Partial Delivery to Customer
+                              </button>
                               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deliveryModal">
                                   Delivery to Customer
                               </button>
@@ -187,7 +193,7 @@
                     </div>
                   </div>
 
-                  <!-- /.modal -->
+                  <!-- /.modal delivery-->
                     <div class="modal fade" id="deliveryModal" tabindex="-1" role="dialog" aria-labelledby="deliveryModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -245,7 +251,68 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /.modal -->
+                    <!-- /.end modal delivery-->
+
+                    <!-- /.modal partial delivery-->
+                    <div class="modal fade" id="partialdeliveryModal" tabindex="-1" role="dialog" aria-labelledby="PartialdeliveryModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Form Partial Delivery Customer</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <!-- Add enctype for file uploads -->
+                                <form id="partialdeliveryForm" method="post" enctype="multipart/form-data" action="<?= site_url('shipment/partialdeliverycustomer/' . $shipment['id']) ?>" >
+                                    <?= csrf_field() ?>
+                                    <div class="card-body">
+
+                                        <div class="form-group row">
+                                            <label for="inputTrackingNumber" class="col-sm-4 col-form-label">Tracking Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="trackingNumber" class="form-control" id="inputTrackingNumber" placeholder="Tracking Number" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="inputCourier" class="col-sm-4 col-form-label">Courier</label>
+                                            <div class="col-sm-8">
+                                                <select name="courier" class="form-control" id="inputCourier" required>
+                                                    <option value="">Select Courier</option>
+                                                    <?php foreach ($couriers as $courier): ?>
+                                                        <option value="<?= esc($courier['id']) ?>"><?= esc($courier['courier_name']) ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modified image input -->
+                                        <div class="form-group row">
+                                            <label for="inputImages" class="col-sm-4 col-form-label">Upload Images</label>
+                                            <div class="col-sm-8">
+                                                <div class="custom-file">
+                                                    <input type="file" name="images[]" class="custom-file-input" id="PartialimageInput" accept="image/*" multiple required>
+                                                    <label class="custom-file-label" for="PartialimageInput">Choose up to 4 images</label>
+                                                </div>
+                                                <small class="form-text text-muted">Max 4 images, JPG/PNG only.</small>
+                                                <div id="PartialimagePreview" class="mt-3 d-flex flex-wrap"></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.end modal partial delivery-->
+
                   <!-- /.card -->
                 </div>
                 <!--/.col (left) -->

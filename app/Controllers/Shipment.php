@@ -401,6 +401,100 @@ class Shipment extends BaseController
         // return redirect()->back()->with('success', 'Delivery and images saved successfully.');
     }
 
+    public function savePartialDeliveryCustomer($id)
+    {
+        helper(['text', 'filesystem']);
+        $db = \Config\Database::connect();
+        $db->transBegin();
+
+        $trackingNumber = $this->request->getPost('trackingNumber');
+        $courierId      = $this->request->getPost('courier');
+        $images         = $this->request->getFiles()['images'] ?? [];
+
+        if (count($images) > 4) {
+            return redirect()->back()->with('error', 'You can only upload up to 4 images.');
+        }
+
+        // Insert delivery record
+        $deliveryModel = new MNCDelivery();
+        $deliveryId = $deliveryModel->insert([
+            'shipment_id'    => $id,
+            'tracking_number' => $trackingNumber,
+            'courier_id'      => $courierId
+        ]);
+
+       $uploadPath = FCPATH . 'delivery';
+
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0775, true);
+        }
+
+        if (!is_writable($uploadPath)) {
+            $db->transRollback();
+            return redirect()->back()->with('error', 'Upload path is not writable: ' . $uploadPath);
+        }
+
+        $allowedTypes = ['jpg', 'jpeg', 'png'];
+        $maxSizeBytes = 2 * 1024 * 1024; // 2MB
+        $imageModel = new MNCDeliveryImage();
+
+        foreach ($images as $image) {
+            if (!$image->isValid()) {
+                $db->transRollback();
+                return redirect()->back()->with('error', 'Invalid image upload.');
+            }
+
+            $ext = strtolower($image->getExtension());
+            if (!in_array($ext, $allowedTypes)) {
+                $db->transRollback();
+                return redirect()->back()->with('error', 'Only JPG, JPEG, PNG are allowed.');
+            }
+
+            if ($image->getSize() > $maxSizeBytes) {
+                $db->transRollback();
+                return redirect()->back()->with('error', 'Each image must be under 2MB.');
+            }
+
+            // Save the image as-is with a unique name
+            $uid = uniqid();
+            $finalName = $uid . '.' . $ext;
+
+            try {
+                if (!$image->move($uploadPath, $finalName)) {
+                    $db->transRollback();
+                    return redirect()->back()->with('error', 'Image move failed (no internal error reported).');
+                }
+            } catch (\Exception $e) {
+                $db->transRollback();
+                return redirect()->back()->with('error', 'Move threw exception: ' . $e->getMessage());
+            }
+
+
+
+            $imageModel->insert([
+                'shipment_delivery_id' => $deliveryId,
+                'path' => $uploadPath . '/' . $finalName,
+                'image' => $finalName
+            ]);
+        }
+
+        $shipmentLogModel = new MNCShipmentLog();
+        $shipmentLogModel->insert([
+            'shipment_id' => $id,
+            'user_id'      => session('user')['id'],
+            'description'  => 'PARTIAL DELIVERY TO CUSTOMER WITH TRACKING NUMBER ' . $trackingNumber . ' BY ' . session('user')['fullname']
+        ]);
+
+        $shipmentModel = new MNCShipment();
+        $shipmentModel->update($id, ['status_tracking' => PARTIAL_DELIVERED_TO_CUSTOMER]); // Update status to Delivered
+
+        $db->transCommit();
+        return redirect()
+                ->to(base_url('shipment/arrived'))
+                ->with('success', 'Success Set Shipment to Partial Delivery.');
+        // return redirect()->back()->with('success', 'Delivery and images saved successfully.');
+    }
+
     // This method handles the route '/shipment/api/getCustomerPrice/{customer_id}'
     public function getCustomerPrice($customer_id)
     {
@@ -802,7 +896,7 @@ class Shipment extends BaseController
                         ')
                         ->join('mnc_customers_price', 'mnc_customers_price.id = mnc_shipment.price_id', 'left')
                         ->where('mnc_shipment.status', 1)
-                        ->where('mnc_shipment.status_tracking', 3)
+                        ->whereIn('mnc_shipment.status_tracking', [3,14])
                         ->orderBy('mnc_shipment.created_at', 'DESC');
 
             $shipments = $shipments->get()->getResultArray();
@@ -1117,7 +1211,8 @@ class Shipment extends BaseController
             case 1: return '<span class="badge badge-warning">NEW DATA SHIPMENT</span>';
             case 2: return '<span class="badge badge-secondary">ON PROGRESS</span>';
             case 3: return '<span class="badge badge-success">ARRIVED AT WAREHOUSE</span>';
-            case 4: return '<span class="badge badge-success">DELIVERED TO CUSTOMER</span>';
+            case 4: return '<span class="badge badge-success">DELIVEREY TO CUSTOMER</span>';
+            case 14: return '<span class="badge badge-warning">PARTIAL DELIVERY TO CUSTOMER</span>';
             case 5: return '<span class="badge badge-success">SUCCESS DELIVERED TO CUSTOMER</span>';
             case 6: return '<span class="badge badge-danger">FAILED DELIVERED TO CUSTOMER</span>';
             default: return '<span class="badge badge-secondary">PENDING</span>';

@@ -69,7 +69,7 @@ class Auth extends BaseController
             setcookie('access_token', $accessToken, time() + $expiresInSeconds, '/', '', false, true);
 
             // ✅ Redirect ke halaman yang akan inject JS (lihat view selanjutnya)
-            return redirect()->to('/dashboard')->with('success', 'Login successfully!');
+            return redirect()->to('/dashboard')->with('success', 'Login successfully.');
             // return redirect()->to('/dashboard');
         }
 

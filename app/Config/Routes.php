@@ -148,6 +148,11 @@ use CodeIgniter\Router\RouteCollection;
 
        // Make Set Delivered
       $routes->get('shipment/deliver/(:num)', 'Shipment::setDelivery/$1');
+      
+      // Partial 3rd Delivery to Customer
+      $routes->post('shipment/partialdeliverycustomer/(:num)', 'Shipment::savePartialDeliveryCustomer/$1');
+
+      // Full 3rd Delivery to Customer
       $routes->post('shipment/deliverycustomer/(:num)', 'Shipment::saveDeliveryCustomer/$1');
 
       // Make Success Delivery to Customer
