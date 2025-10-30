@@ -397,7 +397,7 @@ class Shipment extends BaseController
         $db->transCommit();
         return redirect()
                 ->to(base_url('shipment/arrived'))
-                ->with('success', 'Success Set Shipment Delivery as Failed.');
+                ->with('success', 'Success Set Shipment Delivery to Customer.');
         // return redirect()->back()->with('success', 'Delivery and images saved successfully.');
     }
 
@@ -1198,7 +1198,7 @@ class Shipment extends BaseController
         } else {
            return redirect()
                 ->to(base_url('shipment/outfordelivery'))
-                ->with('success', 'Success Set Shipment Delivery as Failed.');
+                ->with('success', 'Success Set Shipment Delivery to Customer.');
         }
 
     }
@@ -1231,7 +1231,7 @@ class Shipment extends BaseController
         } else {
             return redirect()
                 ->to(base_url('shipment/outfordelivery'))
-                ->with('success', 'Success Set Shipment Delivery as Failed.');
+                ->with('success', 'Success Set Shipment Delivery as Failed to Customer.');
         }
     }
 

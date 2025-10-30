@@ -41,7 +41,31 @@
   <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') ?>">
- 
+  <!-- Toastr -->
+  <link rel="stylesheet" href="<?= base_url('assets/admin/plugins/toastr/toastr.min.css') ?>">
+  <script src="<?= base_url('assets/admin/plugins/toastr/toastr.min.js') ?>"></script>
+
+  <script>
+    $(function () {
+      toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "timeOut": "3000"
+      };
+
+      <?php if (session()->has('success')): ?>
+          toastr.success("<?= esc(session('success')) ?>", "Success");
+      <?php elseif (session()->has('error')): ?>
+          toastr.error("<?= esc(session('error')) ?>", "Error");
+      <?php elseif (session()->has('warning')): ?>
+          toastr.warning("<?= esc(session('warning')) ?>", "Warning");
+      <?php elseif (session()->has('info')): ?>
+          toastr.info("<?= esc(session('info')) ?>", "Info");
+      <?php endif; ?>
+    });
+  </script>
+
   <script>   
     window.formatTextInput = function (el) {
         el.value = el.value
@@ -169,11 +193,24 @@
           }
 
           if (confirm(`Are you sure for Sending ${selectedIds.length} selected item(s)?`)) {
-            $.post('/shipment/api/bulkSending', { ids: selectedIds }, function (response) {
-              alert('Selected shipments status sending successfully!');
-              dt.ajax.reload(null, false);
-            }).fail(function () {
-              alert('Error occurred while updating status.');
+            $.post('/shipment/api/bulkSending', { ids: selectedIds })
+            .done(function (response) {
+              // If your API returns JSON like {status: "success", message: "..."}
+              if (response.status === 'success') {
+                toastr.success(response.message || 'Selected shipments status updated to on going successfully!', 'Success');
+                dt.ajax.reload(null, false); // Reload DataTable without resetting pagination
+              } else {
+                // If API returned an "error" JSON
+                toastr.error(response.message || 'Something went wrong while updating status.', 'Error');
+              }
+            })
+            .fail(function (xhr) {
+              // Handle network or unexpected errors
+              let msg = 'Error occurred while updating status.';
+              if (xhr.responseJSON && xhr.responseJSON.message) {
+                msg = xhr.responseJSON.message;
+              }
+              toastr.error(msg, 'Error');
             });
           }
         }
