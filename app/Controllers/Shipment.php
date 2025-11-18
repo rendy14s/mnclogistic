@@ -161,6 +161,8 @@ class Shipment extends BaseController
         $shipmentModel         = new MNCShipment();
         $shipmentPackageModel  = new MNCShipmentPackage();
         $shipmentLogModel      = new MNCShipmentLog();
+        $shipmentDeliveryModel   = new MNCDelivery();
+        $shipmentDeliveryImageModel = new MNCDeliveryImage();
         $userModel             = new MNCUser();
         $courierData           = new MNCCourier();
         $couriers              = $courierData->findAll();
@@ -188,6 +190,13 @@ class Shipment extends BaseController
         $total_packages   = count($packages); // or ->where()->countAllResults() if not fetching all
         $users      = $userModel->where('id', $shipment['created_by'])->first();
         
+        $imageDelivery = $shipmentDeliveryImageModel
+                ->select('mnc_shipment_delivery_image.*')
+                ->join('mnc_shipment_delivery', 'mnc_shipment_delivery.id = mnc_shipment_delivery_image.shipment_delivery_id', 'left')
+                ->where('mnc_shipment_delivery.shipment_id', $id)
+                ->findAll();
+                // dd($imageDelivery);
+
         $logs = $shipmentLogModel
                 ->select('mnc_shipment_logs.*, mnc_users.full_name')
                 ->join('mnc_users', 'mnc_users.id = mnc_shipment_logs.user_id', 'left')
@@ -199,6 +208,7 @@ class Shipment extends BaseController
             'packages' => $packages,
             'total_packages' => $total_packages,
             'users' => $users,
+            'imageDelivery' => $imageDelivery,
             'logs' => $logs,
             'couriers' => $couriers
         ]);

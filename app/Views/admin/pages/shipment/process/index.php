@@ -110,6 +110,41 @@
                                 </tr>
                             </tfoot>
                         </table>
+                        
+                        <?php if (!empty($imageDelivery)) : ?>
+                        <hr>
+                        <h5>Proof Image Delivery:</h5>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="width:120px;">No</th>
+                                        <th>Image Name</th>
+                                        <th style="width:307px;">Preview</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <?php $no = 1; ?>
+                                    <?php foreach ($imageDelivery as $row) : ?>
+                                        <tr>
+                                            <td><?= $no; ?></td>
+                                            <td>Proof Delivery <?= $no; ?></td>
+                                            <td>
+                                                <a href="<?= base_url('delivery/' . $row['image']); ?>" 
+                                                target="_blank"
+                                                class="btn btn-sm btn-primary">
+                                                    Preview
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php $no++; ?>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?php endif; ?>
 
                         <hr>
 
